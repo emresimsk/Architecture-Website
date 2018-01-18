@@ -1,0 +1,76 @@
+﻿
+@{
+    Layout = null;
+}
+
+
+<!DOCTYPE HTML>
+<html lang="en">
+
+<!-- Mirrored from www.domik.kwst.net/site/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 17:26:17 GMT -->
+<head>
+    <!--=============== basic  ===============-->
+    <meta charset="UTF-8">
+    <title>Domik  - Responsive  Architecture Template</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="robots" content="index, follow" />
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <!--=============== css  ===============-->
+    <link type="text/css" rel="stylesheet" href="~/Content/css/reset.css">
+    <link type="text/css" rel="stylesheet" href="~/Content/css/plugins.css">
+    <link type="text/css" rel="stylesheet" href="~/Content/css/style.css">
+    <!--=============== favicons ===============-->
+    <link rel="shortcut icon" href="#">
+</head>
+<body>
+    <div class="loader"><i class="fa fa-refresh fa-spin"></i></div>
+    <!--================= main start ================-->
+    <div id="main">
+        <!--=============== header ===============-->
+        <header>
+            <div class="header-inner">
+                <div class="logo-holder">
+                    <a href="#" class="ajax"><img src="" alt="">LOGO</a>
+                </div>
+                <div class="nav-button-holder">
+                    <div class="nav-button vis-m"><span></span><span></span><span></span></div>
+                </div>
+                <div class="nav-holder">
+                    <nav>
+                        <ul id="menu">
+                            <li><a href="@Url.Action("Index","Home")" class="ajax act-link">Home</a></li>
+                            <li><a href="@Url.Action("Project","Home")" class="ajax pp">Projects</a></li>
+                            <li><a href="@Url.Action("Portfolio","Home")" class="ajax">Portfolio</a></li>
+                            <li><a href="@Url.Action("About","Home")" class="ajax pa">About us </a></li>
+                            <li><a href="@Url.Action("Contact","Home")" class="ajax">Contact</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+            <!--  <div class="share-container isShare"></div>
+                  <a class="selectMe shareSelector transition">Share</a>-->
+        </header>
+        <!--=============== wrapper ===============-->
+        <div id="wrapper">
+            @RenderBody()
+        </div>
+        <!-- wrapper end -->
+    </div>
+    <!-- Main end -->
+    <!--=============== google map ===============-->
+    <!--=============== scripts  ===============-->
+
+
+    <script src="~/Content/js/jquery.min.js"></script>
+    <script src="~/Content/js/core.js"></script>
+    <script type="text/javascript" src="~/Content/js/plugins.js"></script>
+    <script type="text/javascript" src="~/Content/js/scripts.js"></script>
+    <script type="text/javascript" src="~/Content/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="~/Content/js/popper.min.js"></script>
+    <script type="text/javascript" src="~/Content/js/mdb.js"></script>
+
+
+
+</body>
+</html>

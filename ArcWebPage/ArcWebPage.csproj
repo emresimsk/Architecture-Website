@@ -51,11 +51,51 @@
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.1\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Owin, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Owin.2.2.1\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Owin, Version=3.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.3.1.0\lib\net45\Microsoft.Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Host.SystemWeb, Version=3.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.3.1.0\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.2.1.0\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Cookies, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.Cookies.2.1.0\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.OAuth, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.OAuth.2.1.0\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -97,19 +137,410 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\admin\css\application.min.css" />
+    <Content Include="Content\admin\css\component.css" />
+    <Content Include="Content\admin\css\compose.min.css" />
+    <Content Include="Content\admin\css\contacts.min.css" />
+    <Content Include="Content\admin\css\demo.min.css" />
+    <Content Include="Content\admin\css\drive.min.css" />
+    <Content Include="Content\admin\css\elephant.min.css" />
+    <Content Include="Content\admin\css\errors.min.css" />
+    <Content Include="Content\admin\css\inbox.min.css" />
+    <Content Include="Content\admin\css\landing-page.min.css" />
+    <Content Include="Content\admin\css\mail.min.css" />
+    <Content Include="Content\admin\css\messenger.min.css" />
+    <Content Include="Content\admin\css\product.min.css" />
+    <Content Include="Content\admin\css\profile.min.css" />
+    <Content Include="Content\admin\css\shopping-cart.min.css" />
+    <Content Include="Content\admin\css\spectrum.css" />
+    <Content Include="Content\admin\css\store.min.css" />
+    <Content Include="Content\admin\css\vendor.min.css" />
+    <Content Include="Content\admin\fonts\fontawesome-webfont5b62.html" />
+    <Content Include="Content\admin\fonts\fontawesome-webfont5b62.svg" />
+    <Content Include="Content\admin\fonts\icon-works-webfont.svg" />
+    <Content Include="Content\admin\img\0100e8b81ad03f81a64a0a5f49c5be41.jpg" />
+    <Content Include="Content\admin\img\0180441436.jpg" />
+    <Content Include="Content\admin\img\0299419341.jpg" />
+    <Content Include="Content\admin\img\0310728269.jpg" />
+    <Content Include="Content\admin\img\0460697039.jpg" />
+    <Content Include="Content\admin\img\0531871454.jpg" />
+    <Content Include="Content\admin\img\0601274412.jpg" />
+    <Content Include="Content\admin\img\0777931269.jpg" />
+    <Content Include="Content\admin\img\0872116906.jpg" />
+    <Content Include="Content\admin\img\0980726243.jpg" />
+    <Content Include="Content\admin\img\1099386850.jpg" />
+    <Content Include="Content\admin\img\1182824800.jpg" />
+    <Content Include="Content\admin\img\1272501223.jpg" />
+    <Content Include="Content\admin\img\1376812548.jpg" />
+    <Content Include="Content\admin\img\1463296788.jpg" />
+    <Content Include="Content\admin\img\1554502810.jpg" />
+    <Content Include="Content\admin\img\1699893867.jpg" />
+    <Content Include="Content\admin\img\1703835345.jpg" />
+    <Content Include="Content\admin\img\1823060748.jpg" />
+    <Content Include="Content\admin\img\1968946964.jpg" />
+    <Content Include="Content\admin\img\2079247459.jpg" />
+    <Content Include="Content\admin\img\2163317912.jpg" />
+    <Content Include="Content\admin\img\2234124529.jpg" />
+    <Content Include="Content\admin\img\2362153679.jpg" />
+    <Content Include="Content\admin\img\2440513918.jpg" />
+    <Content Include="Content\admin\img\2565559510.jpg" />
+    <Content Include="Content\admin\img\2621512521.jpg" />
+    <Content Include="Content\admin\img\2790515408.jpg" />
+    <Content Include="Content\admin\img\2832982242.jpg" />
+    <Content Include="Content\admin\img\2995015682.jpg" />
+    <Content Include="Content\admin\img\2ef1cfdcf1da5256d7b994983bd8d457.jpg" />
+    <Content Include="Content\admin\img\3002121059.jpg" />
+    <Content Include="Content\admin\img\3353100198.jpg" />
+    <Content Include="Content\admin\img\3476962581.jpg" />
+    <Content Include="Content\admin\img\35e0765272cd421a5352331003ae2ab1.jpg" />
+    <Content Include="Content\admin\img\3dd124286157b729cc38d9bd7045e384.jpg" />
+    <Content Include="Content\admin\img\4148866741.png" />
+    <Content Include="Content\admin\img\4299815763.png" />
+    <Content Include="Content\admin\img\4337135755.png" />
+    <Content Include="Content\admin\img\4460638882.png" />
+    <Content Include="Content\admin\img\4522104820.png" />
+    <Content Include="Content\admin\img\4608823220.png" />
+    <Content Include="Content\admin\img\4790827186.png" />
+    <Content Include="Content\admin\img\4818875210.jpg" />
+    <Content Include="Content\admin\img\4902540768.jpg" />
+    <Content Include="Content\admin\img\4fcb4322807f1fd92aa3140adb37d4d9.jpg" />
+    <Content Include="Content\admin\img\5037874725.jpg" />
+    <Content Include="Content\admin\img\5171142011.jpg" />
+    <Content Include="Content\admin\img\5285117345.jpg" />
+    <Content Include="Content\admin\img\5345655041.jpg" />
+    <Content Include="Content\admin\img\5477829604.jpg" />
+    <Content Include="Content\admin\img\5595140688.jpg" />
+    <Content Include="Content\admin\img\5615854990.jpg" />
+    <Content Include="Content\admin\img\5774898501.jpg" />
+    <Content Include="Content\admin\img\5892565850.jpg" />
+    <Content Include="Content\admin\img\5991713086.jpg" />
+    <Content Include="Content\admin\img\6049281045.jpg" />
+    <Content Include="Content\admin\img\6149937996.jpg" />
+    <Content Include="Content\admin\img\6298374167.jpg" />
+    <Content Include="Content\admin\img\6381079466.jpg" />
+    <Content Include="Content\admin\img\6482952761.jpg" />
+    <Content Include="Content\admin\img\6501906268.jpg" />
+    <Content Include="Content\admin\img\6621353903.jpg" />
+    <Content Include="Content\admin\img\6711938749.jpg" />
+    <Content Include="Content\admin\img\6858253787.jpg" />
+    <Content Include="Content\admin\img\6950484109.jpg" />
+    <Content Include="Content\admin\img\69ece2eb60bdd2126e2acf27af43aa9b.jpg" />
+    <Content Include="Content\admin\img\7045565015.jpg" />
+    <Content Include="Content\admin\img\7154941405.jpg" />
+    <Content Include="Content\admin\img\7225550528.jpg" />
+    <Content Include="Content\admin\img\7397509215.jpg" />
+    <Content Include="Content\admin\img\7457956311.png" />
+    <Content Include="Content\admin\img\7489e404fb5088d63e5a5d55b27d546c.jpg" />
+    <Content Include="Content\admin\img\7575559379.jpg" />
+    <Content Include="Content\admin\img\7690704672.jpg" />
+    <Content Include="Content\admin\img\7795524868.jpg" />
+    <Content Include="Content\admin\img\7808910503.jpg" />
+    <Content Include="Content\admin\img\7943544458.jpg" />
+    <Content Include="Content\admin\img\7a4ee939781f6165006cff1b5b8096d4.jpg" />
+    <Content Include="Content\admin\img\8077136002.jpg" />
+    <Content Include="Content\admin\img\8160313374.jpg" />
+    <Content Include="Content\admin\img\8244439665.jpg" />
+    <Content Include="Content\admin\img\8335744038.jpg" />
+    <Content Include="Content\admin\img\8447261358.jpg" />
+    <Content Include="Content\admin\img\8525358731.jpg" />
+    <Content Include="Content\admin\img\8694637414.jpg" />
+    <Content Include="Content\admin\img\8796828207.png" />
+    <Content Include="Content\admin\img\8898319262.jpg" />
+    <Content Include="Content\admin\img\8907917568.png" />
+    <Content Include="Content\admin\img\9066377313.png" />
+    <Content Include="Content\admin\img\9193364282.png" />
+    <Content Include="Content\admin\img\9248739560.png" />
+    <Content Include="Content\admin\img\9346320298.png" />
+    <Content Include="Content\admin\img\9438147354.png" />
+    <Content Include="Content\admin\img\9540314125.png" />
+    <Content Include="Content\admin\img\9620101696.png" />
+    <Content Include="Content\admin\img\972b6c5882a45ee73d83a90a9852660c.jpg" />
+    <Content Include="Content\admin\img\b787e62313c23880e0797bfbbc3d150c.jpg" />
+    <Content Include="Content\admin\img\cca2226fdaba079b321ba5cf05ba0adc.jpg" />
+    <Content Include="Content\admin\img\elephant.png" />
+    <Content Include="Content\admin\img\f420a3cea0fb04862eb630f5a54b2733.jpg" />
+    <Content Include="Content\admin\img\flags\4x3\bd.svg" />
+    <Content Include="Content\admin\img\flags\4x3\br.svg" />
+    <Content Include="Content\admin\img\flags\4x3\cn.svg" />
+    <Content Include="Content\admin\img\flags\4x3\id.svg" />
+    <Content Include="Content\admin\img\flags\4x3\in.svg" />
+    <Content Include="Content\admin\img\flags\4x3\mx.svg" />
+    <Content Include="Content\admin\img\flags\4x3\ng.svg" />
+    <Content Include="Content\admin\img\flags\4x3\pk.svg" />
+    <Content Include="Content\admin\img\flags\4x3\ru.svg" />
+    <Content Include="Content\admin\img\flags\4x3\us.svg" />
+    <Content Include="Content\admin\img\Loadingheart.gif" />
+    <Content Include="Content\admin\img\logo-inverse.svg" />
+    <Content Include="Content\admin\img\logo.svg" />
+    <Content Include="Content\admin\js\application.min.js" />
+    <Content Include="Content\admin\js\compiled.min474a.js" />
+    <Content Include="Content\admin\js\compose.min.js" />
+    <Content Include="Content\admin\js\contacts.min.js" />
+    <Content Include="Content\admin\js\demo.min.js" />
+    <Content Include="Content\admin\js\drive.min.js" />
+    <Content Include="Content\admin\js\elephant.min.js" />
+    <Content Include="Content\admin\js\inbox.min.js" />
+    <Content Include="Content\admin\js\landing-page.min.js" />
+    <Content Include="Content\admin\js\mail.min.js" />
+    <Content Include="Content\admin\js\messenger.min.js" />
+    <Content Include="Content\admin\js\product.min.js" />
+    <Content Include="Content\admin\js\profile.min.js" />
+    <Content Include="Content\admin\js\progressbar.js" />
+    <Content Include="Content\admin\js\signup-1.min.js" />
+    <Content Include="Content\admin\js\spectrum.js" />
+    <Content Include="Content\admin\js\vendor.min.js" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\css\bootstrap.min.css" />
+    <Content Include="Content\css\compiled.min.css" />
+    <Content Include="Content\css\mdb.min.css" />
+    <Content Include="Content\css\plugins.css" />
+    <Content Include="Content\css\reset.css" />
+    <Content Include="Content\css\style.css" />
+    <Content Include="Content\dropzone\css\basic.css" />
+    <Content Include="Content\dropzone\css\basic.min.css" />
+    <Content Include="Content\dropzone\css\dropzone.css" />
+    <Content Include="Content\dropzone\css\dropzone.min.css" />
+    <Content Include="Content\dropzone\js\dropzone-amd-module.js" />
+    <Content Include="Content\dropzone\js\dropzone-amd-module.min.js" />
+    <Content Include="Content\dropzone\js\dropzone.js" />
+    <Content Include="Content\dropzone\js\dropzone.min.js" />
+    <Content Include="Content\fonts\fontawesome-webfonte0a5.svg" />
+    <Content Include="Content\fonts\FuturaPT-Book_gdi.svg" />
+    <Content Include="Content\fonts\futurastd-bold.svg" />
+    <Content Include="Content\images\bg\10.jpg" />
+    <Content Include="Content\images\bg\11.jpg" />
+    <Content Include="Content\images\bg\12.jpg" />
+    <Content Include="Content\images\bg\14.jpg" />
+    <Content Include="Content\images\bg\17.jpg" />
+    <Content Include="Content\images\bg\18.jpg" />
+    <Content Include="Content\images\bg\22.jpg" />
+    <Content Include="Content\images\bg\24.jpg" />
+    <Content Include="Content\images\bg\long\2.jpg" />
+    <Content Include="Content\images\bg\long\3.jpg" />
+    <Content Include="Content\images\bg\long\4.jpg" />
+    <Content Include="Content\images\bg\long\5.jpg" />
+    <Content Include="Content\images\bg\long\6.jpg" />
+    <Content Include="Content\images\bg\long\7.jpg" />
+    <Content Include="Content\images\bg\long\8.jpg" />
+    <Content Include="Content\images\bg\long\9.jpg" />
+    <Content Include="Content\images\blog\users\1.jpg" />
+    <Content Include="Content\images\blog\users\2.jpg" />
+    <Content Include="Content\images\body-bg.png" />
+    <Content Include="Content\images\favicon.html" />
+    <Content Include="Content\images\folio\slider\1.jpg" />
+    <Content Include="Content\images\folio\slider\2.jpg" />
+    <Content Include="Content\images\folio\slider\3.jpg" />
+    <Content Include="Content\images\folio\thumbs\1.jpg" />
+    <Content Include="Content\images\folio\thumbs\10.jpg" />
+    <Content Include="Content\images\folio\thumbs\11.jpg" />
+    <Content Include="Content\images\folio\thumbs\12.jpg" />
+    <Content Include="Content\images\folio\thumbs\13.jpg" />
+    <Content Include="Content\images\folio\thumbs\14.jpg" />
+    <Content Include="Content\images\folio\thumbs\15.jpg" />
+    <Content Include="Content\images\folio\thumbs\16.jpg" />
+    <Content Include="Content\images\folio\thumbs\18.jpg" />
+    <Content Include="Content\images\folio\thumbs\2.jpg" />
+    <Content Include="Content\images\folio\thumbs\20.jpg" />
+    <Content Include="Content\images\folio\thumbs\21.jpg" />
+    <Content Include="Content\images\folio\thumbs\3.jpg" />
+    <Content Include="Content\images\folio\thumbs\4.jpg" />
+    <Content Include="Content\images\folio\thumbs\5.jpg" />
+    <Content Include="Content\images\folio\thumbs\6.jpg" />
+    <Content Include="Content\images\folio\thumbs\7.jpg" />
+    <Content Include="Content\images\folio\thumbs\8.jpg" />
+    <Content Include="Content\images\folio\thumbs\9.jpg" />
+    <Content Include="Content\images\footer-logo.png" />
+    <Content Include="Content\images\grabbing.html" />
+    <Content Include="Content\images\logo.png" />
+    <Content Include="Content\images\team\big\2.jpg" />
+    <Content Include="Content\images\team\small\1.jpg" />
+    <Content Include="Content\images\team\small\2.jpg" />
+    <Content Include="Content\images\team\small\3.jpg" />
+    <Content Include="Content\images\team\small\5.jpg" />
+    <Content Include="Content\images\team\small\6.jpg" />
+    <Content Include="Content\img\overlays\01.png" />
+    <Content Include="Content\img\overlays\02.png" />
+    <Content Include="Content\img\overlays\03.png" />
+    <Content Include="Content\img\overlays\04.png" />
+    <Content Include="Content\img\overlays\05.png" />
+    <Content Include="Content\img\overlays\06.png" />
+    <Content Include="Content\img\overlays\07.png" />
+    <Content Include="Content\img\overlays\08.png" />
+    <Content Include="Content\img\overlays\09.png" />
+    <Content Include="Content\img\svg\arrow_left.svg" />
+    <Content Include="Content\img\svg\arrow_right.svg" />
+    <Content Include="Content\js\bootstrap.min.js" />
+    <Content Include="Content\js\core.js" />
+    <Content Include="Content\js\jquery.min.js" />
+    <Content Include="Content\js\mdb.js" />
+    <Content Include="Content\js\plugins.js" />
+    <Content Include="Content\js\popper.min.js" />
+    <Content Include="Content\js\scripts.js" />
+    <Content Include="Content\portfolio\css\basic.css" />
+    <Content Include="Content\portfolio\css\jquery.ui.css" />
+    <Content Include="Content\portfolio\css\jquery.ui.html4.css" />
+    <Content Include="Content\portfolio\css\magazine.css" />
+    <Content Include="Content\portfolio\js\basic.js" />
+    <Content Include="Content\portfolio\js\hash.js" />
+    <Content Include="Content\portfolio\js\jgestures.min.js" />
+    <Content Include="Content\portfolio\js\jquery-ui-1.8.20.custom.min.js" />
+    <Content Include="Content\portfolio\js\jquery.min.1.7.js" />
+    <Content Include="Content\portfolio\js\jquery.mousewheel.min.js" />
+    <Content Include="Content\portfolio\js\magazine.js" />
+    <Content Include="Content\portfolio\js\modernizr.2.5.3.min.js" />
+    <Content Include="Content\portfolio\js\scissor.js" />
+    <Content Include="Content\portfolio\js\scissor.min.js" />
+    <Content Include="Content\portfolio\js\turn.html4.js" />
+    <Content Include="Content\portfolio\js\turn.html4.min.js" />
+    <Content Include="Content\portfolio\js\turn.js" />
+    <Content Include="Content\portfolio\js\turn.min.js" />
+    <Content Include="Content\portfolio\js\zoom.js" />
+    <Content Include="Content\portfolio\js\zoom.min.js" />
+    <Content Include="Content\portfolio\pages\1.jpg" />
+    <Content Include="Content\portfolio\pages\10.jpg" />
+    <Content Include="Content\portfolio\pages\11.jpg" />
+    <Content Include="Content\portfolio\pages\12.jpg" />
+    <Content Include="Content\portfolio\pages\13.jpg" />
+    <Content Include="Content\portfolio\pages\14.jpg" />
+    <Content Include="Content\portfolio\pages\15.jpg" />
+    <Content Include="Content\portfolio\pages\16.jpg" />
+    <Content Include="Content\portfolio\pages\17.jpg" />
+    <Content Include="Content\portfolio\pages\18.jpg" />
+    <Content Include="Content\portfolio\pages\19.jpg" />
+    <Content Include="Content\portfolio\pages\2.jpg" />
+    <Content Include="Content\portfolio\pages\20.jpg" />
+    <Content Include="Content\portfolio\pages\21.jpg" />
+    <Content Include="Content\portfolio\pages\22.jpg" />
+    <Content Include="Content\portfolio\pages\23.jpg" />
+    <Content Include="Content\portfolio\pages\24.jpg" />
+    <Content Include="Content\portfolio\pages\25.jpg" />
+    <Content Include="Content\portfolio\pages\26.jpg" />
+    <Content Include="Content\portfolio\pages\27.jpg" />
+    <Content Include="Content\portfolio\pages\28.jpg" />
+    <Content Include="Content\portfolio\pages\29.jpg" />
+    <Content Include="Content\portfolio\pages\3.jpg" />
+    <Content Include="Content\portfolio\pages\30.jpg" />
+    <Content Include="Content\portfolio\pages\31.jpg" />
+    <Content Include="Content\portfolio\pages\32.jpg" />
+    <Content Include="Content\portfolio\pages\33.jpg" />
+    <Content Include="Content\portfolio\pages\34.jpg" />
+    <Content Include="Content\portfolio\pages\35.jpg" />
+    <Content Include="Content\portfolio\pages\36.jpg" />
+    <Content Include="Content\portfolio\pages\37.jpg" />
+    <Content Include="Content\portfolio\pages\38.jpg" />
+    <Content Include="Content\portfolio\pages\39.jpg" />
+    <Content Include="Content\portfolio\pages\4.jpg" />
+    <Content Include="Content\portfolio\pages\40.jpg" />
+    <Content Include="Content\portfolio\pages\41.jpg" />
+    <Content Include="Content\portfolio\pages\42.jpg" />
+    <Content Include="Content\portfolio\pages\43.jpg" />
+    <Content Include="Content\portfolio\pages\44.jpg" />
+    <Content Include="Content\portfolio\pages\45.jpg" />
+    <Content Include="Content\portfolio\pages\46.jpg" />
+    <Content Include="Content\portfolio\pages\47.jpg" />
+    <Content Include="Content\portfolio\pages\48.jpg" />
+    <Content Include="Content\portfolio\pages\49.jpg" />
+    <Content Include="Content\portfolio\pages\5.jpg" />
+    <Content Include="Content\portfolio\pages\50.jpg" />
+    <Content Include="Content\portfolio\pages\51.jpg" />
+    <Content Include="Content\portfolio\pages\52.jpg" />
+    <Content Include="Content\portfolio\pages\53.jpg" />
+    <Content Include="Content\portfolio\pages\54.jpg" />
+    <Content Include="Content\portfolio\pages\55.jpg" />
+    <Content Include="Content\portfolio\pages\56.jpg" />
+    <Content Include="Content\portfolio\pages\57.jpg" />
+    <Content Include="Content\portfolio\pages\58.jpg" />
+    <Content Include="Content\portfolio\pages\59.jpg" />
+    <Content Include="Content\portfolio\pages\6.jpg" />
+    <Content Include="Content\portfolio\pages\60.jpg" />
+    <Content Include="Content\portfolio\pages\61.jpg" />
+    <Content Include="Content\portfolio\pages\62.jpg" />
+    <Content Include="Content\portfolio\pages\63.jpg" />
+    <Content Include="Content\portfolio\pages\64.jpg" />
+    <Content Include="Content\portfolio\pages\7.jpg" />
+    <Content Include="Content\portfolio\pages\8.jpg" />
+    <Content Include="Content\portfolio\pages\9.jpg" />
+    <Content Include="Content\portfolio\pics\arrows.png" />
+    <Content Include="Content\portfolio\pics\loader.gif" />
+    <Content Include="Content\portfolio\pics\zoom-icons-editable.png" />
+    <Content Include="Content\portfolio\pics\zoom-icons.png" />
+    <Content Include="Content\portfolio\pics\zoom.png" />
+    <Content Include="Content\Site.css" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\jquery-1.10.2.js" />
+    <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\Startup1.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Identity\RoleApp.cs" />
+    <Compile Include="Identity\RoleAppManager.cs" />
+    <Compile Include="Identity\UserApp.cs" />
+    <Compile Include="Identity\UserAppDbContext.cs" />
+    <Compile Include="Identity\UserManagerApp.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />
     <Content Include="packages.config" />
+    <Content Include="Content\admin\fonts\fontawesome-webfont5b62.eot" />
+    <Content Include="Content\admin\fonts\fontawesome-webfont5b62.ttf" />
+    <Content Include="Content\admin\fonts\fontawesome-webfont5b62.woff" />
+    <Content Include="Content\admin\fonts\fontawesome-webfontd41d.eot" />
+    <Content Include="Content\admin\fonts\icon-works-webfont.eot" />
+    <Content Include="Content\admin\fonts\icon-works-webfont.ttf" />
+    <Content Include="Content\admin\fonts\icon-works-webfont.woff" />
+    <Content Include="Content\admin\fonts\icon-works-webfontd41d.eot" />
+    <Content Include="Content\font\roboto\Roboto-Bold.eot" />
+    <Content Include="Content\font\roboto\Roboto-Bold.ttf" />
+    <Content Include="Content\font\roboto\Roboto-Bold.woff" />
+    <Content Include="Content\font\roboto\Roboto-Bold.woff2" />
+    <Content Include="Content\font\roboto\Roboto-Light.eot" />
+    <Content Include="Content\font\roboto\Roboto-Light.ttf" />
+    <Content Include="Content\font\roboto\Roboto-Light.woff" />
+    <Content Include="Content\font\roboto\Roboto-Light.woff2" />
+    <Content Include="Content\font\roboto\Roboto-Medium.eot" />
+    <Content Include="Content\font\roboto\Roboto-Medium.ttf" />
+    <Content Include="Content\font\roboto\Roboto-Medium.woff" />
+    <Content Include="Content\font\roboto\Roboto-Medium.woff2" />
+    <Content Include="Content\font\roboto\Roboto-Regular.eot" />
+    <Content Include="Content\font\roboto\Roboto-Regular.ttf" />
+    <Content Include="Content\font\roboto\Roboto-Regular.woff" />
+    <Content Include="Content\font\roboto\Roboto-Regular.woff2" />
+    <Content Include="Content\font\roboto\Roboto-Thin.eot" />
+    <Content Include="Content\font\roboto\Roboto-Thin.ttf" />
+    <Content Include="Content\font\roboto\Roboto-Thin.woff" />
+    <Content Include="Content\font\roboto\Roboto-Thin.woff2" />
+    <Content Include="Content\fonts\fontawesome-webfontd41d.eot" />
+    <Content Include="Content\fonts\fontawesome-webfonte0a5.eot" />
+    <Content Include="Content\fonts\fontawesome-webfonte0a5.ttf" />
+    <Content Include="Content\fonts\fontawesome-webfonte0a5.woff" />
+    <Content Include="Content\fonts\fontawesome-webfonte0a5.woff2" />
+    <Content Include="Content\fonts\FuturaPT-Book_gdi.eot" />
+    <Content Include="Content\fonts\FuturaPT-Book_gdi.ttf" />
+    <Content Include="Content\fonts\FuturaPT-Book_gdi.woff" />
+    <Content Include="Content\fonts\FuturaPT-Book_gdid41d.eot" />
+    <Content Include="Content\fonts\futurastd-bold.eot" />
+    <Content Include="Content\fonts\futurastd-bold.ttf" />
+    <Content Include="Content\fonts\futurastd-bold.woff" />
+    <Content Include="Content\fonts\futurastd-boldd41d.eot" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Scripts\jquery-1.10.2.min.map" />
+    <Content Include="Views\Shared\LayoutAdmin.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
