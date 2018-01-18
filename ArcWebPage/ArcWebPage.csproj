@@ -490,6 +490,7 @@
     <Compile Include="Identity\UserApp.cs" />
     <Compile Include="Identity\UserAppDbContext.cs" />
     <Compile Include="Identity\UserManagerApp.cs" />
+    <Compile Include="Models\ProjectAndImages.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -561,7 +562,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="File\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BusinessLayer\BusinessLayer.csproj">

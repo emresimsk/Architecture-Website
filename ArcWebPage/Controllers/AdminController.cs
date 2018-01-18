@@ -7,6 +7,7 @@ using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 using ArcWebPage.Identity;
+using ArcWebPage.Models;
 using DAL;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
@@ -43,6 +44,8 @@ namespace ArcWebPage.Controllers
         {
             return View();
         } 
+
+
 
 
         public ActionResult AboutMeEdit()
@@ -98,6 +101,10 @@ namespace ArcWebPage.Controllers
         }
 
 
+
+
+
+
         public ActionResult ContactEdit()
         {
             ContactPage contant = (_db.GetAllContactPages().Any()) ? _db.GetAllContactPages().FirstOrDefault() : new ContactPage();
@@ -132,6 +139,9 @@ namespace ArcWebPage.Controllers
 
             return RedirectToAction("ContactEdit");
         }
+
+
+
 
 
         public ActionResult SocialMediaAdd()
@@ -190,12 +200,8 @@ namespace ArcWebPage.Controllers
             return Json(result);
         }
 
-        //--------------------------------------------------------SOSYAL MEDYA KISMI--------------------------------------------------------------------------//
+  
 
-
-
-
-        //--------------------------------------------------------YETENEKLER SAYFA KISMI--------------------------------------------------------------------------//
 
         public ActionResult SkillList()
         {
@@ -251,12 +257,6 @@ namespace ArcWebPage.Controllers
         }
 
 
-        //--------------------------------------------------------YETENEKLER SAYFA KISMI--------------------------------------------------------------------------//
-
-
-
-
-        //--------------------------------------------------------EGİTİM SAYFA KISMI--------------------------------------------------------------------------//
 
 
 
@@ -318,16 +318,6 @@ namespace ArcWebPage.Controllers
 
 
 
-
-        //--------------------------------------------------------EGİTİM SAYFA KISMI--------------------------------------------------------------------------//
-
-
-
-
-
-
-
-        //--------------------------------------------------------PROJELER SAYFA KISMI--------------------------------------------------------------------------//
 
 
         public ActionResult Projects()
@@ -397,11 +387,13 @@ namespace ArcWebPage.Controllers
         } 
 
         [HttpPost]
-        public ActionResult Upload(IEnumerable<HttpPostedFileBase> file)
+        public ActionResult Upload(IEnumerable<HttpPostedFileBase> file , string id)
         {
-            decimal pId = 0;
+            decimal projectId = Convert.ToDecimal(id);
 
-            if (db.Project.Any(x => x.Id == pId))
+            bool result = false;
+
+            if (_db.GetProjectById(projectId)!=null)
             {
                 foreach (var f in file)
                 {
@@ -410,38 +402,34 @@ namespace ArcWebPage.Controllers
 
                     if (f != null)
                     {
-                        fileName = Path.GetFileName(f.FileName); // dosya adını alıyor
-                        uploadPath =
-                            Path.Combine(Server.MapPath("~/ProjectImages"),
-                                fileName); // dosya adiyla birlikte nereye kaydecegini ayarlıyor
-                        f.SaveAs(uploadPath); // dosyaya kaydediyor
+                        fileName = Path.GetFileName(f.FileName);
+                        uploadPath =Path.Combine(Server.MapPath("~/ProjectImages"),fileName); 
+                        f.SaveAs(uploadPath); 
                     }
 
+                    ImageFilePath imageFile = new ImageFilePath()
+                    {
+                        ProjectID = projectId,
+                        ImagePath = "/ProjectImages/" + fileName
 
-
-                    ImageFilePath imageFile = new ImageFilePath();
-                    imageFile.ProjectID = pId;
-                    imageFile.ImagePath = "/ProjectImages/" + fileName;
-                    db.ImageFilePath.Add(imageFile);
-                    db.SaveChanges();
-
-                }
-                return Json(new { Message = true });
+                    };
+                    result = _db.AddImageFilePath(imageFile);
+                }   
             }
-            return Json(new { Message = false });
+            return Json(new { Message = result });
 
-        }  // Projeye resimleri kaydedecegim
+        }  
 
         [HttpPost]
         public ActionResult projectDetail(string id)
         {
             ProjectAndImages projectAndImages = new ProjectAndImages();
 
-            if (db.Project.Any(x => x.ProjectNameUnique == id))
+            if (_db.GetProjectByName(id)!=null)
             {
-                Project project = (from x in db.Project where x.ProjectNameUnique == id select x).FirstOrDefault();
-
-                List<ImageFilePath> images = (from x in db.ImageFilePath where x.ProjectID == project.Id select x).ToList();
+                Project project = _db.GetProjectByName(id);
+                
+                var images = _db.GetImagesByProjectId(project.Id);
 
                 projectAndImages.Project = project;
                 projectAndImages.Images = images;
