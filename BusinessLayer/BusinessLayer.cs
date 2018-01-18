@@ -153,6 +153,11 @@ namespace BusinessLayer
             return _projectRepository.GetSingle(x => x.Id == id);
         }
 
+        public Project GetProjectByName(string projectName)
+        {
+            return _projectRepository.GetSingle(x => x.ProjectNameUnique == projectName);
+        }
+
         public bool AddProject(params Project[] project)
         {
             return (_projectRepository.Add(project) == 1);
@@ -253,5 +258,7 @@ namespace BusinessLayer
         {
             return (_socialMediaRepository.Remove() == 1);
         }
+
+        
     }
 }

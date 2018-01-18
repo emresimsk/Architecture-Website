@@ -40,6 +40,7 @@ namespace BusinessLayer
 
         IList<Project> GetAllProjects();                                          // Project
         Project GetProjectById(decimal id);                                       // Project
+        Project GetProjectByName(string projectName);                             // Project
         bool AddProject(params Project[] project);                                // Project
         bool UpdateProject(params Project[] project);                             // Project
         bool RemoveProject(params Project[] project);                             // Project
