@@ -9,2386 +9,2382 @@
 
 (function($) {
 
-'use strict';
+    "use strict";
 
-var has3d,
+    var has3d,
 
-  vendor = '',
-  
-  version = '4.1.0',
+        vendor = "",
 
-  isTouch = false,
+        version = "4.1.0",
 
-  mouseEvents =
-    {
-      down: 'mousedown',
-      move: 'mousemove',
-      up: 'mouseup',
-      over: 'mouseover',
-      out: 'mouseout'
-    },
+        isTouch = false,
 
-  corners = {
-    backward: ['l'],
-    forward: ['r'],
-    all: ['l', 'r']
-  },
+        mouseEvents =
+        {
+            down: "mousedown",
+            move: "mousemove",
+            up: "mouseup",
+            over: "mouseover",
+            out: "mouseout"
+        },
 
-  // Display values
+        corners = {
+            backward: ["l"],
+            forward: ["r"],
+            all: ["l", "r"]
+        },
 
-  displays = ['single', 'double'],
+        // Display values
 
-  // Direction values
+        displays = ["single", "double"],
 
-  directions = ['ltr', 'rtl'],
+        // Direction values
 
-  // Default options
+        directions = ["ltr", "rtl"],
 
-  turnOptions = {
+        // Default options
 
-    // Enables hardware acceleration
+        turnOptions = {
 
-    acceleration: true,
+            // Enables hardware acceleration
+            acceleration: true,
 
-    // Display
+            // Display
 
-    display: 'double',
+            display: "double",
 
-    // Duration of transition in milliseconds
+            // Duration of transition in milliseconds
 
-    duration: 600,
+            duration: 600,
 
-    // First page
+            // First page
 
-    page: 1,
-    
-    // Enables gradients
+            page: 1,
 
-    gradients: true,
+            // Enables gradients
 
-    // Events
+            gradients: true,
 
-    when: null
-  },
+            // Events
 
-  flipOptions = {
+            when: null
+        },
 
-    // Enables hardware acceleration
+        flipOptions = {
 
-    acceleration: true,
-    
-    // Corners
-    // backward: Activates both tl and bl corners
-    // forward: Activates both tr and br corners
-    // all: Activates all the corners
+            // Enables hardware acceleration
+            acceleration: true,
 
-    corners: 'forward',
-    
-    // Size of the active zone of each corner
+            // Corners
+            // backward: Activates both tl and bl corners
+            // forward: Activates both tr and br corners
+            // all: Activates all the corners
 
-    cornerSize: 100,
+            corners: "forward",
 
+            // Size of the active zone of each corner
 
-    // Duration of transition in milliseconds
+            cornerSize: 100,
 
-    duration: 600,
-    
-    // Enables gradients
 
-    gradients: true
+            // Duration of transition in milliseconds
 
-  },
+            duration: 600,
 
-  // Number of pages in the DOM, minimum value: 6
+            // Enables gradients
 
-  pagesInDOM = 6,
-  
+            gradients: true
 
-turnMethods = {
+        },
 
-  // Singleton constructor
-  // $('#selector').turn([options]);
+        // Number of pages in the DOM, minimum value: 6
 
-  init: function(opts) {
+        pagesInDOM = 6,
 
-    if (this.length>1)
-      throw turnError('This selector has more than 1 element');
-    
-    // Define constants
-    
-    vendor = getPrefix();
 
-    var i, pageNum = 0, data = this.data(), ch = this.children();
+        turnMethods = {
 
-    // Set initial configuration
+            // Singleton constructor
+            // $('#selector').turn([options]);
+            init: function(opts) {
 
-    opts = $.extend({
-      width: this.width(),
-      height: this.height(),
-      direction: this.attr('dir') || this.css('direction') || 'ltr'
-    }, turnOptions, opts);
+                if (this.length > 1)
+                    throw turnError("This selector has more than 1 element");
 
-    data.opts = opts;
-    data.pageObjs = {};
-    data.pages = {};
-    data.pageWrap = {};
-    data.pagePlace = {};
-    data.pageMv = [];
-    data.zoom = 1;
-    data.totalPages = opts.pages || 0;
-    data.docEvents = {
-      mouseStart: function(e) {
-        for (var page in data.pages)
-          if (has(page, data.pages) &&
-            flipMethods._eventStart.call(data.pages[page], e)===false)
-              return false;
-      },
+                // Define constants
 
-      mouseMove: function(e) {
-        for (var page in data.pages)
-          if (has(page, data.pages))
-            flipMethods._eventMove.call(data.pages[page], e);
-      },
+                vendor = getPrefix();
 
-      mouseEnd: function(e) {
-        for (var page in data.pages)
-          if (has(page, data.pages))
-            flipMethods._eventEnd.call(data.pages[page], e);
-      }
-    };
+                var i, pageNum = 0, data = this.data(), ch = this.children();
 
-    // Add event listeners
+                // Set initial configuration
 
-    if (opts.when)
-      for (i in opts.when)
-        if (has(i, opts.when))
-          this.bind(i, opts.when[i]);
+                opts = $.extend({
+                        width: this.width(),
+                        height: this.height(),
+                        direction: this.attr("dir") || this.css("direction") || "ltr"
+                    },
+                    turnOptions,
+                    opts);
 
-    // Set the css
+                data.opts = opts;
+                data.pageObjs = {};
+                data.pages = {};
+                data.pageWrap = {};
+                data.pagePlace = {};
+                data.pageMv = [];
+                data.zoom = 1;
+                data.totalPages = opts.pages || 0;
+                data.docEvents = {
+                    mouseStart: function(e) {
+                        for (var page in data.pages)
+                            if (has(page, data.pages) &&
+                                flipMethods._eventStart.call(data.pages[page], e) === false)
+                                return false;
+                    },
 
-    this.css({position: 'relative', width: opts.width, height: opts.height});
+                    mouseMove: function(e) {
+                        for (var page in data.pages)
+                            if (has(page, data.pages))
+                                flipMethods._eventMove.call(data.pages[page], e);
+                    },
 
-    // Set the initial display
+                    mouseEnd: function(e) {
+                        for (var page in data.pages)
+                            if (has(page, data.pages))
+                                flipMethods._eventEnd.call(data.pages[page], e);
+                    }
+                };
 
-    this.turn('display', opts.display);
+                // Add event listeners
 
-    // Set the direction
+                if (opts.when)
+                    for (i in opts.when)
+                        if (has(i, opts.when))
+                            this.bind(i, opts.when[i]);
 
-    if (opts.direction!=='')
-      this.turn('direction', opts.direction);
+                // Set the css
 
+                this.css({ position: "relative", width: opts.width, height: opts.height });
 
-    // Add pages from the DOM
+                // Set the initial display
 
-    for (i = 0; i<ch.length; i++) {
-      if ($(ch[i]).attr('ignore')!='1') {
-        this.turn('addPage', ch[i], ++pageNum);
-      }
-    }
+                this.turn("display", opts.display);
 
-    // Event listeners
+                // Set the direction
 
-    $(this).bind(mouseEvents.down, data.docEvents.mouseStart).
-      bind('start', turnMethods._start).
-      bind('end', turnMethods._end).
-      bind('pressed', turnMethods._pressed).
-      bind('released', turnMethods._released).
-      bind('flip', turnMethods._flip);
+                if (opts.direction !== "")
+                    this.turn("direction", opts.direction);
 
-    $(document).bind(mouseEvents.move, data.docEvents.mouseMove).
-      bind(mouseEvents.up, data.docEvents.mouseEnd);
 
-    // Set the initial page
+                // Add pages from the DOM
 
-    this.turn('page', opts.page);
+                for (i = 0; i < ch.length; i++) {
+                    if ($(ch[i]).attr("ignore") != "1") {
+                        this.turn("addPage", ch[i], ++pageNum);
+                    }
+                }
 
-    data.done = true;
+                // Event listeners
 
-    return this;
-  },
+                $(this).bind(mouseEvents.down, data.docEvents.mouseStart).bind("start", turnMethods._start)
+                    .bind("end", turnMethods._end).bind("pressed", turnMethods._pressed)
+                    .bind("released", turnMethods._released).bind("flip", turnMethods._flip);
 
-  // Adds a page from external data
+                $(document).bind(mouseEvents.move, data.docEvents.mouseMove)
+                    .bind(mouseEvents.up, data.docEvents.mouseEnd);
 
-  addPage: function(element, page) {
+                // Set the initial page
 
-    var currentPage,
-      className,
-      incPages = false,
-      data = this.data(),
-      lastPage = data.totalPages+1;
+                this.turn("page", opts.page);
 
-    if (data.destroying)
-      return false;
+                data.done = true;
 
-    // Read the page number from the className of `element` - format: p[0-9]+
+                return this;
+            },
 
-    if ((currentPage = /\bp([0-9]+)\b/.exec($(element).attr('class'))))
-      page = parseInt(currentPage[1], 10);
+            // Adds a page from external data
 
-    if (page) {
-      
-      if (page==lastPage)
-        incPages = true;
-      else if (page>lastPage)
-        throw turnError('Page "'+page+'" cannot be inserted');
+            addPage: function(element, page) {
 
-    } else {
-      
-      page = lastPage;
-      incPages = true;
+                var currentPage,
+                    className,
+                    incPages = false,
+                    data = this.data(),
+                    lastPage = data.totalPages + 1;
 
-    }
+                if (data.destroying)
+                    return false;
 
-    if (page>=1 && page<=lastPage) {
+                // Read the page number from the className of `element` - format: p[0-9]+
 
-      if (data.display=='double')
-        className = (page%2) ? ' odd' : ' even';
-      else
-        className = '';
+                if ((currentPage = /\bp([0-9]+)\b/.exec($(element).attr("class"))))
+                    page = parseInt(currentPage[1], 10);
 
-      // Stop animations
-      if (data.done)
-        this.turn('stop');
+                if (page) {
 
-      // Move pages if it's necessary
-      if (page in data.pageObjs)
-        turnMethods._movePages.call(this, page, 1);
+                    if (page == lastPage)
+                        incPages = true;
+                    else if (page > lastPage)
+                        throw turnError('Page "' + page + '" cannot be inserted');
 
-      // Increase the number of pages
-      if (incPages)
-        data.totalPages = lastPage;
+                } else {
 
-      // Add element
-      data.pageObjs[page] = $(element).
-        css({'float': 'left'}).
-        addClass('page p' + page + className);
+                    page = lastPage;
+                    incPages = true;
 
-      // Add page
-      turnMethods._addPage.call(this, page);
+                }
 
+                if (page >= 1 && page <= lastPage) {
 
-      // Update view
-      if (data.done)
-        this.turn('update');
+                    if (data.display == "double")
+                        className = (page % 2) ? " odd" : " even";
+                    else
+                        className = "";
 
+                    // Stop animations
+                    if (data.done)
+                        this.turn("stop");
 
-      // Remove pages out of range
-      turnMethods._removeFromDOM.call(this);
-    }
+                    // Move pages if it's necessary
+                    if (page in data.pageObjs)
+                        turnMethods._movePages.call(this, page, 1);
 
-    return this;
-  },
+                    // Increase the number of pages
+                    if (incPages)
+                        data.totalPages = lastPage;
 
-  // Adds a page
+                    // Add element
+                    data.pageObjs[page] = $(element).css({ 'float': "left" }).addClass("page p" + page + className);
 
-  _addPage: function(page) {
-    
-    var data = this.data(),
-      element = data.pageObjs[page];
+                    // Add page
+                    turnMethods._addPage.call(this, page);
 
-    if (element)
-      if (turnMethods._necessPage.call(this, page)) {
 
-        if (!data.pageWrap[page]) {
+                    // Update view
+                    if (data.done)
+                        this.turn("update");
 
-          var prop = turnMethods._pageSize.call(this, page, true);
 
-          element.css({width: prop.width, height: prop.height});
+                    // Remove pages out of range
+                    turnMethods._removeFromDOM.call(this);
+                }
 
-          // Place
-          data.pagePlace[page] = page;
+                return this;
+            },
 
-          // Wrapper
-          data.pageWrap[page] = $('<div/>',
-            {'class': 'turn-page-wrapper',
-              page: page,
-              css: {position: 'absolute',
-              overflow: 'hidden'}}).
-            css(prop);
+            // Adds a page
 
-          // Append to this
-          this.append(data.pageWrap[page]);
+            _addPage: function(page) {
 
-          // Move element to wrapper
-          data.pageWrap[page].prepend(data.pageObjs[page]);
+                var data = this.data(),
+                    element = data.pageObjs[page];
 
-        }
+                if (element)
+                    if (turnMethods._necessPage.call(this, page)) {
 
-        // If the page is in the current view, create the flip effect
-        if (!page || turnMethods._setPageLoc.call(this, page)==1)
-          turnMethods._makeFlip.call(this, page);
-        
-      } else {
+                        if (!data.pageWrap[page]) {
 
-        // Place
-        data.pagePlace[page] = 0;
+                            var prop = turnMethods._pageSize.call(this, page, true);
 
-        // Remove element from the DOM
-        if (data.pageObjs[page])
-          data.pageObjs[page].remove();
+                            element.css({ width: prop.width, height: prop.height });
 
-      }
+                            // Place
+                            data.pagePlace[page] = page;
 
-  },
+                            // Wrapper
+                            data.pageWrap[page] = $("<div/>",
+                                {
+                                    'class': "turn-page-wrapper",
+                                    page: page,
+                                    css: {
+                                        position: "absolute",
+                                        overflow: "hidden"
+                                    }
+                                }).css(prop);
 
-  // Checks if a page is in memory
-  
-  hasPage: function(page) {
+                            // Append to this
+                            this.append(data.pageWrap[page]);
 
-    return has(page, this.data().pageObjs);
-  
-  },
+                            // Move element to wrapper
+                            data.pageWrap[page].prepend(data.pageObjs[page]);
 
-  // Centers the flipbook
+                        }
 
-  center: function(page) {
-    
-    var data = this.data(),
-      size = $(this).turn('size'),
-      left = size.width/(data.zoom*2) -size.width/2;
+                        // If the page is in the current view, create the flip effect
+                        if (!page || turnMethods._setPageLoc.call(this, page) == 1)
+                            turnMethods._makeFlip.call(this, page);
 
-    if (data.display=='double') {
-      var view = this.turn('view', page || data.tpage || data.page);
+                    } else {
 
-      if (data.direction=='ltr') {
-        if (!view[0])
-          left -= size.width/4;
-        else if (!view[1])
-          left += size.width/4;
-      } else {
-        if (!view[0])
-          left += size.width/4;
-        else if (!view[1])
-          left -= size.width/4;
-      }
-    }
+                        // Place
+                        data.pagePlace[page] = 0;
 
-    $(this).css({marginLeft: left});
+                        // Remove element from the DOM
+                        if (data.pageObjs[page])
+                            data.pageObjs[page].remove();
 
-    return this;
+                    }
 
-  },
+            },
 
-  // Destroys the flipbook
+            // Checks if a page is in memory
 
-  destroy: function () {
+            hasPage: function(page) {
 
-    var page,
-      data = this.data();
+                return has(page, this.data().pageObjs);
 
-    data.destroying = true;
+            },
 
-    $(this).unbind(mouseEvents.down)
-      .unbind('end')
-      .unbind('first')
-      .unbind('flip')
-      .unbind('last')
-      .unbind('pressed')
-      .unbind('released')
-      .unbind('start')
-      .unbind('turning')
-      .unbind('turned')
-      .unbind('zooming');
+            // Centers the flipbook
 
-    $(document).unbind(mouseEvents.move, data.docEvents.mouseMove).
-      unbind(mouseEvents.up, data.docEvents.mouseEnd);
-    
-    while (data.totalPages!==0) {
-      this.turn('removePage', data.totalPages);
-    }
+            center: function(page) {
 
-    if (data.fparent)
-      data.fparent.remove();
+                var data = this.data(),
+                    size = $(this).turn("size"),
+                    left = size.width / (data.zoom * 2) - size.width / 2;
 
-    if (data.shadow)
-      data.shadow.remove();
+                if (data.display == "double") {
+                    var view = this.turn("view", page || data.tpage || data.page);
 
-    this.removeData();
-    data = null;
+                    if (data.direction == "ltr") {
+                        if (!view[0])
+                            left -= size.width / 4;
+                        else if (!view[1])
+                            left += size.width / 4;
+                    } else {
+                        if (!view[0])
+                            left += size.width / 4;
+                        else if (!view[1])
+                            left -= size.width / 4;
+                    }
+                }
 
-    return this;
+                $(this).css({ marginLeft: left });
 
-  },
+                return this;
 
-  // Checks if this element is a flipbook
+            },
 
-  is: function() {
+            // Destroys the flipbook
 
-    return typeof(this.data().pages)=='object';
+            destroy: function() {
 
-  },
+                var page,
+                    data = this.data();
 
-  // Sets and gets the zoom value
+                data.destroying = true;
 
-  zoom: function(newZoom) {
-    
-    var data = this.data();
+                $(this).unbind(mouseEvents.down)
+                    .unbind("end")
+                    .unbind("first")
+                    .unbind("flip")
+                    .unbind("last")
+                    .unbind("pressed")
+                    .unbind("released")
+                    .unbind("start")
+                    .unbind("turning")
+                    .unbind("turned")
+                    .unbind("zooming");
 
-    if (typeof(newZoom)=='number') {
+                $(document).unbind(mouseEvents.move, data.docEvents.mouseMove)
+                    .unbind(mouseEvents.up, data.docEvents.mouseEnd);
 
-      if (newZoom<0.001 || newZoom>100)
-        throw turnError(newZoom+ ' is not a value for zoom');
-    
-      var event = $.Event('zooming');
-      this.trigger(event, [newZoom, data.zoom]);
+                while (data.totalPages !== 0) {
+                    this.turn("removePage", data.totalPages);
+                }
 
-      if (event.isDefaultPrevented())
-        return this;
-      
-      var size = $(this).turn('size'),
-        iz = 1/data.zoom,
-        newWidth = Math.round(size.width * iz * newZoom),
-        newHeight = Math.round(size.height * iz * newZoom);
-    
-      data.zoom = newZoom;
+                if (data.fparent)
+                    data.fparent.remove();
 
-      $(this).turn('stop').
-        turn('size', newWidth, newHeight).
-        css({marginTop: size.height * iz / 2 - newHeight / 2});
+                if (data.shadow)
+                    data.shadow.remove();
 
-      if (data.opts.autoCenter)
-        this.turn('center');
-      else
-        $(this).css({marginLeft: size.width * iz / 2 - newWidth / 2});
-      
-      turnMethods._updateShadow.call(this);
-  
-      return this;
+                this.removeData();
+                data = null;
 
-    } else
-      return data.zoom;
+                return this;
 
-  },
+            },
 
-  // Gets the size of a page
+            // Checks if this element is a flipbook
 
-  _pageSize: function(page, position) {
+            is: function() {
 
-    var data = this.data(),
-      prop = {};
+                return typeof(this.data().pages) == "object";
 
-    if (data.display=='single') {
+            },
 
-      prop.width = this.width();
-      prop.height = this.height();
+            // Sets and gets the zoom value
 
-      if (position) {
-        prop.top = 0;
-        prop.left = 0;
-        prop.right = 'auto';
-      }
+            zoom: function(newZoom) {
 
-    } else {
+                var data = this.data();
 
-      var pageWidth = this.width()/2,
-        pageHeight = this.height();
+                if (typeof(newZoom) == "number") {
 
-      if (data.pageObjs[page].hasClass('own-size')) {
-        prop.width = data.pageObjs[page].width();
-        prop.height = data.pageObjs[page].height();
-      } else {
-        prop.width = pageWidth;
-        prop.height = pageHeight;
-      }
+                    if (newZoom < 0.001 || newZoom > 100)
+                        throw turnError(newZoom + " is not a value for zoom");
 
-      if (position) {
-        var odd = page%2;
-        prop.top = (pageHeight-prop.height)/2;
+                    var event = $.Event("zooming");
+                    this.trigger(event, [newZoom, data.zoom]);
 
-        if (data.direction=='ltr') {
-          
-          prop[(odd) ? 'right' : 'left'] = pageWidth-prop.width;
-          prop[(odd) ? 'left' : 'right'] = 'auto';
+                    if (event.isDefaultPrevented())
+                        return this;
 
-        } else {
-          
-          prop[(odd) ? 'left' : 'right'] = pageWidth-prop.width;
-          prop[(odd) ? 'right' : 'left'] = 'auto';
+                    var size = $(this).turn("size"),
+                        iz = 1 / data.zoom,
+                        newWidth = Math.round(size.width * iz * newZoom),
+                        newHeight = Math.round(size.height * iz * newZoom);
 
-        }
+                    data.zoom = newZoom;
 
-      }
-    }
+                    $(this).turn("stop").turn("size", newWidth, newHeight)
+                        .css({ marginTop: size.height * iz / 2 - newHeight / 2 });
 
-    return prop;
+                    if (data.opts.autoCenter)
+                        this.turn("center");
+                    else
+                        $(this).css({ marginLeft: size.width * iz / 2 - newWidth / 2 });
 
-  },
+                    turnMethods._updateShadow.call(this);
 
-  // Prepares the flip effect for a page
+                    return this;
 
-  _makeFlip: function(page) {
+                } else
+                    return data.zoom;
 
-    var data = this.data();
+            },
 
-    if (!data.pages[page] && data.pagePlace[page]==page) {
-      var corner,
-        single = data.display=='single',
-        odd = page%2;
+            // Gets the size of a page
 
-      data.pages[page] = data.pageObjs[page].
-        css(turnMethods._pageSize.call(this, page)).
-        flip({page: page,
-          next: (odd || single) ? page+1 : page-1,
-          turn: this,
-          duration: data.opts.duration,
-          acceleration : data.opts.acceleration,
-          gradients: data.opts.gradients
-          }).
-          flip('disable', data.disabled);
-    }
+            _pageSize: function(page, position) {
 
-    return data.pages[page];
-  },
+                var data = this.data(),
+                    prop = {};
 
-  // Makes pages within a range
+                if (data.display == "single") {
 
-  _makeRange: function() {
+                    prop.width = this.width();
+                    prop.height = this.height();
 
-    var page, range,
-      data = this.data();
+                    if (position) {
+                        prop.top = 0;
+                        prop.left = 0;
+                        prop.right = "auto";
+                    }
 
-    if (data.totalPages<1)
-      return;
+                } else {
 
-    range = this.turn('range');
+                    var pageWidth = this.width() / 2,
+                        pageHeight = this.height();
 
-    for (page = range[0]; page<=range[1]; page++)
-      turnMethods._addPage.call(this, page);
+                    if (data.pageObjs[page].hasClass("own-size")) {
+                        prop.width = data.pageObjs[page].width();
+                        prop.height = data.pageObjs[page].height();
+                    } else {
+                        prop.width = pageWidth;
+                        prop.height = pageHeight;
+                    }
 
-  },
+                    if (position) {
+                        var odd = page % 2;
+                        prop.top = (pageHeight - prop.height) / 2;
 
-  // Returns a range of pages that should be in the DOM
-  // Example:
-  // - page in the current view, return true
-  // * page is in the range, return true
-  // Otherwise, return false
-  //
-  // 1 2-3 4-5 6-7 8-9 10-11 12-13
-  //   **  **  --   **  **
+                        if (data.direction == "ltr") {
 
-  range: function(page) {
+                            prop[(odd) ? "right" : "left"] = pageWidth - prop.width;
+                            prop[(odd) ? "left" : "right"] = "auto";
 
-    var remainingPages, left, right, view,
-      data = this.data();
+                        } else {
 
+                            prop[(odd) ? "left" : "right"] = pageWidth - prop.width;
+                            prop[(odd) ? "right" : "left"] = "auto";
 
-      page = page || data.tpage || data.page || 1;
-      view = turnMethods._view.call(this, page);
+                        }
 
-      if (page<1 || page>data.totalPages)
-        throw turnError('"'+page+'" is not a page for range');
-    
-      view[1] = view[1] || view[0];
-      
-      if (view[0]>=1 && view[1]<=data.totalPages) {
+                    }
+                }
 
-        remainingPages = Math.floor((pagesInDOM-2)/2);
+                return prop;
 
-        if (data.totalPages-view[1] > view[0]) {
-          left = Math.min(view[0]-1, remainingPages);
-          right = 2*remainingPages-left;
-        } else {
-          right = Math.min(data.totalPages-view[1], remainingPages);
-          left = 2*remainingPages-right;
-        }
+            },
 
-      } else {
-        left = pagesInDOM-1;
-        right = pagesInDOM-1;
-      }
+            // Prepares the flip effect for a page
 
-      return [Math.max(1, view[0]-left),
-          Math.min(data.totalPages, view[1]+right)];
+            _makeFlip: function(page) {
 
-  },
+                var data = this.data();
 
-  // Detects if a page is within the range of `pagesInDOM` from the current view
+                if (!data.pages[page] && data.pagePlace[page] == page) {
+                    var corner,
+                        single = data.display == "single",
+                        odd = page % 2;
 
-  _necessPage: function(page) {
-    
-    if (page===0)
-      return true;
+                    data.pages[page] = data.pageObjs[page].css(turnMethods._pageSize.call(this, page)).flip({
+                        page: page,
+                        next: (odd || single) ? page + 1 : page - 1,
+                        turn: this,
+                        duration: data.opts.duration,
+                        acceleration: data.opts.acceleration,
+                        gradients: data.opts.gradients
+                    }).flip("disable", data.disabled);
+                }
 
-    var data = this.data(),
-      range = this.turn('range');
+                return data.pages[page];
+            },
 
-    return data.pageObjs[page].hasClass('fixed') ||
-      (page>=range[0] && page<=range[1]);
-    
-  },
+            // Makes pages within a range
 
-  // Releases memory by removing pages from the DOM
+            _makeRange: function() {
 
-  _removeFromDOM: function() {
+                var page,
+                    range,
+                    data = this.data();
 
-    var page, data = this.data();
+                if (data.totalPages < 1)
+                    return;
 
-    for (page in data.pageWrap)
-      if (has(page, data.pageWrap) &&
-        !turnMethods._necessPage.call(this, page))
-      turnMethods._removePageFromDOM.call(this, page);
-    
-  },
+                range = this.turn("range");
 
-  // Removes a page from DOM and its internal references
+                for (page = range[0]; page <= range[1]; page++)
+                    turnMethods._addPage.call(this, page);
 
-  _removePageFromDOM: function(page) {
+            },
 
-    var data = this.data();
+            // Returns a range of pages that should be in the DOM
+            // Example:
+            // - page in the current view, return true
+            // * page is in the range, return true
+            // Otherwise, return false
+            //
+            // 1 2-3 4-5 6-7 8-9 10-11 12-13
+            //   **  **  --   **  **
 
-    if (data.pages[page]) {
-      var dd = data.pages[page].data();
+            range: function(page) {
 
-      flipMethods._moveFoldingPage.call(data.pages[page], false);
+                var remainingPages,
+                    left,
+                    right,
+                    view,
+                    data = this.data();
 
-      if (dd.f && dd.f.fwrapper)
-        dd.f.fwrapper.remove();
 
-      data.pages[page].removeData();
-      data.pages[page].remove();
-      delete data.pages[page];
-    }
+                page = page || data.tpage || data.page || 1;
+                view = turnMethods._view.call(this, page);
 
-    if (data.pageObjs[page])
-      data.pageObjs[page].remove();
+                if (page < 1 || page > data.totalPages)
+                    throw turnError('"' + page + '" is not a page for range');
 
-    if (data.pageWrap[page]) {
-      data.pageWrap[page].remove();
-      delete data.pageWrap[page];
-    }
+                view[1] = view[1] || view[0];
 
-    delete data.pagePlace[page];
+                if (view[0] >= 1 && view[1] <= data.totalPages) {
 
-  },
+                    remainingPages = Math.floor((pagesInDOM - 2) / 2);
 
-  // Removes a page
+                    if (data.totalPages - view[1] > view[0]) {
+                        left = Math.min(view[0] - 1, remainingPages);
+                        right = 2 * remainingPages - left;
+                    } else {
+                        right = Math.min(data.totalPages - view[1], remainingPages);
+                        left = 2 * remainingPages - right;
+                    }
 
-  removePage: function(page) {
+                } else {
+                    left = pagesInDOM - 1;
+                    right = pagesInDOM - 1;
+                }
 
-    var data = this.data();
+                return [
+                    Math.max(1, view[0] - left),
+                    Math.min(data.totalPages, view[1] + right)
+                ];
 
-    if (page<1 || page>data.totalPages)
-      throw turnError('The page '+ page + ' doesn\'t exist');
-      
-    if (data.pageObjs[page]) {
+            },
 
-      // Stop animations
-      this.turn('stop');
+            // Detects if a page is within the range of `pagesInDOM` from the current view
 
-      // Remove `page`
-      turnMethods._removePageFromDOM.call(this, page);
-      delete data.pageObjs[page];
+            _necessPage: function(page) {
 
-    }
+                if (page === 0)
+                    return true;
 
-    // Move the pages behind `page`
-    turnMethods._movePages.call(this, page, -1);
+                var data = this.data(),
+                    range = this.turn("range");
 
-    // Resize the size of this flipbook
-    data.totalPages = data.totalPages-1;
+                return data.pageObjs[page].hasClass("fixed") ||
+                    (page >= range[0] && page <= range[1]);
 
-    // Check the current view
+            },
 
-    if (data.page>data.totalPages)
-      this.turn('page', data.totalPages);
-    else
-      turnMethods._makeRange.call(this);
+            // Releases memory by removing pages from the DOM
 
-    return this;
-  
-  },
+            _removeFromDOM: function() {
 
-  // Moves pages
+                var page, data = this.data();
 
-  _movePages: function(from, change) {
+                for (page in data.pageWrap)
+                    if (has(page, data.pageWrap) &&
+                        !turnMethods._necessPage.call(this, page))
+                        turnMethods._removePageFromDOM.call(this, page);
 
-    var page,
-      that = this,
-      data = this.data(),
-      single = data.display=='single',
-      move = function(page) {
+            },
 
-        var next = page + change,
-          odd = next%2,
-          className = (odd) ? ' odd ' : ' even ';
+            // Removes a page from DOM and its internal references
 
-        if (data.pageObjs[page])
-          data.pageObjs[next] = data.pageObjs[page]
-            .removeClass('p' + page + ' odd even')
-            .addClass('p' + next + className);
+            _removePageFromDOM: function(page) {
 
-        if (data.pagePlace[page] && data.pageWrap[page]) {
-          data.pagePlace[next] = next;
-        
-        if (data.pageObjs[next].hasClass('fixed'))
-          data.pageWrap[next] = data.pageWrap[page]
-            .attr('page', next);
-        else
-          data.pageWrap[next] = data.pageWrap[page].
-            css(turnMethods._pageSize.call(that, next, true)).
-            attr('page', next);
-    
-          if (data.pages[page])
-            data.pages[next] = data.pages[page]
-              .flip('options', {
-                page: next,
-                next: (single || odd) ? next+1 : next-1,
-                corners: (single) ? 'all' :
-                  ((odd) ? 'forward' : 'backward')
-              });
+                var data = this.data();
 
-          if (change) {
-            delete data.pages[page];
-            delete data.pagePlace[page];
-            delete data.pageObjs[page];
-            delete data.pageWrap[page];
-            delete data.pageObjs[page];
-          }
-      }
-    };
+                if (data.pages[page]) {
+                    var dd = data.pages[page].data();
 
-    if (change>0)
-      for (page=data.totalPages; page>=from; page--)
-        move(page);
-    else
-      for (page=from; page<=data.totalPages; page++)
-        move(page);
+                    flipMethods._moveFoldingPage.call(data.pages[page], false);
 
-  },
+                    if (dd.f && dd.f.fwrapper)
+                        dd.f.fwrapper.remove();
 
-  // Sets or Gets the display mode
+                    data.pages[page].removeData();
+                    data.pages[page].remove();
+                    delete data.pages[page];
+                }
 
-  display: function(display) {
+                if (data.pageObjs[page])
+                    data.pageObjs[page].remove();
 
-    var data = this.data(),
-      currentDisplay = data.display;
+                if (data.pageWrap[page]) {
+                    data.pageWrap[page].remove();
+                    delete data.pageWrap[page];
+                }
 
-    if (display) {
+                delete data.pagePlace[page];
 
-      if ($.inArray(display, displays)==-1)
-        throw turnError('"'+display + '" is not a value for display');
-      
-      if (display=='single') {
-        if (!data.pageObjs[0]) {
+            },
 
-          this.turn('stop').
-            css({'overflow': 'hidden'});
+            // Removes a page
 
-          data.pageObjs[0] = $('<div />',
-              {'class': 'page p-temporal'}).
-            css({width: this.width(), height: this.height()}).
-            appendTo(this);
+            removePage: function(page) {
 
-        }
-      } else {
-        if (data.pageObjs[0]) {
-          this.turn('stop').css({'overflow': ''});
-          data.pageObjs[0].remove();
-          delete data.pageObjs[0];
-        }
-      }
+                var data = this.data();
 
-      data.display = display;
+                if (page < 1 || page > data.totalPages)
+                    throw turnError("The page " + page + " doesn't exist");
 
-      if (currentDisplay) {
-        var size = this.turn('size');
-        turnMethods._movePages.call(this, 1, 0);
-        this.turn('size', size.width, size.height).
-          turn('update');
-      }
+                if (data.pageObjs[page]) {
 
-      return this;
+                    // Stop animations
+                    this.turn("stop");
 
-    } else
-      return currentDisplay;
-  
-  },
+                    // Remove `page`
+                    turnMethods._removePageFromDOM.call(this, page);
+                    delete data.pageObjs[page];
 
-  // Gets and sets the direction of the flipbook
+                }
 
-  direction: function(dir) {
+                // Move the pages behind `page`
+                turnMethods._movePages.call(this, page, -1);
 
-    var data = this.data();
+                // Resize the size of this flipbook
+                data.totalPages = data.totalPages - 1;
 
-    if (typeof(dir)=='undefined') {
+                // Check the current view
 
-      return data.direction;
+                if (data.page > data.totalPages)
+                    this.turn("page", data.totalPages);
+                else
+                    turnMethods._makeRange.call(this);
 
-    } else {
+                return this;
 
-      dir = dir.toLowerCase();
+            },
 
-      if ($.inArray(dir, directions)==-1)
-        throw turnError('"' + dir + '" is not a value for direction');
+            // Moves pages
 
-      if (dir=='rtl') {
-        $(this).attr('dir', 'ltr').
-          css({direction: 'ltr'});
-      }
+            _movePages: function(from, change) {
 
-      data.direction = dir;
+                var page,
+                    that = this,
+                    data = this.data(),
+                    single = data.display == "single",
+                    move = function(page) {
 
-      if (data.done)
-        this.turn('size', $(this).width(), $(this).height());
+                        var next = page + change,
+                            odd = next % 2,
+                            className = (odd) ? " odd " : " even ";
 
-      return this;
-    }
+                        if (data.pageObjs[page])
+                            data.pageObjs[next] = data.pageObjs[page]
+                                .removeClass("p" + page + " odd even")
+                                .addClass("p" + next + className);
 
-  },
+                        if (data.pagePlace[page] && data.pageWrap[page]) {
+                            data.pagePlace[next] = next;
 
-  // Detects if the pages are being animated
+                            if (data.pageObjs[next].hasClass("fixed"))
+                                data.pageWrap[next] = data.pageWrap[page]
+                                    .attr("page", next);
+                            else
+                                data.pageWrap[next] = data.pageWrap[page]
+                                    .css(turnMethods._pageSize.call(that, next, true)).attr("page", next);
 
-  animating: function() {
+                            if (data.pages[page])
+                                data.pages[next] = data.pages[page]
+                                    .flip("options",
+                                        {
+                                            page: next,
+                                            next: (single || odd) ? next + 1 : next - 1,
+                                            corners: (single) ? "all" : ((odd) ? "forward" : "backward")
+                                        });
 
-    return this.data().pageMv.length>0;
+                            if (change) {
+                                delete data.pages[page];
+                                delete data.pagePlace[page];
+                                delete data.pageObjs[page];
+                                delete data.pageWrap[page];
+                                delete data.pageObjs[page];
+                            }
+                        }
+                    };
 
-  },
+                if (change > 0)
+                    for (page = data.totalPages; page >= from; page--)
+                        move(page);
+                else
+                    for (page = from; page <= data.totalPages; page++)
+                        move(page);
 
-  // Disables and enables the effect
+            },
 
-  disable: function(bool) {
+            // Sets or Gets the display mode
 
-    var page,
-      data = this.data(),
-      view = this.turn('view');
+            display: function(display) {
 
-      data.disabled = bool===undefined || bool===true;
+                var data = this.data(),
+                    currentDisplay = data.display;
 
-    for (page in data.pages)
-      if (has(page, data.pages))
-        data.pages[page].flip('disable', (bool) ? $.inArray(page, view) : false);
+                if (display) {
 
-    return this;
+                    if ($.inArray(display, displays) == -1)
+                        throw turnError('"' + display + '" is not a value for display');
 
-  },
+                    if (display == "single") {
+                        if (!data.pageObjs[0]) {
 
-  // Disables and enables the effect
+                            this.turn("stop").css({ 'overflow': "hidden" });
 
-  disabled: function(disable) {
+                            data.pageObjs[0] = $("<div />",
+                                    { 'class': "page p-temporal" }).css({ width: this.width(), height: this.height() })
+                                .appendTo(this);
 
-    if (disable===undefined) {
-      return this.data().disabled===true;
-    } else {
-      return this.turn('disable', disable);
-    }
+                        }
+                    } else {
+                        if (data.pageObjs[0]) {
+                            this.turn("stop").css({ 'overflow': "" });
+                            data.pageObjs[0].remove();
+                            delete data.pageObjs[0];
+                        }
+                    }
 
-  },
+                    data.display = display;
 
-  // Gets and sets the size
+                    if (currentDisplay) {
+                        var size = this.turn("size");
+                        turnMethods._movePages.call(this, 1, 0);
+                        this.turn("size", size.width, size.height).turn("update");
+                    }
 
-  size: function(width, height) {
+                    return this;
 
-    if (width && height) {
+                } else
+                    return currentDisplay;
 
-      var page, prop,
-        data = this.data(),
-        pageWidth = (data.display=='double') ? width/2 : width;
+            },
 
-      this.css({width: width, height: height});
+            // Gets and sets the direction of the flipbook
 
-      if (data.pageObjs[0])
-        data.pageObjs[0].css({width: pageWidth, height: height});
-      
-      for (page in data.pageWrap) {
-        if (!has(page, data.pageWrap)) continue;
+            direction: function(dir) {
 
-        prop = turnMethods._pageSize.call(this, page, true);
+                var data = this.data();
 
-        data.pageObjs[page].css({width: prop.width, height: prop.height});
-        data.pageWrap[page].css(prop);
+                if (typeof(dir) == "undefined") {
 
-        if (data.pages[page])
-          data.pages[page].css({width: prop.width, height: prop.height});
-      }
+                    return data.direction;
 
-      this.turn('resize');
+                } else {
 
-      return this;
+                    dir = dir.toLowerCase();
 
-    } else {
-      
-      return {width: this.width(), height: this.height()};
+                    if ($.inArray(dir, directions) == -1)
+                        throw turnError('"' + dir + '" is not a value for direction');
 
-    }
-  },
+                    if (dir == "rtl") {
+                        $(this).attr("dir", "ltr").css({ direction: "ltr" });
+                    }
 
-  // Resizes each page
+                    data.direction = dir;
 
-  resize: function() {
+                    if (data.done)
+                        this.turn("size", $(this).width(), $(this).height());
 
-    var page, data = this.data();
+                    return this;
+                }
 
-    if (data.pages[0]) {
-      data.pageWrap[0].css({left: -this.width()});
-      data.pages[0].flip('resize', true);
-    }
+            },
 
-    for (page = 1; page <= data.totalPages; page++)
-      if (data.pages[page])
-        data.pages[page].flip('resize', true);
+            // Detects if the pages are being animated
 
+            animating: function() {
 
-  },
+                return this.data().pageMv.length > 0;
 
-  // Removes an animation from the cache
+            },
 
-  _removeMv: function(page) {
+            // Disables and enables the effect
 
-    var i, data = this.data();
-      
-    for (i=0; i<data.pageMv.length; i++)
-      if (data.pageMv[i]==page) {
-        data.pageMv.splice(i, 1);
-        return true;
-      }
+            disable: function(bool) {
 
-    return false;
+                var page,
+                    data = this.data(),
+                    view = this.turn("view");
 
-  },
+                data.disabled = bool === undefined || bool === true;
 
-  // Adds an animation to the cache
-  
-  _addMv: function(page) {
+                for (page in data.pages)
+                    if (has(page, data.pages))
+                        data.pages[page].flip("disable", (bool) ? $.inArray(page, view) : false);
 
-    var data = this.data();
+                return this;
 
-    turnMethods._removeMv.call(this, page);
-    data.pageMv.push(page);
+            },
 
-  },
+            // Disables and enables the effect
 
-  // Gets indexes for a view
+            disabled: function(disable) {
 
-  _view: function(page) {
-  
-    var data = this.data();
-    
-    page = page || data.page;
+                if (disable === undefined) {
+                    return this.data().disabled === true;
+                } else {
+                    return this.turn("disable", disable);
+                }
 
-    if (data.display=='double')
-      return (page%2) ? [page-1, page] : [page, page+1];
-    else
-      return [page];
+            },
 
-  },
+            // Gets and sets the size
 
-  // Gets a view
+            size: function(width, height) {
 
-  view: function(page) {
+                if (width && height) {
 
-    var data = this.data(),
-      view = turnMethods._view.call(this, page);
+                    var page,
+                        prop,
+                        data = this.data(),
+                        pageWidth = (data.display == "double") ? width / 2 : width;
 
-    if (data.display=='double')
-      return [(view[0]>0) ? view[0] : 0,
-        (view[1]<=data.totalPages) ? view[1] : 0];
-    else
-      return [(view[0]>0 && view[0]<=data.totalPages) ? view[0] : 0];
+                    this.css({ width: width, height: height });
 
-  },
+                    if (data.pageObjs[0])
+                        data.pageObjs[0].css({ width: pageWidth, height: height });
 
-  // Stops animations
+                    for (page in data.pageWrap) {
+                        if (!has(page, data.pageWrap)) continue;
 
-  stop: function(ignore, animate) {
+                        prop = turnMethods._pageSize.call(this, page, true);
 
-    if (this.turn('animating')) {
-      var i, opts, page,
-        data = this.data(),
-        pages = data.pageMv;
+                        data.pageObjs[page].css({ width: prop.width, height: prop.height });
+                        data.pageWrap[page].css(prop);
 
-      data.pageMv = [];
+                        if (data.pages[page])
+                            data.pages[page].css({ width: prop.width, height: prop.height });
+                    }
 
-      if (data.tpage) {
-        data.page = data.tpage;
-        delete data['tpage'];
-      }
+                    this.turn("resize");
 
-      for (i = 0; i<pages.length; i++) {
+                    return this;
 
-        page = data.pages[pages[i]];
-        opts = page.data().f.opts;
+                } else {
 
-        page.flip('hideFoldedPage', false);
+                    return { width: this.width(), height: this.height() };
 
-        flipMethods._moveFoldingPage.call(page, false);
+                }
+            },
 
-        data.pagePlace[opts.next] = opts.next;
+            // Resizes each page
 
-        if (opts.force) {
-          opts.next = (opts.page%2===0) ? opts.page-1 : opts.page+1;
-          delete opts['force'];
-        }
-      }
-    }
+            resize: function() {
 
-    this.turn('update');
+                var page, data = this.data();
 
-    return this;
-  
-  },
+                if (data.pages[0]) {
+                    data.pageWrap[0].css({ left: -this.width() });
+                    data.pages[0].flip("resize", true);
+                }
 
-  // Gets and sets the number of pages
+                for (page = 1; page <= data.totalPages; page++)
+                    if (data.pages[page])
+                        data.pages[page].flip("resize", true);
 
-  pages: function(pages) {
 
-    var data = this.data();
+            },
 
-    if (pages) {
-      if (pages<data.totalPages) {
+            // Removes an animation from the cache
 
-        for (var page = pages+1; page<=data.totalPages; page++)
-          this.turn('removePage', page);
+            _removeMv: function(page) {
 
-        if (this.turn('page')>pages)
-          this.turn('page', pages);
-      }
+                var i, data = this.data();
 
-      data.totalPages = pages;
+                for (i = 0; i < data.pageMv.length; i++)
+                    if (data.pageMv[i] == page) {
+                        data.pageMv.splice(i, 1);
+                        return true;
+                    }
 
-      return this;
-    } else
-      return data.totalPages;
+                return false;
 
-  },
+            },
 
-  // Checks missing pages
+            // Adds an animation to the cache
 
-  _missing : function(page) {
-    
-    var p,
-      data = this.data(),
-      range = this.turn('range', page),
-      missing = [];
+            _addMv: function(page) {
 
-    for (p = range[0]; p<=range[1]; p++) {
-      if (!data.pageObjs[p])
-        missing.push(p);
-    }
+                var data = this.data();
 
-    if (missing.length>0)
-      this.trigger('missing', [missing]);
-    
-  },
+                turnMethods._removeMv.call(this, page);
+                data.pageMv.push(page);
 
-  // Sets a page without effect
+            },
 
-  _fitPage: function(page) {
+            // Gets indexes for a view
 
-    var data = this.data(),
-      newView = this.turn('view', page);
-    
-    turnMethods._missing.call(this, page);
+            _view: function(page) {
 
-    if (!data.pageObjs[page])
-      return;
+                var data = this.data();
 
-    data.page = page;
+                page = page || data.page;
 
-    this.turn('stop');
-    turnMethods._removeFromDOM.call(this);
-    turnMethods._makeRange.call(this);
-    turnMethods._updateShadow.call(this);
-    this.trigger('turned', [page, newView]);
+                if (data.display == "double")
+                    return (page % 2) ? [page - 1, page] : [page, page + 1];
+                else
+                    return [page];
 
-    if (data.opts.autoCenter)
-      this.turn('center');
+            },
 
-  },
-  
-  // Turns to a page
+            // Gets a view
 
-  _turnPage: function(page, fromMouseAction) {
+            view: function(page) {
 
-    var current, next,
-      data = this.data(),
-      place = data.pagePlace[page],
-      view = this.turn('view'),
-      newView = this.turn('view', page);
-  
-    if (data.page!=page) {
+                var data = this.data(),
+                    view = turnMethods._view.call(this, page);
 
-      var event = $.Event('turning');
-      this.trigger(event, [page, newView]);
+                if (data.display == "double")
+                    return [
+                        (view[0] > 0) ? view[0] : 0,
+                        (view[1] <= data.totalPages) ? view[1] : 0
+                    ];
+                else
+                    return [(view[0] > 0 && view[0] <= data.totalPages) ? view[0] : 0];
 
-      if (event.isDefaultPrevented())
-        return;
+            },
 
-      if ($.inArray(1, newView)!=-1)
-        this.trigger('first');
-      if ($.inArray(data.totalPages, newView)!=-1)
-        this.trigger('last');
+            // Stops animations
 
-    }
+            stop: function(ignore, animate) {
 
+                if (this.turn("animating")) {
+                    var i,
+                        opts,
+                        page,
+                        data = this.data(),
+                        pages = data.pageMv;
 
+                    data.pageMv = [];
 
-    if (fromMouseAction) {
+                    if (data.tpage) {
+                        data.page = data.tpage;
+                        delete data["tpage"];
+                    }
 
-      this.turn('stop', place);
+                    for (i = 0; i < pages.length; i++) {
 
-    } else {
+                        page = data.pages[pages[i]];
+                        opts = page.data().f.opts;
 
-      turnMethods._missing.call(this, page);
-      
-      if (!data.pageObjs[page])
-        return;
+                        page.flip("hideFoldedPage", false);
 
-      this.turn('stop');
-      data.page = page;
-    }
-    
+                        flipMethods._moveFoldingPage.call(page, false);
 
-    turnMethods._makeRange.call(this);
+                        data.pagePlace[opts.next] = opts.next;
 
-    if (data.display=='single') {
-      current = view[0];
-      next = newView[0];
-    } else if (view[1] && page>view[1]) {
-      current = view[1];
-      next = newView[0];
-    } else if (view[0] && page<view[0]) {
-      current = view[0];
-      next = newView[1];
-    }
+                        if (opts.force) {
+                            opts.next = (opts.page % 2 === 0) ? opts.page - 1 : opts.page + 1;
+                            delete opts["force"];
+                        }
+                    }
+                }
 
-    if (data.pages[current]) {
+                this.turn("update");
 
-      var opts = data.pages[current].data().f.opts;
-      data.tpage = next;
-      
-      if (opts.next!=next) {
-        opts.next = next;
-        data.pagePlace[next] = opts.page;
-        opts.force = true;
-      }
+                return this;
 
-      if (data.display=='single') {
+            },
 
-        if (data.direction=='ltr') {
-          data.pages[current].flip('turnPage',
-            (newView[0] > view[0]) ? 'r' : 'l');
-        } else {
-          data.pages[current].flip('turnPage',
-            (newView[0] > view[0]) ? 'l' : 'r');
-        }
+            // Gets and sets the number of pages
 
-      } else {
-        
-        data.pages[current].flip('turnPage');
+            pages: function(pages) {
 
-      }
-    }
+                var data = this.data();
 
-  },
+                if (pages) {
+                    if (pages < data.totalPages) {
 
-  // Gets and sets a page
+                        for (var page = pages + 1; page <= data.totalPages; page++)
+                            this.turn("removePage", page);
 
-  page: function(page) {
+                        if (this.turn("page") > pages)
+                            this.turn("page", pages);
+                    }
 
-    page = parseInt(page, 10);
+                    data.totalPages = pages;
 
-    var data = this.data();
+                    return this;
+                } else
+                    return data.totalPages;
 
-    if (page>0 && page<=data.totalPages) {
-      if (!data.done || $.inArray(page, this.turn('view'))!=-1)
-        turnMethods._fitPage.call(this, page);
-      else
-        turnMethods._turnPage.call(this, page);
-    
-      return this;
+            },
 
-    } else
-      return data.page;
-  
-  },
+            // Checks missing pages
 
-  // Turns to the next view
+            _missing: function(page) {
 
-  next: function() {
+                var p,
+                    data = this.data(),
+                    range = this.turn("range", page),
+                    missing = [];
 
-    return this.turn('page',
-      turnMethods._view.call(this, this.data().page).pop() + 1);
-  
-  },
+                for (p = range[0]; p <= range[1]; p++) {
+                    if (!data.pageObjs[p])
+                        missing.push(p);
+                }
 
-  // Turns to the previous view
+                if (missing.length > 0)
+                    this.trigger("missing", [missing]);
 
-  previous: function() {
-    
-    return this.turn('page',
-      turnMethods._view.call(this, this.data().page).shift() - 1);
+            },
 
-  },
+            // Sets a page without effect
 
-  peel: function(corner, animate) {
-    
-    return this;
+            _fitPage: function(page) {
 
-  },
+                var data = this.data(),
+                    newView = this.turn("view", page);
 
-  // Adds a motion to the internal list
-  // This event is called in context of flip
+                turnMethods._missing.call(this, page);
 
-  _addMotionPage: function() {
+                if (!data.pageObjs[page])
+                    return;
 
-    var opts = $(this).data().f.opts,
-      turn = opts.turn,
-      dd = turn.data();
+                data.page = page;
 
-    turnMethods._addMv.call(turn, opts.page);
-    dd.pagePlace[opts.next] = opts.page;
-    turn.turn('update');
+                this.turn("stop");
+                turnMethods._removeFromDOM.call(this);
+                turnMethods._makeRange.call(this);
+                turnMethods._updateShadow.call(this);
+                this.trigger("turned", [page, newView]);
 
-  },
+                if (data.opts.autoCenter)
+                    this.turn("center");
 
-  // This event is called in context of flip
+            },
 
-  _start: function(e, opts, corner) {
+            // Turns to a page
 
-    var data = opts.turn.data();
+            _turnPage: function(page, fromMouseAction) {
 
-    if (e.isDefaultPrevented()) {
-      turnMethods._updateShadow.call(opts.turn);
-      return;
-    }
+                var current,
+                    next,
+                    data = this.data(),
+                    place = data.pagePlace[page],
+                    view = this.turn("view"),
+                    newView = this.turn("view", page);
 
-    if (data.display=='single' && corner) {
+                if (data.page != page) {
 
-      if ((corner=='l' && data.direction=='ltr')
-        ||
-        (corner=='r' && data.direction=='rtl'))
-      {
-        
-        opts.next = (opts.next<opts.page) ? opts.next : opts.page-1;
-        opts.force = true;
+                    var event = $.Event("turning");
+                    this.trigger(event, [page, newView]);
 
-      } else {
+                    if (event.isDefaultPrevented())
+                        return;
 
-        opts.next = (opts.next>opts.page) ? opts.next : opts.page+1;
+                    if ($.inArray(1, newView) != -1)
+                        this.trigger("first");
+                    if ($.inArray(data.totalPages, newView) != -1)
+                        this.trigger("last");
 
-      }
+                }
 
-    }
 
-    turnMethods._addMotionPage.call(e.target);
-    turnMethods._updateShadow.call(opts.turn);
-  },
+                if (fromMouseAction) {
 
-  // This event is called in context of flip
+                    this.turn("stop", place);
 
-  _end: function(e, opts, turned) {
+                } else {
 
-    var that = $(e.target),
-      data = that.data().f,
-      turn = opts.turn,
-      dd = turn.data();
+                    turnMethods._missing.call(this, page);
 
-    if (turned || dd.tpage) {
+                    if (!data.pageObjs[page])
+                        return;
 
-      if (dd.tpage==opts.next || dd.tpage==opts.page) {
-        delete dd['tpage'];
-        turnMethods._fitPage.call(turn, dd.tpage || opts.next, true);
-      }
+                    this.turn("stop");
+                    data.page = page;
+                }
 
-    } else {
 
-      turnMethods._removeMv.call(turn, opts.page);
-      turnMethods._updateShadow.call(turn);
-      turn.turn('update');
+                turnMethods._makeRange.call(this);
 
-    }
-    
-  },
-  
-  // This event is called in context of flip
+                if (data.display == "single") {
+                    current = view[0];
+                    next = newView[0];
+                } else if (view[1] && page > view[1]) {
+                    current = view[1];
+                    next = newView[0];
+                } else if (view[0] && page < view[0]) {
+                    current = view[0];
+                    next = newView[1];
+                }
 
-  _pressed: function(e) {
+                if (data.pages[current]) {
 
-    e.stopPropagation();
+                    var opts = data.pages[current].data().f.opts;
+                    data.tpage = next;
 
-    var page,
-      data = $(e.target).data().f,
-      pages = data.opts.turn.data().pages;
+                    if (opts.next != next) {
+                        opts.next = next;
+                        data.pagePlace[next] = opts.page;
+                        opts.force = true;
+                    }
 
-    for (page in pages)
-      if (page!=data.opts.page)
-        pages[page].flip('disable', true);
+                    if (data.display == "single") {
 
-    return data.time = new Date().getTime();
+                        if (data.direction == "ltr") {
+                            data.pages[current].flip("turnPage",
+                                (newView[0] > view[0]) ? "r" : "l");
+                        } else {
+                            data.pages[current].flip("turnPage",
+                                (newView[0] > view[0]) ? "l" : "r");
+                        }
 
-  },
+                    } else {
 
-  // This event is called in context of flip
+                        data.pages[current].flip("turnPage");
 
-  _released: function(e, point) {
+                    }
+                }
 
-    e.stopPropagation();
+            },
 
-    var outArea,
-      page = $(e.target),
-      data = page.data().f,
-      turn = data.opts.turn,
-      turnData = turn.data();
-    
-    if (turnData.display=='single') {
-      outArea = (point.corner=='r') ?
-        point.x<page.width()/2:
-        point.x>page.width()/2;
-    } else {
-      outArea = point.x<0 || point.x>page.width();
-    }
+            // Gets and sets a page
 
-    if ((new Date()).getTime()-data.time<200 || outArea) {
+            page: function(page) {
 
-      e.preventDefault();
+                page = parseInt(page, 10);
 
-      turnMethods._turnPage.call(
-        turn,
-        data.opts.next,
-        flipMethods._cornerActivated.call(page, point, 1) === false
-      );
+                var data = this.data();
 
-    }
+                if (page > 0 && page <= data.totalPages) {
+                    if (!data.done || $.inArray(page, this.turn("view")) != -1)
+                        turnMethods._fitPage.call(this, page);
+                    else
+                        turnMethods._turnPage.call(this, page);
 
-    turnData.mouseAction = false;
+                    return this;
 
-  },
+                } else
+                    return data.page;
 
-  // This event is called in context of flip
-  
-  _flip: function(e) {
+            },
 
-    e.stopPropagation();
+            // Turns to the next view
 
-    var opts = $(e.target).data().f.opts;
+            next: function() {
 
-    opts.turn.trigger('turn', [opts.next]);
+                return this.turn("page",
+                    turnMethods._view.call(this, this.data().page).pop() + 1);
 
-    if (opts.turn.data().opts.autoCenter)
-      opts.turn.turn('center', opts.next);
+            },
 
-  },
+            // Turns to the previous view
 
-  // Calculate the z-index value for pages during the animation
+            previous: function() {
 
-  calculateZ: function(mv) {
+                return this.turn("page",
+                    turnMethods._view.call(this, this.data().page).shift() - 1);
 
-    var i, page, nextPage, placePage, dpage,
-      that = this,
-      data = this.data(),
-      view = this.turn('view'),
-      currentPage = view[0] || view[1],
-      r = {pageZ: {}, partZ: {}, pageV: {}},
+            },
 
-      addView = function(page) {
-        var view = that.turn('view', page);
-        if (view[0]) r.pageV[view[0]] = true;
-        if (view[1]) r.pageV[view[1]] = true;
-      };
-    
-    for (i = 0; i<mv.length; i++) {
-      page = mv[i];
-      nextPage = data.pages[page].data().f.opts.next;
-      placePage = data.pagePlace[page];
-      addView(page);
-      addView(nextPage);
-      dpage = (data.pagePlace[nextPage]==nextPage) ? nextPage : page;
-      r.pageZ[dpage] = data.totalPages - Math.abs(currentPage-dpage);
-      r.partZ[placePage] = data.totalPages*2 + Math.abs(currentPage-dpage);
-    }
+            peel: function(corner, animate) {
 
-    return r;
-  },
+                return this;
 
-  // Updates the z-index and display property of every page
+            },
 
-  update: function() {
+            // Adds a motion to the internal list
+            // This event is called in context of flip
 
-    var page,
-      data = this.data();
+            _addMotionPage: function() {
 
-    if (data.pageMv.length && data.pageMv[0]!==0) {
+                var opts = $(this).data().f.opts,
+                    turn = opts.turn,
+                    dd = turn.data();
 
-      // Update motion
+                turnMethods._addMv.call(turn, opts.page);
+                dd.pagePlace[opts.next] = opts.page;
+                turn.turn("update");
 
-      var p,
-        fixed,
-        pos = this.turn('calculateZ', data.pageMv),
-        view = this.turn('view', data.tpage);
-    
-      for (page in data.pageWrap) {
+            },
 
-        if (!has(page, data.pageWrap))
-          continue;
+            // This event is called in context of flip
 
-        fixed = data.pageObjs[page].hasClass('fixed');
+            _start: function(e, opts, corner) {
 
-        data.pageWrap[page].css({
-          display: (pos.pageV[page] || fixed) ? '' : 'none',
-          'z-index': pos.pageZ[page] || ((fixed) ? -1 : 0)
-        });
+                var data = opts.turn.data();
 
-        if ((p = data.pages[page])) {
-          p.flip('z', pos.partZ[page] || null);
+                if (e.isDefaultPrevented()) {
+                    turnMethods._updateShadow.call(opts.turn);
+                    return;
+                }
 
-          if (pos.pageV[page])
-            p.flip('resize');
+                if (data.display == "single" && corner) {
 
-          if (data.tpage)
-            p.flip('disable', true); // data.disabled || page!=apage
-        }
-      }
-  
-    } else {
+                    if ((corner == "l" && data.direction == "ltr") ||
+                        (corner == "r" && data.direction == "rtl")) {
 
-      // Update static pages
+                        opts.next = (opts.next < opts.page) ? opts.next : opts.page - 1;
+                        opts.force = true;
 
-      for (page in data.pageWrap) {
+                    } else {
 
-        if (!has(page, data.pageWrap))
-          continue;
+                        opts.next = (opts.next > opts.page) ? opts.next : opts.page + 1;
 
-        var pageLocation = turnMethods._setPageLoc.call(this, page);
+                    }
 
-        if (data.pages[page])
-          data.pages[page].flip('disable',
-            data.disabled || pageLocation!=1).flip('z', null);
+                }
 
-      }
-    }
-  },
+                turnMethods._addMotionPage.call(e.target);
+                turnMethods._updateShadow.call(opts.turn);
+            },
 
-  // Updates the position and size of the flipbook's shadow
+            // This event is called in context of flip
 
-  _updateShadow: function() {
-    
-    var view, view2, shadow,
-      data = this.data(),
-      width = this.width(),
-      height = this.height(),
-      pageWidth = (data.display=='single') ? width : width/2;
+            _end: function(e, opts, turned) {
 
-    view = this.turn('view');
+                var that = $(e.target),
+                    data = that.data().f,
+                    turn = opts.turn,
+                    dd = turn.data();
 
-    if (!data.shadow) {
-      data.shadow = $('<div />',
-      {
-        'class': 'shadow',
-        'css': divAtt(0, 0, 0).css
-      }).
-      appendTo(this);
-    }
+                if (turned || dd.tpage) {
 
-    for (var i = 0; i<data.pageMv.length; i++) {
-      if (!view[0] || !view[1])
-        break;
-    
-      view = this.turn('view', data.pages[data.pageMv[i]].data().f.opts.next);
-      view2 = this.turn('view', data.pageMv[i]);
+                    if (dd.tpage == opts.next || dd.tpage == opts.page) {
+                        delete dd["tpage"];
+                        turnMethods._fitPage.call(turn, dd.tpage || opts.next, true);
+                    }
 
-      view[0] = view[0] && view2[0];
-      view[1] = view[1] && view2[1];
-    }
+                } else {
 
-    if (!view[0]) shadow = (data.direction=='ltr') ? 1 : 2;
-    else if (!view[1]) shadow = (data.direction=='ltr') ? 2 : 1;
-    else shadow = 3;
+                    turnMethods._removeMv.call(turn, opts.page);
+                    turnMethods._updateShadow.call(turn);
+                    turn.turn("update");
 
-    switch (shadow) {
-      case 1:
-        data.shadow.css({
-          width: pageWidth,
-          height: height,
-          top: 0,
-          left: pageWidth
-        });
-        break;
-      case 2:
-        data.shadow.css({
-          width: pageWidth,
-          height: height,
-          top: 0,
-          left: 0
-        });
-        break;
-      case 3:
-        data.shadow.css({
-          width: width,
-          height: height,
-          top: 0,
-          left: 0
-        });
-        break;
-    }
+                }
 
-  },
+            },
 
-  // Sets the z-index and display property of a page
-  // It depends on the current view
+            // This event is called in context of flip
 
-  _setPageLoc: function(page) {
+            _pressed: function(e) {
 
-    var data = this.data(),
-      view = this.turn('view');
+                e.stopPropagation();
 
-    if (page==view[0] || page==view[1]) {
-      
-      data.pageWrap[page].css({zIndex: data.totalPages, display: ''});
-      return 1;
+                var page,
+                    data = $(e.target).data().f,
+                    pages = data.opts.turn.data().pages;
 
-    } else if ((data.display=='single' && page==view[0]+1) ||
-      (data.display=='double' && page==view[0]-2 ||
-      page==view[1]+2)) {
-      
-      data.pageWrap[page].css({zIndex: data.totalPages-1, display: ''});
-      return 2;
+                for (page in pages)
+                    if (page != data.opts.page)
+                        pages[page].flip("disable", true);
 
-    } else {
-      
-      data.pageWrap[page].css({zIndex: 0,
-        display: (data.pageObjs[page].hasClass('fixed')) ? '' : 'none'}
-      );
+                return data.time = new Date().getTime();
 
-      return 0;
-    }
-  },
+            },
 
-  // Gets and sets the options
+            // This event is called in context of flip
 
-  options: function(options) {
-    
-    if (options===undefined) {
-      
-      return this.data().opts;
+            _released: function(e, point) {
 
-    } else {
+                e.stopPropagation();
 
-      var data = this.data();
+                var outArea,
+                    page = $(e.target),
+                    data = page.data().f,
+                    turn = data.opts.turn,
+                    turnData = turn.data();
 
-      // Set new values
+                if (turnData.display == "single") {
+                    outArea = (point.corner == "r") ? point.x < page.width() / 2 : point.x > page.width() / 2;
+                } else {
+                    outArea = point.x < 0 || point.x > page.width();
+                }
 
-      $.extend(data.opts, options);
-      
-      // Set pages
+                if ((new Date()).getTime() - data.time < 200 || outArea) {
 
-      if (options.pages)
-        this.turn('pages', options.pages);
+                    e.preventDefault();
 
-      // Set page
+                    turnMethods._turnPage.call(
+                        turn,
+                        data.opts.next,
+                        flipMethods._cornerActivated.call(page, point, 1) === false
+                    );
 
-      if (options.page)
-        this.turn('page', options.page);
+                }
 
-      // Set display
+                turnData.mouseAction = false;
 
-      if (options.display)
-        this.turn('display', options.display);
-      
-      // Set direction
+            },
 
-      if (options.direction)
-        this.turn('direction', options.direction);
+            // This event is called in context of flip
 
-      // Set size
+            _flip: function(e) {
 
-      if (options.width && options.height)
-        this.turn('size', options.width, options.height);
-      
-      // Add event listeners
+                e.stopPropagation();
 
-      if (options.when)
-        for (var eventName in options.when)
-          if (has(eventName, options.when)) {
-            this.unbind(eventName).
-              bind(eventName, options.when[eventName]);
-          }
+                var opts = $(e.target).data().f.opts;
 
-      return this;
-    }
+                opts.turn.trigger("turn", [opts.next]);
 
-  },
+                if (opts.turn.data().opts.autoCenter)
+                    opts.turn.turn("center", opts.next);
 
-  // Gets the current version
+            },
 
-  version: function() {
+            // Calculate the z-index value for pages during the animation
 
-    return version;
+            calculateZ: function(mv) {
 
-  }
-},
+                var i,
+                    page,
+                    nextPage,
+                    placePage,
+                    dpage,
+                    that = this,
+                    data = this.data(),
+                    view = this.turn("view"),
+                    currentPage = view[0] || view[1],
+                    r = { pageZ: {}, partZ: {}, pageV: {} },
+
+                    addView = function(page) {
+                        var view = that.turn("view", page);
+                        if (view[0]) r.pageV[view[0]] = true;
+                        if (view[1]) r.pageV[view[1]] = true;
+                    };
+
+                for (i = 0; i < mv.length; i++) {
+                    page = mv[i];
+                    nextPage = data.pages[page].data().f.opts.next;
+                    placePage = data.pagePlace[page];
+                    addView(page);
+                    addView(nextPage);
+                    dpage = (data.pagePlace[nextPage] == nextPage) ? nextPage : page;
+                    r.pageZ[dpage] = data.totalPages - Math.abs(currentPage - dpage);
+                    r.partZ[placePage] = data.totalPages * 2 + Math.abs(currentPage - dpage);
+                }
+
+                return r;
+            },
+
+            // Updates the z-index and display property of every page
+
+            update: function() {
+
+                var page,
+                    data = this.data();
+
+                if (data.pageMv.length && data.pageMv[0] !== 0) {
+
+                    // Update motion
+
+                    var p,
+                        fixed,
+                        pos = this.turn("calculateZ", data.pageMv),
+                        view = this.turn("view", data.tpage);
+
+                    for (page in data.pageWrap) {
+
+                        if (!has(page, data.pageWrap))
+                            continue;
+
+                        fixed = data.pageObjs[page].hasClass("fixed");
+
+                        data.pageWrap[page].css({
+                            display: (pos.pageV[page] || fixed) ? "" : "none",
+                            'z-index': pos.pageZ[page] || ((fixed) ? -1 : 0)
+                        });
+
+                        if ((p = data.pages[page])) {
+                            p.flip("z", pos.partZ[page] || null);
+
+                            if (pos.pageV[page])
+                                p.flip("resize");
+
+                            if (data.tpage)
+                                p.flip("disable", true); // data.disabled || page!=apage
+                        }
+                    }
+
+                } else {
+
+                    // Update static pages
+
+                    for (page in data.pageWrap) {
+
+                        if (!has(page, data.pageWrap))
+                            continue;
+
+                        var pageLocation = turnMethods._setPageLoc.call(this, page);
+
+                        if (data.pages[page])
+                            data.pages[page].flip("disable",
+                                data.disabled || pageLocation != 1).flip("z", null);
+
+                    }
+                }
+            },
+
+            // Updates the position and size of the flipbook's shadow
+
+            _updateShadow: function() {
+
+                var view,
+                    view2,
+                    shadow,
+                    data = this.data(),
+                    width = this.width(),
+                    height = this.height(),
+                    pageWidth = (data.display == "single") ? width : width / 2;
+
+                view = this.turn("view");
+
+                if (!data.shadow) {
+                    data.shadow = $("<div />",
+                        {
+                            'class': "shadow",
+                            'css': divAtt(0, 0, 0).css
+                        }).appendTo(this);
+                }
+
+                for (var i = 0; i < data.pageMv.length; i++) {
+                    if (!view[0] || !view[1])
+                        break;
+
+                    view = this.turn("view", data.pages[data.pageMv[i]].data().f.opts.next);
+                    view2 = this.turn("view", data.pageMv[i]);
+
+                    view[0] = view[0] && view2[0];
+                    view[1] = view[1] && view2[1];
+                }
+
+                if (!view[0]) shadow = (data.direction == "ltr") ? 1 : 2;
+                else if (!view[1]) shadow = (data.direction == "ltr") ? 2 : 1;
+                else shadow = 3;
+
+                switch (shadow) {
+                case 1:
+                    data.shadow.css({
+                        width: pageWidth,
+                        height: height,
+                        top: 0,
+                        left: pageWidth
+                    });
+                    break;
+                case 2:
+                    data.shadow.css({
+                        width: pageWidth,
+                        height: height,
+                        top: 0,
+                        left: 0
+                    });
+                    break;
+                case 3:
+                    data.shadow.css({
+                        width: width,
+                        height: height,
+                        top: 0,
+                        left: 0
+                    });
+                    break;
+                }
+
+            },
+
+            // Sets the z-index and display property of a page
+            // It depends on the current view
+
+            _setPageLoc: function(page) {
+
+                var data = this.data(),
+                    view = this.turn("view");
+
+                if (page == view[0] || page == view[1]) {
+
+                    data.pageWrap[page].css({ zIndex: data.totalPages, display: "" });
+                    return 1;
+
+                } else if ((data.display == "single" && page == view[0] + 1) ||
+                (data.display == "double" && page == view[0] - 2 ||
+                    page == view[1] + 2)) {
+
+                    data.pageWrap[page].css({ zIndex: data.totalPages - 1, display: "" });
+                    return 2;
+
+                } else {
+
+                    data.pageWrap[page].css({
+                            zIndex: 0,
+                            display: (data.pageObjs[page].hasClass("fixed")) ? "" : "none"
+                        }
+                    );
+
+                    return 0;
+                }
+            },
+
+            // Gets and sets the options
+
+            options: function(options) {
+
+                if (options === undefined) {
+
+                    return this.data().opts;
+
+                } else {
+
+                    var data = this.data();
+
+                    // Set new values
+
+                    $.extend(data.opts, options);
+
+                    // Set pages
+
+                    if (options.pages)
+                        this.turn("pages", options.pages);
+
+                    // Set page
+
+                    if (options.page)
+                        this.turn("page", options.page);
+
+                    // Set display
+
+                    if (options.display)
+                        this.turn("display", options.display);
+
+                    // Set direction
+
+                    if (options.direction)
+                        this.turn("direction", options.direction);
+
+                    // Set size
+
+                    if (options.width && options.height)
+                        this.turn("size", options.width, options.height);
+
+                    // Add event listeners
+
+                    if (options.when)
+                        for (var eventName in options.when)
+                            if (has(eventName, options.when)) {
+                                this.unbind(eventName).bind(eventName, options.when[eventName]);
+                            }
+
+                    return this;
+                }
+
+            },
+
+            // Gets the current version
+
+            version: function() {
+
+                return version;
+
+            }
+        },
 
 // Methods and properties for the flip page effect
 
-flipMethods = {
-
-  // Constructor
+        flipMethods = {
 
-  init: function(opts) {
+            // Constructor
+            init: function(opts) {
 
-    this.data({f:
-      {effect: (opts.corners=='r' || opts.corners=='l') ? 'hard' : 'sheet'}}
-    );
+                this.data({
+                        f:
+                            { effect: (opts.corners == "r" || opts.corners == "l") ? "hard" : "sheet" }
+                    }
+                );
 
-    this.flip('options', opts);
+                this.flip("options", opts);
 
-    flipMethods._addPageWrapper.call(this);
+                flipMethods._addPageWrapper.call(this);
 
-    return this;
-  },
+                return this;
+            },
 
-  setData: function(d) {
-    
-    var data = this.data();
+            setData: function(d) {
 
-    data.f = $.extend(data.f, d);
+                var data = this.data();
 
-    return this;
-  },
+                data.f = $.extend(data.f, d);
 
-  options: function(opts) {
-    
-    var data = this.data().f;
+                return this;
+            },
 
-    if (opts) {
-      flipMethods.setData.call(this,
-        {opts: $.extend({}, data.opts || flipOptions, opts)});
-      return this;
-    } else
-      return data.opts;
+            options: function(opts) {
 
-  },
+                var data = this.data().f;
 
-  z: function(z) {
+                if (opts) {
+                    flipMethods.setData.call(this,
+                        { opts: $.extend({}, data.opts || flipOptions, opts) });
+                    return this;
+                } else
+                    return data.opts;
 
-    var data = this.data().f;
+            },
 
-    if (data.fwrapper) {
-      data.opts['z-index'] = z;
-      data.fwrapper.css(
-        {'z-index': z || parseInt(data.parent.css('z-index'), 10) || 0}
-      );
-    }
+            z: function(z) {
 
-    return this;
-  },
+                var data = this.data().f;
 
-  _cAllowed: function() {
-    
-    var data = this.data().f,
-    turnData = data.opts.turn.data(),
-    page = data.opts.page,
-    odd = page%2;
+                if (data.fwrapper) {
+                    data.opts["z-index"] = z;
+                    data.fwrapper.css(
+                        { 'z-index': z || parseInt(data.parent.css("z-index"), 10) || 0 }
+                    );
+                }
 
-    if (turnData.display=='single') {
-      if (page==1)
-        return (turnData.direction=='ltr') ?
-          corners['forward'] : corners['backward'];
-      else if (page==turnData.totalPages)
-        return (turnData.direction=='ltr') ?
-          corners['backward'] : corners['forward'];
-      else
-        return corners['all'];
-    } else {
+                return this;
+            },
 
-      return (turnData.direction=='ltr') ?
-        corners[(odd) ? 'forward' : 'backward']
-        :
-        corners[(odd) ? 'backward' : 'forward'];
+            _cAllowed: function() {
 
-    }
+                var data = this.data().f,
+                    turnData = data.opts.turn.data(),
+                    page = data.opts.page,
+                    odd = page % 2;
 
-  },
+                if (turnData.display == "single") {
+                    if (page == 1)
+                        return (turnData.direction == "ltr") ? corners["forward"] : corners["backward"];
+                    else if (page == turnData.totalPages)
+                        return (turnData.direction == "ltr") ? corners["backward"] : corners["forward"];
+                    else
+                        return corners["all"];
+                } else {
 
-  _cornerActivated: function(e) {
-  
-  
-    var data = this.data().f,
-      pos = data.parent.offset(),
-      width = this.width(),
-      height = this.height(),
-      c = {x: Math.max(0, e.pageX-pos.left), y: Math.max(0, e.pageY-pos.top)},
-      csz = data.opts.cornerSize;
+                    return (turnData.direction == "ltr")
+                        ? corners[(odd) ? "forward" : "backward"]
+                        : corners[(odd) ? "backward" : "forward"];
 
-    if (c.x<=0 || c.y<=0 || c.x>=width || c.y>=height)
-      return false;
+                }
 
-    var allowedCorners = flipMethods._cAllowed.call(this);
+            },
 
-    if (c.x>width-csz)
-      c.corner = 'r';
-    else if (c.x<csz)
-      c.corner = 'l';
-    else
-      return false;
+            _cornerActivated: function(e) {
 
 
-    return ($.inArray(c.corner, allowedCorners)==-1) ? false : c;
+                var data = this.data().f,
+                    pos = data.parent.offset(),
+                    width = this.width(),
+                    height = this.height(),
+                    c = { x: Math.max(0, e.pageX - pos.left), y: Math.max(0, e.pageY - pos.top) },
+                    csz = data.opts.cornerSize;
 
-  },
+                if (c.x <= 0 || c.y <= 0 || c.x >= width || c.y >= height)
+                    return false;
 
-  _c: function(corner, opts) {
+                var allowedCorners = flipMethods._cAllowed.call(this);
 
-    opts = opts || 0;
+                if (c.x > width - csz)
+                    c.corner = "r";
+                else if (c.x < csz)
+                    c.corner = "l";
+                else
+                    return false;
 
-    switch (corner) {
-      case 'l':
-        return point2D(opts, 0);
-      case 'r':
-        return point2D(this.width()-opts, 0);
-    }
 
-  },
+                return ($.inArray(c.corner, allowedCorners) == -1) ? false : c;
 
-  _c2: function(corner) {
+            },
 
-    switch (corner) {
-      case 'l':
-        return point2D(this.width()*2, 0);
-      case 'r':
-        return point2D(-this.width(), 0);
-    }
+            _c: function(corner, opts) {
 
-  },
+                opts = opts || 0;
 
-  _foldingPage: function(corner) {
+                switch (corner) {
+                case "l":
+                    return point2D(opts, 0);
+                case "r":
+                    return point2D(this.width() - opts, 0);
+                }
 
-    var data = this.data().f,
-      opts = data.opts;
+            },
 
-    if (data.folding) return data.folding;
-    else if(opts.turn) {
+            _c2: function(corner) {
 
-      data = opts.turn.data();
-      if (data.display == 'single')
-        return (data.pageObjs[opts.next]) ? data.pageObjs[0] : null;
-      else
-        return data.pageObjs[opts.next];
-    }
+                switch (corner) {
+                case "l":
+                    return point2D(this.width() * 2, 0);
+                case "r":
+                    return point2D(-this.width(), 0);
+                }
 
-  },
+            },
 
-  _backGradient: function() {
+            _foldingPage: function(corner) {
 
-    var data = this.data().f,
-      turn = data.opts.turn,
-      gradient = data.opts.gradients &&
-        (!turn ||
-        turn.data().display=='single' ||
-        (data.opts.page!=2 && data.opts.page!=turn.data().totalPages-1));
+                var data = this.data().f,
+                    opts = data.opts;
 
+                if (data.folding) return data.folding;
+                else if (opts.turn) {
 
-    return gradient;
+                    data = opts.turn.data();
+                    if (data.display == "single")
+                        return (data.pageObjs[opts.next]) ? data.pageObjs[0] : null;
+                    else
+                        return data.pageObjs[opts.next];
+                }
 
-  },
+            },
 
-  resize: function(full) {
-    
-    var data = this.data().f,
-      width = this.width(),
-      height = this.height();
+            _backGradient: function() {
 
+                var data = this.data().f,
+                    turn = data.opts.turn,
+                    gradient = data.opts.gradients &&
+                    (!turn ||
+                        turn.data().display == "single" ||
+                        (data.opts.page != 2 && data.opts.page != turn.data().totalPages - 1));
 
-    if (full) {
-      data.wrapper.css({width: width, height: height});
-      data.fpage.css({width: width, height: height});
-    }
 
-  },
+                return gradient;
 
-  // Prepares the page by adding a general wrapper and another objects
+            },
 
-  _addPageWrapper: function() {
+            resize: function(full) {
 
-    var att,
-      data = this.data().f,
-      parent = this.parent();
+                var data = this.data().f,
+                    width = this.width(),
+                    height = this.height();
 
-    data.parent = parent;
 
-    if (!data.wrapper) {
-        
-      var cssProperties = {};
+                if (full) {
+                    data.wrapper.css({ width: width, height: height });
+                    data.fpage.css({ width: width, height: height });
+                }
 
-      data.wrapper = $('<div/>', divAtt(0, 0, 2)).
-        css(cssProperties).
-        appendTo(parent).
-        prepend(this);
+            },
 
-      data.fpage = $('<div/>', divAtt(0, 0, 1)).
-        css(cssProperties).
-        appendTo(parent);
+            // Prepares the page by adding a general wrapper and another objects
 
-    }
+            _addPageWrapper: function() {
 
-    // Set size
-    flipMethods.resize.call(this, true);
+                var att,
+                    data = this.data().f,
+                    parent = this.parent();
 
-  },
+                data.parent = parent;
 
-  // Takes a 2P point from the screen and applies the transformation
+                if (!data.wrapper) {
 
-  _fold: function(point) {
+                    var cssProperties = {};
 
-    var data = this.data().f,
-      o = flipMethods._c.call(this, point.corner),
-      relX = (o.x) ? o.x - point.x :  point.x,
-      width = this.width(),
-      height = this.height();
+                    data.wrapper = $("<div/>", divAtt(0, 0, 2)).css(cssProperties).appendTo(parent).prepend(this);
 
-      relX = Math.min(width*2, Math.max(0, relX));
+                    data.fpage = $("<div/>", divAtt(0, 0, 1)).css(cssProperties).appendTo(parent);
 
+                }
 
-      switch(point.corner) {
-        case 'r' :
-          data.wrapper.css({
-            width: Math.max(0, width-relX)
-          });
-          this.css({
-            position: 'relative',
-            left: -relX
-          });
+                // Set size
+                flipMethods.resize.call(this, true);
 
-          data.fpage.css({
-            left: -relX + width,
-            width: Math.max(0, relX-width)
-          });
-        break;
-        case 'l' :
+            },
 
-          data.wrapper.css({
-            width: width
-          });
-          this.css({
-            position: 'relative',
-            left: relX
-          });
+            // Takes a 2P point from the screen and applies the transformation
 
-          data.fpage.css({
-            left: width,
-            width: Math.max(0, relX-width)
-          });
+            _fold: function(point) {
 
-          if (data.folding)
-            data.folding.css({
-              position: 'relative',
-              left: -width*2 + relX
-            });
-        
-        break;
-      }
+                var data = this.data().f,
+                    o = flipMethods._c.call(this, point.corner),
+                    relX = (o.x) ? o.x - point.x : point.x,
+                    width = this.width(),
+                    height = this.height();
 
-      data.parent.css({'overflow': 'visible'});
+                relX = Math.min(width * 2, Math.max(0, relX));
 
-    data.point = point;
-  
-  },
 
-  _moveFoldingPage: function(bool) {
+                switch (point.corner) {
+                case "r":
+                    data.wrapper.css({
+                        width: Math.max(0, width - relX)
+                    });
+                    this.css({
+                        position: "relative",
+                        left: -relX
+                    });
 
-    var data = this.data().f;
-      
-    if (bool) {
-      
-      var folding = flipMethods._foldingPage.call(this),
-        turn = data.opts.turn;
-      
-      if (folding) {
+                    data.fpage.css({
+                        left: -relX + width,
+                        width: Math.max(0, relX - width)
+                    });
+                    break;
+                case "l":
 
-        if (data.folding) {
-          if (data.folding===folding)
-            return;
-          flipMethods._moveFoldingPage.call(this, false);
-        }
-      
-        flipMethods.setData.call(this,
-          {backParent: folding.parent(),
-          folding: folding});
+                    data.wrapper.css({
+                        width: width
+                    });
+                    this.css({
+                        position: "relative",
+                        left: relX
+                    });
 
-        data.fpage.prepend(folding);
+                    data.fpage.css({
+                        left: width,
+                        width: Math.max(0, relX - width)
+                    });
 
-      }
+                    if (data.folding)
+                        data.folding.css({
+                            position: "relative",
+                            left: -width * 2 + relX
+                        });
 
-      turn.turn('update');
+                    break;
+                }
 
-    } else {
-      if (data.backParent) {
-        data.backParent.prepend(data.folding);
-        delete data.backParent;
-        delete data.folding;
-      }
-    }
-  },
+                data.parent.css({ 'overflow': "visible" });
 
-  _showFoldedPage: function(c, animate) {
+                data.point = point;
 
-    var folding = flipMethods._foldingPage.call(this),
-      dd = this.data(),
-      data = dd.f,
-      visible = data.visible;
+            },
 
-    if (!visible || !data.point || data.point.corner!=c.corner) {
-      
-      var mAction = data.opts.turn.data().mouseAction;
+            _moveFoldingPage: function(bool) {
 
-      var event = $.Event('start');
-      this.trigger(event, [data.opts, c.corner]);
-      visible = false;
+                var data = this.data().f;
 
-      if (event.isDefaultPrevented())
-        return false;
+                if (bool) {
 
-    }
+                    var folding = flipMethods._foldingPage.call(this),
+                        turn = data.opts.turn;
 
-    if (folding) {
+                    if (folding) {
 
-      if (animate) {
-        
-        var that = this,
-          point = (data.point && data.point.corner==c.corner) ?
-          data.point : flipMethods._c.call(this, c.corner, 1);
-      
-        this.animatef({from: [point.x, point.y],
-          to: [c.x, c.y],
-          duration: 500,
-          frame: function(v) {
-            c.x = Math.round(v[0]);
-            c.y = Math.round(v[1]);
-            flipMethods._fold.call(that, c);
-          }});
+                        if (data.folding) {
+                            if (data.folding === folding)
+                                return;
+                            flipMethods._moveFoldingPage.call(this, false);
+                        }
 
-      } else  {
+                        flipMethods.setData.call(this,
+                            {
+                                backParent: folding.parent(),
+                                folding: folding
+                            });
 
-        flipMethods._fold.call(this, c);
-        if (dd.effect && !dd.effect.turning)
-          this.animatef(false);
+                        data.fpage.prepend(folding);
 
-      }
+                    }
 
-      if (!visible) {
+                    turn.turn("update");
 
-        data.visible = true;
-        flipMethods._moveFoldingPage.call(this, true);
-        data.fpage.show();
-      }
+                } else {
+                    if (data.backParent) {
+                        data.backParent.prepend(data.folding);
+                        delete data.backParent;
+                        delete data.folding;
+                    }
+                }
+            },
 
-      return true;
-    }
+            _showFoldedPage: function(c, animate) {
 
-    return false;
-  },
-
-  hide: function() {
-
-    var data = this.data().f,
-      folding = flipMethods._foldingPage.call(this);
-
-    this.css({
-      position: '',
-      left: 'auto'
-    });
-
-    data.wrapper.css({
-      width: this.width()
-    });
-
-    data.fpage.css({
-      width: this.width()
-    });
+                var folding = flipMethods._foldingPage.call(this),
+                    dd = this.data(),
+                    data = dd.f,
+                    visible = data.visible;
 
-    if (data.folding)
-      data.folding.css({
-        position: '',
-        left: 'auto'
-      });
+                if (!visible || !data.point || data.point.corner != c.corner) {
 
-    data.fpage.hide();
+                    var mAction = data.opts.turn.data().mouseAction;
 
-    data.visible = false;
+                    var event = $.Event("start");
+                    this.trigger(event, [data.opts, c.corner]);
+                    visible = false;
 
-    return this;
-  },
+                    if (event.isDefaultPrevented())
+                        return false;
 
-  hideFoldedPage: function(animate) {
+                }
 
-    var data = this.data().f;
+                if (folding) {
 
-    if (!data.point) return;
+                    if (animate) {
 
-    var that = this,
-      p1 = data.point,
-      hide = function() {
-        data.point = null;
-        that.flip('hide');
-        that.trigger('end', [data.opts, false]);
-      };
+                        var that = this,
+                            point = (data.point && data.point.corner == c.corner)
+                                ? data.point
+                                : flipMethods._c.call(this, c.corner, 1);
 
-    if (animate) {
-      var p4 = flipMethods._c.call(this, p1.corner),
-        top = (p1.corner.substr(0,1)=='t'),
-        delta = (top) ? Math.min(0, p1.y-p4.y)/2 : Math.max(0, p1.y-p4.y)/2,
-        p2 = point2D(p1.x, p1.y+delta),
-        p3 = point2D(p4.x, p4.y-delta);
-    
-      this.animatef({
-        from: 0,
-        to: 1,
-        frame: function(v) {
-          var np = bezier(p1, p2, p3, p4, v);
-          p1.x = np.x;
-          p1.y = np.y;
-          flipMethods._fold.call(that, p1);
-        },
-        complete: hide,
-        duration: 800,
-        hiding: true
-        });
+                        this.animatef({
+                            from: [point.x, point.y],
+                            to: [c.x, c.y],
+                            duration: 500,
+                            frame: function(v) {
+                                c.x = Math.round(v[0]);
+                                c.y = Math.round(v[1]);
+                                flipMethods._fold.call(that, c);
+                            }
+                        });
 
-    } else {
-      this.animatef(false);
-      hide();
-    }
-  },
+                    } else {
 
-  turnPage: function(corner) {
+                        flipMethods._fold.call(this, c);
+                        if (dd.effect && !dd.effect.turning)
+                            this.animatef(false);
 
-    var that = this,
-      data = this.data().f;
+                    }
 
-    corner = {corner: (data.corner) ?
-      data.corner.corner :
-      corner || flipMethods._cAllowed.call(this)[0]};
+                    if (!visible) {
 
-    var p1 = data.point ||
-      flipMethods._c.call(this,
-        corner.corner,
-        (data.opts.turn) ? data.opts.turn.data().opts.elevation : 0),
-      p4 = flipMethods._c2.call(this, corner.corner);
+                        data.visible = true;
+                        flipMethods._moveFoldingPage.call(this, true);
+                        data.fpage.show();
+                    }
 
-      this.trigger('flip').
-        animatef({
-          from: 0,
-          to: 1,
-          frame: function(v) {
-            var np = bezier(p1, p1, p4, p4, v);
-            corner.x = np.x;
-            corner.y = np.y;
+                    return true;
+                }
 
-            flipMethods._showFoldedPage.call(that, corner);
-          },
-          
-          complete: function() {
-            that.trigger('end', [data.opts, true]);
-          },
-          duration: data.opts.duration,
-          turning: true
-        });
+                return false;
+            },
 
-      data.corner = null;
-  },
+            hide: function() {
 
-  moving: function() {
+                var data = this.data().f,
+                    folding = flipMethods._foldingPage.call(this);
 
-    return 'effect' in this.data();
-  
-  },
+                this.css({
+                    position: "",
+                    left: "auto"
+                });
 
-  isTurning: function() {
+                data.wrapper.css({
+                    width: this.width()
+                });
 
-    return this.flip('moving') && this.data().effect.turning;
-  
-  },
+                data.fpage.css({
+                    width: this.width()
+                });
 
-  _eventStart: function(e) {
+                if (data.folding)
+                    data.folding.css({
+                        position: "",
+                        left: "auto"
+                    });
 
-    var data = this.data().f;
+                data.fpage.hide();
 
-    if (!data.disabled && !this.flip('isTurning')) {
+                data.visible = false;
 
-      data.corner = flipMethods._cornerActivated.call(this, e);
-    
-      if (data.corner && flipMethods._foldingPage.call(this, data.corner)) {
-      
-        if (flipMethods._showFoldedPage.call(this, data.corner))
-          this.trigger('pressed', [data.point]);
+                return this;
+            },
 
-        return false;
+            hideFoldedPage: function(animate) {
 
-      } else
-        data.corner = null;
+                var data = this.data().f;
 
-    }
+                if (!data.point) return;
 
-  },
+                var that = this,
+                    p1 = data.point,
+                    hide = function() {
+                        data.point = null;
+                        that.flip("hide");
+                        that.trigger("end", [data.opts, false]);
+                    };
 
-  _eventMove: function(e) {
+                if (animate) {
+                    var p4 = flipMethods._c.call(this, p1.corner),
+                        top = (p1.corner.substr(0, 1) == "t"),
+                        delta = (top) ? Math.min(0, p1.y - p4.y) / 2 : Math.max(0, p1.y - p4.y) / 2,
+                        p2 = point2D(p1.x, p1.y + delta),
+                        p3 = point2D(p4.x, p4.y - delta);
 
-    var data = this.data().f;
+                    this.animatef({
+                        from: 0,
+                        to: 1,
+                        frame: function(v) {
+                            var np = bezier(p1, p2, p3, p4, v);
+                            p1.x = np.x;
+                            p1.y = np.y;
+                            flipMethods._fold.call(that, p1);
+                        },
+                        complete: hide,
+                        duration: 800,
+                        hiding: true
+                    });
 
-    if (!data.disabled) {
+                } else {
+                    this.animatef(false);
+                    hide();
+                }
+            },
 
-      e = (isTouch) ? e.originalEvent.touches : [e];
-    
-      if (data.corner) {
+            turnPage: function(corner) {
 
-        var pos = data.parent.offset();
-        data.corner.x = e[0].pageX-pos.left;
-        data.corner.y = e[0].pageY-pos.top;
-        flipMethods._showFoldedPage.call(this, data.corner);
+                var that = this,
+                    data = this.data().f;
 
-      } else if (!this.data().effect && this.is(':visible')) {
-    
+                corner = { corner: (data.corner) ? data.corner.corner : corner || flipMethods._cAllowed.call(this)[0] };
 
-        var corner = flipMethods._cornerActivated.call(this, e[0]);
+                var p1 = data.point ||
+                        flipMethods._c.call(this,
+                            corner.corner,
+                            (data.opts.turn) ? data.opts.turn.data().opts.elevation : 0),
+                    p4 = flipMethods._c2.call(this, corner.corner);
 
-        if (corner) {
-          var origin = flipMethods._c.call(this, corner.corner, data.opts.cornerSize/2);
-          corner.x = origin.x;
-          corner.y = origin.y;
-          flipMethods._showFoldedPage.call(this, corner, true);
-        } else
-          flipMethods.hideFoldedPage.call(this, true);
-               
+                this.trigger("flip").animatef({
+                    from: 0,
+                    to: 1,
+                    frame: function(v) {
+                        var np = bezier(p1, p1, p4, p4, v);
+                        corner.x = np.x;
+                        corner.y = np.y;
 
-      }
-    }
-  },
+                        flipMethods._showFoldedPage.call(that, corner);
+                    },
 
-  _eventEnd: function() {
+                    complete: function() {
+                        that.trigger("end", [data.opts, true]);
+                    },
+                    duration: data.opts.duration,
+                    turning: true
+                });
 
-    var data = this.data().f;
+                data.corner = null;
+            },
 
-    if (!data.disabled && data.point) {
-      var event = $.Event('released');
-      this.trigger(event, [data.point]);
-      if (!event.isDefaultPrevented())
-        flipMethods.hideFoldedPage.call(this, true);
-    }
+            moving: function() {
 
-    data.corner = null;
+                return "effect" in this.data();
 
-  },
+            },
 
-  disable: function(disable) {
+            isTurning: function() {
 
-    flipMethods.setData.call(this, {'disabled': disable});
-    return this;
+                return this.flip("moving") && this.data().effect.turning;
 
-  }
-};
+            },
 
+            _eventStart: function(e) {
+
+                var data = this.data().f;
+
+                if (!data.disabled && !this.flip("isTurning")) {
+
+                    data.corner = flipMethods._cornerActivated.call(this, e);
+
+                    if (data.corner && flipMethods._foldingPage.call(this, data.corner)) {
+
+                        if (flipMethods._showFoldedPage.call(this, data.corner))
+                            this.trigger("pressed", [data.point]);
+
+                        return false;
+
+                    } else
+                        data.corner = null;
+
+                }
+
+            },
+
+            _eventMove: function(e) {
+
+                var data = this.data().f;
+
+                if (!data.disabled) {
+
+                    e = (isTouch) ? e.originalEvent.touches : [e];
+
+                    if (data.corner) {
+
+                        var pos = data.parent.offset();
+                        data.corner.x = e[0].pageX - pos.left;
+                        data.corner.y = e[0].pageY - pos.top;
+                        flipMethods._showFoldedPage.call(this, data.corner);
+
+                    } else if (!this.data().effect && this.is(":visible")) {
+
+
+                        var corner = flipMethods._cornerActivated.call(this, e[0]);
+
+                        if (corner) {
+                            var origin = flipMethods._c.call(this, corner.corner, data.opts.cornerSize / 2);
+                            corner.x = origin.x;
+                            corner.y = origin.y;
+                            flipMethods._showFoldedPage.call(this, corner, true);
+                        } else
+                            flipMethods.hideFoldedPage.call(this, true);
+
+
+                    }
+                }
+            },
+
+            _eventEnd: function() {
+
+                var data = this.data().f;
+
+                if (!data.disabled && data.point) {
+                    var event = $.Event("released");
+                    this.trigger(event, [data.point]);
+                    if (!event.isDefaultPrevented())
+                        flipMethods.hideFoldedPage.call(this, true);
+                }
+
+                data.corner = null;
+
+            },
+
+            disable: function(disable) {
+
+                flipMethods.setData.call(this, { 'disabled': disable });
+                return this;
+
+            }
+        };
 
 
 // Processes classes
 
-function decorator(that, methods, args) {
+    function decorator(that, methods, args) {
 
-  if (!args[0] || typeof(args[0])=='object')
-    return methods.init.apply(that, args);
-
-  else if (methods[args[0]])
-    return methods[args[0]].apply(that, Array.prototype.slice.call(args, 1));
-
-  else
-    throw turnError(args[0] + ' is an invalid value');
-}
+        if (!args[0] || typeof(args[0]) == "object")
+            return methods.init.apply(that, args);
+        else if (methods[args[0]])
+            return methods[args[0]].apply(that, Array.prototype.slice.call(args, 1));
+        else
+            throw turnError(args[0] + " is an invalid value");
+    }
 
 
 // Attributes for a layer
 
-function divAtt(top, left, zIndex, overf) {
-    
-  return {'css': {
-        position: 'absolute',
-        top: top,
-        left: left,
-        'overflow': overf || 'hidden',
-        'z-index': zIndex || 'auto'
-        }
-    };
-      
-}
+    function divAtt(top, left, zIndex, overf) {
+
+        return {
+            'css': {
+                position: "absolute",
+                top: top,
+                left: left,
+                'overflow': overf || "hidden",
+                'z-index': zIndex || "auto"
+            }
+        };
+
+    }
 
 // Gets a 2D point from a bezier curve of four points
 
-function bezier(p1, p2, p3, p4, t) {
+    function bezier(p1, p2, p3, p4, t) {
 
-  var a = 1 - t,
-    b = a * a * a,
-    c = t * t * t;
-    
-  return point2D(Math.round(b*p1.x + 3*t*a*a*p2.x + 3*t*t*a*p3.x + c*p4.x),
-    Math.round(b*p1.y + 3*t*a*a*p2.y + 3*t*t*a*p3.y + c*p4.y));
+        var a = 1 - t,
+            b = a * a * a,
+            c = t * t * t;
 
-}
+        return point2D(Math.round(b * p1.x + 3 * t * a * a * p2.x + 3 * t * t * a * p3.x + c * p4.x),
+            Math.round(b * p1.y + 3 * t * a * a * p2.y + 3 * t * t * a * p3.y + c * p4.y));
+
+    }
 
 // Gets a 2D point
 
-function point2D(x, y) {
-  
-  return {x: x, y: y};
+    function point2D(x, y) {
 
-}
+        return { x: x, y: y };
+
+    }
 
 // Checks if a property belongs to an object
 
-function has(property, object) {
-  
-  return Object.prototype.hasOwnProperty.call(object, property);
+    function has(property, object) {
 
-}
+        return Object.prototype.hasOwnProperty.call(object, property);
+
+    }
 
 // Gets the CSS3 vendor prefix
 
-function getPrefix() {
+    function getPrefix() {
 
-  var vendorPrefixes = ['Moz','Webkit','Khtml','O','ms'],
-  len = vendorPrefixes.length,
-  vendor = '';
+        var vendorPrefixes = ["Moz", "Webkit", "Khtml", "O", "ms"],
+            len = vendorPrefixes.length,
+            vendor = "";
 
-  while (len--)
-    if ((vendorPrefixes[len] + 'Transform') in document.body.style)
-      vendor='-'+vendorPrefixes[len].toLowerCase()+'-';
+        while (len--)
+            if ((vendorPrefixes[len] + "Transform") in document.body.style)
+                vendor = "-" + vendorPrefixes[len].toLowerCase() + "-";
 
-  return vendor;
+        return vendor;
 
-}
+    }
 
 // JS Errors
 
-function turnError(message) {
+    function turnError(message) {
 
-  function TurnJsError(message) {
-    this.name = "TurnJsError";
-    this.message = message;
-  }
+        function TurnJsError(message) {
+            this.name = "TurnJsError";
+            this.message = message;
+        }
 
-  TurnJsError.prototype = new Error();
-  TurnJsError.prototype.constructor = TurnJsError;
+        TurnJsError.prototype = new Error();
+        TurnJsError.prototype.constructor = TurnJsError;
 
-  return new TurnJsError(message);
-}
+        return new TurnJsError(message);
+    }
 
 // Find the offset of an element discarding its transformation
 
-function findPos(obj) {
-  var offset = {top: 0, left: 0};
+    function findPos(obj) {
+        var offset = { top: 0, left: 0 };
 
-  do{
-    offset.left += obj.offsetLeft;
-    offset.top += obj.offsetTop;
-  } while ((obj = obj.offsetParent));
+        do {
+            offset.left += obj.offsetLeft;
+            offset.top += obj.offsetTop;
+        } while ((obj = obj.offsetParent));
 
-  return offset;
-}
+        return offset;
+    }
 
 
 // Request an animation
 
-window.requestAnim = function(callback) {
-  window.setTimeout(callback, 1000 / 60);
-}
+    window.requestAnim = function(callback) {
+        window.setTimeout(callback, 1000 / 60);
+    };
 
 
-function emptyFunction() {
-  return '';
-}
+    function emptyFunction() {
+        return "";
+    }
 
 
 // Extend $.fn
 
-$.extend($.fn, {
+    $.extend($.fn,
+        {
+            flip: function(req, opts) {
+                return decorator(this, flipMethods, arguments);
+            },
 
-  flip: function(req, opts) {
-    return decorator(this, flipMethods, arguments);
-  },
+            turn: function(req) {
+                return decorator(this, turnMethods, arguments);
+            },
 
-  turn: function(req) {
-    return decorator(this, turnMethods, arguments);
-  },
+            transform: function(transform, origin) {
 
-  transform: function(transform, origin) {
+                var properties = {};
 
-    var properties = {};
-    
-    if (origin)
-      properties[vendor+'transform-origin'] = origin;
-    
-    properties[vendor+'transform'] = transform;
-  
-    return this.css(properties);
+                if (origin)
+                    properties[vendor + "transform-origin"] = origin;
 
-  },
+                properties[vendor + "transform"] = transform;
 
-  animatef: function(point) {
+                return this.css(properties);
 
-    var data = this.data();
+            },
 
-    if (data.effect)
-      data.effect.stop();
+            animatef: function(point) {
 
-    if (point) {
+                var data = this.data();
 
-      if (!point.to.length) point.to = [point.to];
-      if (!point.from.length) point.from = [point.from];
+                if (data.effect)
+                    data.effect.stop();
 
-      var diff = [],
-        len = point.to.length,
-        animating = true,
-        that = this,
-        time = (new Date()).getTime(),
-        frame = function() {
+                if (point) {
 
-          if (!data.effect || !animating)
-            return;
+                    if (!point.to.length) point.to = [point.to];
+                    if (!point.from.length) point.from = [point.from];
 
-          var v = [],
-            timeDiff = Math.min(point.duration, (new Date()).getTime() - time);
+                    var diff = [],
+                        len = point.to.length,
+                        animating = true,
+                        that = this,
+                        time = (new Date()).getTime(),
+                        frame = function() {
 
-          for (var i = 0; i < len; i++)
-            v.push(data.effect.easing(1, timeDiff, point.from[i], diff[i], point.duration));
+                            if (!data.effect || !animating)
+                                return;
 
-          point.frame((len==1) ? v[0] : v);
+                            var v = [],
+                                timeDiff = Math.min(point.duration, (new Date()).getTime() - time);
 
-          if (timeDiff==point.duration) {
-            delete data['effect'];
-            that.data(data);
-            if (point.complete)
-              point.complete();
-          } else {
-            window.requestAnim(frame);
-          }
-        };
+                            for (var i = 0; i < len; i++)
+                                v.push(data.effect.easing(1, timeDiff, point.from[i], diff[i], point.duration));
 
-      for (var i = 0; i < len; i++)
-        diff.push(point.to[i] - point.from[i]);
+                            point.frame((len == 1) ? v[0] : v);
 
-      data.effect = $.extend({
-        stop: function() {
-          animating = false;
-        },
-        easing: function (x, t, b, c, data) {
-          return c * Math.sqrt(1 - (t=t/data-1)*t) + b;
-        }
-      }, point);
+                            if (timeDiff == point.duration) {
+                                delete data["effect"];
+                                that.data(data);
+                                if (point.complete)
+                                    point.complete();
+                            } else {
+                                window.requestAnim(frame);
+                            }
+                        };
 
-      this.data(data);
+                    for (var i = 0; i < len; i++)
+                        diff.push(point.to[i] - point.from[i]);
 
-      frame();
+                    data.effect = $.extend({
+                            stop: function() {
+                                animating = false;
+                            },
+                            easing: function(x, t, b, c, data) {
+                                return c * Math.sqrt(1 - (t = t / data - 1) * t) + b;
+                            }
+                        },
+                        point);
 
-    } else {
-      
-      delete data['effect'];
+                    this.data(data);
 
-    }
-  }
-});
+                    frame();
+
+                } else {
+
+                    delete data["effect"];
+
+                }
+            }
+        });
 
 // Export some globals
 
-$.isTouch = isTouch;
-$.mouseEvents = mouseEvents;
-$.cssPrefix = emptyFunction;
-$.cssTransitionEnd = emptyFunction;
-$.findPos = findPos;
+    $.isTouch = isTouch;
+    $.mouseEvents = mouseEvents;
+    $.cssPrefix = emptyFunction;
+    $.cssTransitionEnd = emptyFunction;
+    $.findPos = findPos;
 
 })(jQuery);

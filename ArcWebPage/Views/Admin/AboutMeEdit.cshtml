@@ -1,0 +1,119 @@
+﻿@model DAL.DB.AboutMe
+
+@{
+    ViewBag.Title = "AboutMeEdit";
+    Layout = "~/Views/Shared/LayoutAdmin.cshtml";
+}
+
+
+
+<script>
+
+    $(document).ready(function() {
+        message();
+    });
+
+    function message()
+    {
+       var messa =  @Html.Raw(TempData["AboutMe"]);
+
+        if (messa) {
+            toastr.success('Profil güncelleme işlemi başarılı. Tatlisim ❤');
+        } else {
+            toastr.success('Profil güncelleme işlemi başarısız. Tatlisim ❤');
+        }
+    }
+
+</script>
+
+
+
+@using (Html.BeginForm("AboutMeEdit", "Home", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-signin" }))
+{
+    <div class="row gutter-xs">
+        <div class="col-xs-12 col-md-6 col-lg-12">
+            <div class="card">
+
+                <div class="card-body">
+                    <div class="pull-left">
+                        <h4 class="card-title"></h4>
+                    </div>
+                    <div class="pull-right" data-toggle="buttons">
+                        <label>Hakkımda sayfası</label>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="md-form">
+                        <textarea type="text" id="header" name="Header" class="md-textarea">
+                            @{
+                                if (Model.Header != null)
+                                {
+                                    @Model.Header
+                                }
+                            }
+                        </textarea>
+                        <label for="header">Başlık:</label>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="md-form">
+                        <textarea type="text" id="headerComment" name="HeaderSecond" class="md-textarea">
+                            @{
+                                if (Model.HeaderSecond != null)
+                                {
+                                    @Model.HeaderSecond
+                                }
+                            }
+                        </textarea>
+                        <label for="headerComment">Başlık Açıklaması:</label>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="md-form">
+                        <textarea type="text" id="aboutComment" name="AboutComment" class="md-textarea">
+                            @{
+                                if (Model.AboutComment != null)
+                                {
+                                    @Model.AboutComment
+                                }
+                            }
+                        </textarea>
+                        <label for="aboutComment">Tanıtım Açıklaması:</label>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="file-field">
+                        <div class="btn btn-secondary btn-lg">
+                            <span>Profil Resmi 1</span>
+                            <input type="file" name="picture1">
+                        </div>
+                        <div class="file-path-wrapper">
+                            <input class="file-path validate" type="text" placeholder="@( (Model.ImagePath!=null)?"Resim degiştir":"Resim yükle")">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="file-field">
+                        <div class="btn btn-secondary btn-lg">
+                            <span>Profil Resmi 2</span>
+                            <input type="file" name="picture2">
+                        </div>
+                        <div class="file-path-wrapper">
+                            <input class="file-path validate" type="text" placeholder="@( (Model.ImagePathSecond!=null)?"Resim degiştir":"Resim yükle")">
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <button type="submit" class="btn btn-lg btn-secondary btn-block">Kaydet</button>
+                </div>
+            </div>
+        </div>
+    </div>
+                                }
+
+
+<script src="~/Content/admin/js/compiled.min474a.js"></script>

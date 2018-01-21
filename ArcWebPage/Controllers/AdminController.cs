@@ -1,58 +1,46 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 using ArcWebPage.Identity;
 using ArcWebPage.Models;
-using DAL;
 using Microsoft.AspNet.Identity.Owin;
-using Microsoft.Owin;
-using BusinessLayer = BusinessLayer.BusinessLayer;
+using BusinessLayer;
+using DAL.DB;
 
 namespace ArcWebPage.Controllers
 {
     public class AdminController : Controller
     {
+        private readonly BusinessLayer.BusinessLayer _db = new BusinessLayer.BusinessLayer();
+
         public UserManagerApp UserManagerApp
         {
-
             get
             {
-                IOwinContext context = HttpContext.GetOwinContext();
+                var context = HttpContext.GetOwinContext();
                 return context.GetUserManager<UserManagerApp>();
             }
         }
 
 
-        public RoleAppManager RoleAppManager
-        {
-            get
-            {
-                return HttpContext.GetOwinContext().GetUserManager<RoleAppManager>();
-            }
-        }
-
-
-        public global::BusinessLayer.BusinessLayer _db = new global::BusinessLayer.BusinessLayer();
+        public RoleAppManager RoleAppManager => HttpContext.GetOwinContext().GetUserManager<RoleAppManager>();
 
 
         public ActionResult Panel()
         {
             return View();
-        } 
-
-
+        }
 
 
         public ActionResult AboutMeEdit()
         {
-            AboutMe about = (_db.GetAllAboutMes().Any()) ? _db.GetAllAboutMes().FirstOrDefault() : new AboutMe();
+            var aboutList = _db.GetAllAboutMes();
+            var about = aboutList.Any() ? aboutList.FirstOrDefault() : new AboutMe();
             return View(about);
-        } 
+        }
 
         [HttpPost]
         public ActionResult AboutMeEdit(AboutMe about, HttpPostedFileBase picture1, HttpPostedFileBase picture2)
@@ -62,14 +50,14 @@ namespace ArcWebPage.Controllers
 
             if (picture1 != null)
             {
-                string filePictureName = Path.GetFileName(picture1.FileName); 
-                filePicturePath = Path.Combine(Server.MapPath("~/File"), filePictureName); 
+                var filePictureName = Path.GetFileName(picture1.FileName);
+                filePicturePath = Path.Combine(Server.MapPath("~/File"), filePictureName);
                 picture1.SaveAs(filePicturePath);
             }
 
             if (picture2 != null)
             {
-                string filePictureName1 = Path.GetFileName(picture1.FileName);  
+                var filePictureName1 = Path.GetFileName(picture2.FileName);
                 filePicturePath1 = Path.Combine(Server.MapPath("~/File"), filePictureName1);
                 picture1.SaveAs(filePicturePath1);
             }
@@ -77,7 +65,7 @@ namespace ArcWebPage.Controllers
 
             if (_db.GetAllAboutMes().Any())
             {
-                AboutMe aboutMe = _db.GetAllAboutMes().FirstOrDefault();
+                var aboutMe = _db.GetAllAboutMes().FirstOrDefault();
 
                 aboutMe.AboutComment = about.AboutComment;
                 aboutMe.Header = about.Header;
@@ -89,25 +77,20 @@ namespace ArcWebPage.Controllers
 
                 return RedirectToAction("AboutMeEdit");
             }
-            else
-            {
-                about.ImagePath = filePicturePath;
-                about.ImagePathSecond = filePicturePath1;
+            about.ImagePath = filePicturePath;
+            about.ImagePathSecond = filePicturePath1;
 
-                TempData["AboutMe"] = _db.AddAboutMe(about).ToString().ToLower();
+            TempData["AboutMe"] = _db.AddAboutMe(about).ToString().ToLower();
 
-                return RedirectToAction("AboutMeEdit");
-            }
+            return RedirectToAction("AboutMeEdit");
         }
-
-
-
-
 
 
         public ActionResult ContactEdit()
         {
-            ContactPage contant = (_db.GetAllContactPages().Any()) ? _db.GetAllContactPages().FirstOrDefault() : new ContactPage();
+            var contant = _db.GetAllContactPages().Any()
+                ? _db.GetAllContactPages().FirstOrDefault()
+                : new ContactPage();
             return View(contant);
         }
 
@@ -118,14 +101,16 @@ namespace ArcWebPage.Controllers
 
             if (picture1 != null)
             {
-                string filePictureName = Path.GetFileName(picture1.FileName);  // dosya adını alıyor
-                filePicturePath = Path.Combine(Server.MapPath("~/File"), filePictureName); // dosya adiyla birlikte nereye kaydecegini ayarlıyor
+                var filePictureName = Path.GetFileName(picture1.FileName); // dosya adını alıyor
+                filePicturePath =
+                    Path.Combine(Server.MapPath("~/File"),
+                        filePictureName); // dosya adiyla birlikte nereye kaydecegini ayarlıyor
                 picture1.SaveAs(filePicturePath);
             }
 
             if (_db.GetAllContactPages().Any())
             {
-                ContactPage contactMe = _db.GetAllContactPages().FirstOrDefault();
+                var contactMe = _db.GetAllContactPages().FirstOrDefault();
                 contactMe.Comment = contact.Comment;
                 contactMe.Title = contact.Title;
                 contactMe.ImagePath = filePicturePath;
@@ -141,9 +126,6 @@ namespace ArcWebPage.Controllers
         }
 
 
-
-
-
         public ActionResult SocialMediaAdd()
         {
             return View();
@@ -152,7 +134,7 @@ namespace ArcWebPage.Controllers
         [HttpPost]
         public JsonResult getSocialMedia()
         {
-            var social = _db.GetAllSocialMedias().Any()? _db.GetAllSocialMedias() : new List<SocialMedia>();
+            var social = _db.GetAllSocialMedias().Any() ? _db.GetAllSocialMedias() : new List<SocialMedia>();
 
             return Json(social);
         }
@@ -160,11 +142,11 @@ namespace ArcWebPage.Controllers
         [HttpPost]
         public JsonResult modifySocialMedia(string id, string name, string link)
         {
-            string result = "false";
+            var result = "false";
 
             if (string.IsNullOrEmpty(id))
             {
-                SocialMedia media = new SocialMedia()
+                var media = new SocialMedia
                 {
                     SocialMediaLink = link,
                     SocialMediaName = name
@@ -175,7 +157,7 @@ namespace ArcWebPage.Controllers
             else
             {
                 var mediaId = Convert.ToDecimal(id);
-                SocialMedia media = _db.GetSocialMediaById(mediaId);
+                var media = _db.GetSocialMediaById(mediaId);
                 media.SocialMediaLink = link;
                 media.SocialMediaName = name;
 
@@ -188,24 +170,19 @@ namespace ArcWebPage.Controllers
         [HttpPost]
         public JsonResult deleteSocialMedia(string id)
         {
-            string result = "false";
+            var result = "false";
             var mediaId = Convert.ToDecimal(id);
-            SocialMedia media = _db.GetSocialMediaById(mediaId);
+            var media = _db.GetSocialMediaById(mediaId);
 
-            if (media !=null)
-            {
+            if (media != null)
                 result = _db.RemoveSocialMedia(media).ToString().ToLower();
-            }
 
             return Json(result);
         }
 
-  
-
 
         public ActionResult SkillList()
         {
-
             return View();
         }
 
@@ -219,11 +196,11 @@ namespace ArcWebPage.Controllers
         [HttpPost]
         public JsonResult modifySkill(string id, string name, string value, string colorCode)
         {
-            string result = "false";
+            var result = "false";
 
             if (string.IsNullOrEmpty(id))
             {
-                Skills skill = new Skills()
+                var skill = new Skills
                 {
                     ColorCode = colorCode,
                     Name = name,
@@ -234,15 +211,17 @@ namespace ArcWebPage.Controllers
             }
             else
             {
-                decimal skillId = Convert.ToDecimal(id);
+                var skillId = Convert.ToDecimal(id);
 
-                Skills skill = _db.GetSkillsById(skillId) != null ? _db.GetSkillsById(skillId) : new Skills();
-                    
+                var skill = _db.GetSkillsById(skillId) != null ? _db.GetSkillsById(skillId) : new Skills();
+
                 skill.ColorCode = colorCode;
                 skill.Name = name;
                 skill.Value = value;
 
-                result = _db.GetSkillsById(skillId) != null ? _db.UpdateSkill(skill).ToString().ToLower() : _db.AddSkill(skill).ToString().ToLower();
+                result = _db.GetSkillsById(skillId) != null
+                    ? _db.UpdateSkill(skill).ToString().ToLower()
+                    : _db.AddSkill(skill).ToString().ToLower();
             }
 
             return Json(result);
@@ -251,13 +230,11 @@ namespace ArcWebPage.Controllers
         [HttpPost]
         public JsonResult deleteSkill(string id)
         {
-            decimal skillId = Convert.ToDecimal(id);
-            Skills skill = _db.GetSkillsById(skillId);
-            string result = _db.RemoveSkill(skill).ToString().ToLower();
+            var skillId = Convert.ToDecimal(id);
+            var skill = _db.GetSkillsById(skillId);
+            var result = _db.RemoveSkill(skill).ToString().ToLower();
+            return Json(result);
         }
-
-
-
 
 
         public ActionResult EducationList()
@@ -276,11 +253,11 @@ namespace ArcWebPage.Controllers
         [HttpPost]
         public JsonResult modifyEducation(string id, string year1, string year2, string title, string comment)
         {
-            string result = "false";
+            var result = "false";
 
             if (string.IsNullOrEmpty(id))
             {
-                Education education = new Education()
+                var education = new Education
                 {
                     Comment = comment,
                     Title = title,
@@ -290,8 +267,10 @@ namespace ArcWebPage.Controllers
             }
             else
             {
-                decimal educationId = Convert.ToDecimal(id);
-                Education education = _db.GetEducationById(educationId) != null ? _db.GetEducationById(educationId) : new Education();
+                var educationId = Convert.ToDecimal(id);
+                var education = _db.GetEducationById(educationId) != null
+                    ? _db.GetEducationById(educationId)
+                    : new Education();
 
                 education.Comment = comment;
                 education.Title = title;
@@ -299,7 +278,7 @@ namespace ArcWebPage.Controllers
 
                 result = _db.GetEducationById(educationId) != null
                     ? _db.UpdateEducation(education).ToString().ToLower()
-                    : _db.AddEducation(education).ToString().ToLower();            
+                    : _db.AddEducation(education).ToString().ToLower();
             }
 
             return Json(result);
@@ -308,16 +287,13 @@ namespace ArcWebPage.Controllers
         [HttpPost]
         public JsonResult deleteEducation(string id)
         {
-            decimal educationId = Convert.ToDecimal(id);
-            Education education = _db.GetEducationById(educationId);
+            var educationId = Convert.ToDecimal(id);
+            var education = _db.GetEducationById(educationId);
 
-            string result = _db.RemoveEducation(education).ToString().ToLower();
+            var result = _db.RemoveEducation(education).ToString().ToLower();
 
             return Json(result);
         }
-
-
-
 
 
         public ActionResult Projects()
@@ -327,7 +303,7 @@ namespace ArcWebPage.Controllers
 
         public JsonResult getProjects()
         {
-            var projectList = _db.GetAllProjects().Any() ? _db.GetAllProjects() :  new List<Project>();
+            var projectList = _db.GetAllProjects().Any() ? _db.GetAllProjects() : new List<Project>();
 
             return Json(projectList);
         }
@@ -338,30 +314,31 @@ namespace ArcWebPage.Controllers
         }
 
         [HttpPost]
-        public ActionResult ProjectAdd(string projectNameUnique, string title, string comment, string titleSecond, string commentSecond, string interior, string industrial, HttpPostedFileBase file)
+        public ActionResult ProjectAdd(string projectNameUnique, string title, string comment, string titleSecond,
+            string commentSecond, string interior, string industrial, HttpPostedFileBase file)
         {
-            Project project = new Project();
+            var project = new Project();
 
-            if (_db.GetProjectByName(projectNameUnique)!=null)
-            {
+            if (_db.GetProjectByName(projectNameUnique) != null)
                 return View();
-            }
 
 
             string filePicturePath = null;
 
             if (file != null)
             {
-                string filePictureName = Path.GetFileName(file.FileName);  // dosya adını alıyor
-                filePicturePath = Path.Combine(Server.MapPath("~/File"), filePictureName); // dosya adiyla birlikte nereye kaydecegini ayarlıyor
+                var filePictureName = Path.GetFileName(file.FileName); // dosya adını alıyor
+                filePicturePath =
+                    Path.Combine(Server.MapPath("~/File"),
+                        filePictureName); // dosya adiyla birlikte nereye kaydecegini ayarlıyor
                 file.SaveAs(filePicturePath);
             }
 
-            string type = interior + " " + industrial;
+            var type = interior + " " + industrial;
             project.ProjectNameUnique = projectNameUnique.ToLower().Replace(" ", "-").Replace("ş", "s")
-                                                                   .Replace("ü", "u").Replace("ı", "i")
-                                                                   .Replace("ğ", "g").Replace("ü", "u")
-                                                                   .Replace("ö", "o").Replace("ç", "c");
+                .Replace("ü", "u").Replace("ı", "i")
+                .Replace("ğ", "g").Replace("ü", "u")
+                .Replace("ö", "o").Replace("ç", "c");
             project.Title = title;
             project.Comment = comment;
             project.TitleSecond = titleSecond;
@@ -370,31 +347,25 @@ namespace ArcWebPage.Controllers
             project.MainPicturePath = filePicturePath;
 
             if (_db.AddProject(project))
-            {
                 return RedirectToAction("ProjectImageAdd", new {id = project.ProjectNameUnique});
-            }
-            else
-            {
-                return View();
-            }
-        } 
+            return View();
+        }
 
         public ActionResult ProjectImageAdd(string id)
         {
-            Project project = _db.GetProjectByName(id) != null ? _db.GetProjectByName(id) : new Project();
+            var project = _db.GetProjectByName(id) != null ? _db.GetProjectByName(id) : new Project();
 
             return View(project);
-        } 
+        }
 
         [HttpPost]
-        public ActionResult Upload(IEnumerable<HttpPostedFileBase> file , string id)
+        public ActionResult Upload(IEnumerable<HttpPostedFileBase> file, string id)
         {
-            decimal projectId = Convert.ToDecimal(id);
+            var projectId = Convert.ToDecimal(id);
 
-            bool result = false;
+            var result = false;
 
-            if (_db.GetProjectById(projectId)!=null)
-            {
+            if (_db.GetProjectById(projectId) != null)
                 foreach (var f in file)
                 {
                     string fileName = null;
@@ -403,32 +374,29 @@ namespace ArcWebPage.Controllers
                     if (f != null)
                     {
                         fileName = Path.GetFileName(f.FileName);
-                        uploadPath =Path.Combine(Server.MapPath("~/ProjectImages"),fileName); 
-                        f.SaveAs(uploadPath); 
+                        uploadPath = Path.Combine(Server.MapPath("~/ProjectImages"), fileName);
+                        f.SaveAs(uploadPath);
                     }
 
-                    ImageFilePath imageFile = new ImageFilePath()
+                    var imageFile = new ImageFilePath
                     {
                         ProjectID = projectId,
                         ImagePath = "/ProjectImages/" + fileName
-
                     };
                     result = _db.AddImageFilePath(imageFile);
-                }   
-            }
-            return Json(new { Message = result });
-
-        }  
+                }
+            return Json(new {Message = result});
+        }
 
         [HttpPost]
         public ActionResult projectDetail(string id)
         {
-            ProjectAndImages projectAndImages = new ProjectAndImages();
+            var projectAndImages = new ProjectAndImages();
 
-            if (_db.GetProjectByName(id)!=null)
+            if (_db.GetProjectByName(id) != null)
             {
-                Project project = _db.GetProjectByName(id);
-                
+                var project = _db.GetProjectByName(id);
+
                 var images = _db.GetImagesByProjectId(project.Id);
 
                 projectAndImages.Project = project;
@@ -437,6 +405,5 @@ namespace ArcWebPage.Controllers
 
             return View(projectAndImages);
         }
-
     }
 }

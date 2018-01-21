@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     Layout = null;
 }
 
@@ -7,82 +6,83 @@
 
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width"/>
     <title>Admin Panel Login</title>
-    <link href="~/Content/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="~/Content/css/mdb.min.css" rel="stylesheet" />
+    <link href="~/Content/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="~/Content/css/mdb.min.css" rel="stylesheet"/>
     <style>
         .wrapper {
-            margin-top: 80px;
             margin-bottom: 20px;
+            margin-top: 80px;
         }
 
         .form-signin {
+            background-color: #eee;
+            border: 3px dotted rgba(0, 0, 0, 0.1);
+            margin: 0 auto;
             max-width: 420px;
             padding: 30px 38px 66px;
-            margin: 0 auto;
-            background-color: #eee;
-            border: 3px dotted rgba(0,0,0,0.1);
         }
 
         .form-signin-heading {
-            text-align: center;
             margin-bottom: 30px;
+            text-align: center;
         }
 
         .form-control {
-            position: relative;
             font-size: 16px;
             height: auto;
             padding: 10px;
+            position: relative;
         }
 
         input[type="text"] {
-            margin-bottom: 0px;
             border-bottom-left-radius: 0;
             border-bottom-right-radius: 0;
+            margin-bottom: 0px;
         }
 
         input[type="password"] {
-            margin-bottom: 20px;
             border-top-left-radius: 0;
             border-top-right-radius: 0;
+            margin-bottom: 20px;
         }
 
         .colorgraph {
-            height: 7px;
-            border-top: 0;
             background: #c4e17f;
-            border-radius: 5px;
             background-image: -webkit-linear-gradient(left, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
             background-image: -moz-linear-gradient(left, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
             background-image: -o-linear-gradient(left, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
             background-image: linear-gradient(to right, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
+            border-radius: 5px;
+            border-top: 0;
+            height: 7px;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <div class="wrapper">
-            @using (Html.BeginForm("Admin", "Home", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-signin" }))
-            {
-                <h3 class="form-signin-heading">Welcome. Please Sign In</h3>
-                <hr class="colorgraph"><br>
-                <div class="md-form">
-                    <input type="text" id="username" name="username" class="form-control">
-                    <label for="form1" class="">Username</label>
-                </div>
-                <div class="md-form">
-                    <input type="password" id="password" name="password" class="form-control">
-                    <label for="form1" class="">Password</label>
-                </div>
-                <button type="submit" class="btn btn-lg btn-secondary btn-block">Login</button>
-                <br />
-                @Html.ValidationSummary(false, "", new { @class = "text-danger" })
-            }
-        </div>
+<div class="container">
+    <div class="wrapper">
+        @using (Html.BeginForm("Admin", "Home", FormMethod.Post, new {enctype = "multipart/form-data", @class = "form-signin"}))
+        {
+            <h3 class="form-signin-heading">Welcome. Please Sign In</h3>
+            <hr class="colorgraph">
+            <br>
+            <div class="md-form">
+                <input type="text" id="username" name="username" class="form-control">
+                <label for="form1" class="">Username</label>
+            </div>
+            <div class="md-form">
+                <input type="password" id="password" name="password" class="form-control">
+                <label for="form1" class="">Password</label>
+            </div>
+            <button type="submit" class="btn btn-lg btn-secondary btn-block">Login</button>
+            <br/>
+            @Html.ValidationSummary(false, "", new {@class = "text-danger"})
+        }
     </div>
+</div>
 
 </body>
 </html>

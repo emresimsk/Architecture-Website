@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using Microsoft.AspNet.Identity;
+﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
@@ -15,17 +11,17 @@ namespace ArcWebPage.Identity
         {
         }
 
-        public static UserManagerApp Create(IdentityFactoryOptions<UserManagerApp> idetityFactoryOptions, IOwinContext owinContext)
+        public static UserManagerApp Create(IdentityFactoryOptions<UserManagerApp> idetityFactoryOptions,
+            IOwinContext owinContext)
         {
+            var context = owinContext.Get<UserAppDbContext>();
 
-            UserAppDbContext context = owinContext.Get<UserAppDbContext>();
+            var user = new UserManagerApp(new UserStore<UserApp>(context));
 
-            UserManagerApp user = new UserManagerApp(new UserStore<UserApp>(context));
-
-            UserValidator<UserApp> userValidator = new UserValidator<UserApp>(user)
+            var userValidator = new UserValidator<UserApp>(user)
             {
                 RequireUniqueEmail = true,
-                AllowOnlyAlphanumericUserNames = true,
+                AllowOnlyAlphanumericUserNames = true
             };
 
             user.UserValidator = userValidator;

@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
 using System.Web;
 using System.Web.Mvc;
 using ArcWebPage.Identity;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
-using Microsoft.Owin;
 using Microsoft.Owin.Security;
 
 namespace ArcWebPage.Controllers
@@ -16,21 +12,14 @@ namespace ArcWebPage.Controllers
     {
         public UserManagerApp UserManagerApp
         {
-
             get
             {
-                IOwinContext context = HttpContext.GetOwinContext();
+                var context = HttpContext.GetOwinContext();
                 return context.GetUserManager<UserManagerApp>();
             }
         }
 
-        public RoleAppManager RoleAppManager
-        {
-            get
-            {
-                return HttpContext.GetOwinContext().GetUserManager<RoleAppManager>();
-            }
-        }
+        public RoleAppManager RoleAppManager => HttpContext.GetOwinContext().GetUserManager<RoleAppManager>();
 
 
         public ActionResult Index()
@@ -71,21 +60,20 @@ namespace ArcWebPage.Controllers
         [HttpPost]
         public ActionResult Admin(string username, string password)
         {
-
             if (ModelState.IsValid)
             {
-                UserApp currentUser = UserManagerApp.Find(username, password);
+                var currentUser = UserManagerApp.Find(username, password);
 
                 if (currentUser != null)
                 {
-                    ClaimsIdentity identy = UserManagerApp.CreateIdentity(currentUser, DefaultAuthenticationTypes.ApplicationCookie);
+                    var identy =
+                        UserManagerApp.CreateIdentity(currentUser, DefaultAuthenticationTypes.ApplicationCookie);
 
                     HttpContext.GetOwinContext().Authentication.SignOut();
-                    HttpContext.GetOwinContext().Authentication.SignIn(new AuthenticationProperties()
+                    HttpContext.GetOwinContext().Authentication.SignIn(new AuthenticationProperties
                     {
                         IsPersistent = false,
                         ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(30)
-
                     }, identy);
 
 
