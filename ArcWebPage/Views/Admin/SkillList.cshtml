@@ -1,0 +1,258 @@
+﻿
+@{
+    ViewBag.Title = "SkillList";
+    Layout = "~/Views/Shared/LayoutAdmin.cshtml";
+}
+
+
+<link href="https://fonts.googleapis.com/css?family=Raleway:400,300,600,800,900" rel="stylesheet" type="text/css">
+<link href="~/Content/admin/css/spectrum.css" rel="stylesheet" />
+
+<style>
+    #container {
+        margin: 20px;
+        width: 200px;
+        height: 200px;
+        position: relative;
+    }
+</style>
+<div class="row gutter-xs">
+    <div class="col-xs-12 col-md-6 col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="md-form col-sm-2">
+                    Yetenek Adi
+                    <input type="text" id="skillName" class="form-control" required="">
+                    <input type="hidden" id="skillId" />
+                </div>
+                <div class="md-form offset-sm-1 col-sm-1">
+                    %'lik Dilim
+                    <input type="text" id="skillValue" maxlength="3" class="form-control" required="">
+                </div>
+                <div class="md-form offset-sm-1 col-sm-1">
+                    Renk Seçimi
+                    <input type="text" id="colorCode" class="form-control" value="#000000" required="">
+                </div>
+                <div class="col-sm-1">
+                    <br />
+                    <input type="text" id="colorPicker" class="form-control" required="">
+                </div>
+                <div class="col-sm-offset-1 col-sm-2">
+                    <br />
+                    <button type="button" id="btnShow" class="btn btn-primary btn-block">On İzleme</button>
+                </div>
+                <div class="col-sm-offset-1 col-sm-2">
+                    <br />
+                    <button type="button" id="btnModify" class="btn btn-secondary btn-block">Ekle</button>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <div style="margin: 0 auto; text-align: center;font-size: 17px" id="containerName">
+                </div>
+                <div style="margin: 0 auto" id="container"></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <table class="table table-hover" id="skilltable">
+                    <thead class="secondary-color" style="color: white">
+                        <tr>
+                            <th>
+                                Yetenek Adı
+                            </th>
+                            <th>
+                                Yüzdelik
+                            </th>
+                            <th>
+                                Renk Kodu
+                            </th>
+                            <th>
+                                #
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Content/admin/js/spectrum.js"></script>
+<script src="~/Content/admin/js/progressbar.js"></script>
+
+
+<script>
+
+
+    $("#colorPicker").spectrum({
+        change: function(color) {
+            $("#colorCode").val(color.toHexString());
+        }
+    });
+
+    $('#btnShow').click(function() {
+
+        var code = $("#colorCode").val();
+        var name = $("#skillName").val();
+        var value = $("#skillValue").val() / 100;
+
+        $('#containerName').text(name);
+        progressCreate(code, value, name);
+    });
+
+
+    function progressCreate(colorCode, value, name) {
+        $('#container').empty();
+        var bar = new ProgressBar.Circle(container,
+            {
+                color: colorCode,
+                // This has to be the same size as the maximum width to
+                // prevent clipping
+                strokeWidth: 4,
+                trailWidth: 1,
+                easing: 'easeInOut',
+                duration: 1500,
+                text: {
+                    autoStyleContainer: false
+                },
+                from: { color: colorCode, width: 1 },
+                to: { color: colorCode, width: 4 },
+                // Set default step function for all animate calls
+                step: function(state, circle) {
+                    circle.path.setAttribute('stroke', state.color);
+                    circle.path.setAttribute('stroke-width', state.width);
+
+                    var value = Math.round(circle.value() * 100);
+                    if (value === 0) {
+                        circle.setText('');
+                    } else {
+                        circle.setText(value);
+                    }
+
+                }
+            });
+        bar.text.style.fontFamily = '"Raleway", Helvetica, sans-serif';
+        bar.text.style.fontSize = '2rem';
+
+        bar.animate(value); // Number from 0.0 to 1.0
+    }
+
+
+    $(document).ready(function() {
+        getSkills();
+    });
+
+    function getSkills() {
+        $('#skilltable tbody').empty();
+        $.ajax({
+            url: '/Admin/getSkills',
+            type: 'POST',
+            dataType: 'json',
+            beforeSend: function() {
+                $("div#divLoading").addClass("show");
+            },
+            success: function(data) {
+                data.forEach(function(element) {
+                    $('#skilltable tbody').append('<tr value="' +
+                        element.Id +
+                        '"> <td class="tableSkillName">' +
+                        element.Name +
+                        '</td> <td class="tableSkillValue">' +
+                        element.Value +
+                        '</td> <td class="tableSkillColorCode">' +
+                        element.ColorCode +
+                        '</td>  <td><a href="#" id="' +
+                        element.Id +
+                        '" onclick="deleteSkill(this)"> Sil </a> </td> /tr>');
+                });
+            },
+            complete: function() {
+                $("div#divLoading").removeClass("show");
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                toastr.success('Daha hiç bir yetenek eklenmemiş, Tatlisim ❤');
+            }
+        });
+    }
+
+    $('#btnModify').click(function () {
+
+      var id =$('#skillId').val();
+      var skillName = $('#skillName').val();
+      var skillValue =$('#skillValue').val();
+      var skillColorCode = $('#colorCode').val();
+
+
+      $('#skillId').val(id);
+        $.ajax({
+            url: '/Admin/modifySkill',
+            data: { 'id': id, 'name': skillName, 'value': skillValue, 'colorCode': skillColorCode },
+            type: 'POST',
+            dataType: 'json',
+            beforeSend: function () {
+                $("div#divLoading").addClass("show");
+            },
+            success: function (data) {
+                if (data === 'true') {
+                    getSkills();
+                    toastr.success('Yetenek işlemi başarılı. Tatlisim ❤');
+                } else {
+                    toastr.error('Yetenek işlemi başarısız. Tatlisim ❤');
+                }
+            },
+            complete: function () {
+                $("div#divLoading").removeClass("show");
+            }
+        });
+
+    });
+
+    $('#skilltable').on('click',
+        'tr',
+        function (e) {
+            e.preventDefault();
+            var id = $(this).attr('value');
+            var skillName = $(this).find('td.tableSkillName').text();
+            var skillValue = $(this).find('td.tableSkillValue').text();
+            var skillColorCode = $(this).find('td.tableSkillColorCode').text();
+
+            $('#skillName').val(skillName);
+            $('#skillValue').val(skillValue);
+            $('#colorCode').val(skillColorCode);
+            $('#skillId').val(id);
+
+        });
+
+
+
+    function deleteSkill(event) {
+
+        var id = event.id;
+
+        $.ajax({
+            url: '/Admin/deleteSkill',
+            data: { 'id': id },
+            type: 'POST',
+            dataType: 'json',
+            beforeSend: function() {
+                $("div#divLoading").addClass("show");
+            },
+            success: function(data) {
+                if (data === 'true') {
+                    getSkills();
+                    toastr.success('Yetenek silindi. Tatlisim ❤');
+                } else {
+                    toastr.error('Yetenek silinemedi. Tatlisim ❤');
+                }
+            },
+            complete: function() {
+                $("div#divLoading").removeClass("show");
+            }
+        });
+    }
+</script>
+

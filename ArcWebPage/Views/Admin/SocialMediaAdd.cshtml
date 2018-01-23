@@ -1,0 +1,154 @@
+﻿
+@{
+    ViewBag.Title = "SocialMediaAdd";
+    Layout = "~/Views/Shared/LayoutAdmin.cshtml";
+}
+
+
+<div class="row gutter-xs">
+    <div class="col-xs-12 col-md-6 col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="md-form col-sm-2">
+                    Sosyal Medya
+                    <input type="text" id="socialMediaName" class="form-control" required="">
+                    <input type="hidden" id="socialMediaId" />
+                </div>
+                <div class="md-form col-sm-offset-1 col-sm-6">
+                    Sosyal Medya Link
+                    <input type="text" id="socialMediaNameLink" class="form-control" required="">
+                </div>
+                <div class="col-sm-offset-1 col-sm-2">
+                    <br />
+                    <button type="button" id="btnModify" class="btn btn-secondary btn-block">Ekle</button>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <table class="table table-hover" id="socialmediatable">
+                    <thead class="secondary-color" style="color: white">
+                        <tr>
+                            <th>
+                                Sosyal Medya
+                            </th>
+                            <th>
+                                Sosyal Medya Linki
+                            </th>
+                            <th>
+                                #
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+
+    $(document).ready(function() {
+        getSocial();
+    });
+
+    function getSocial() {
+        $('#socialmediatable tbody').empty();
+        $.ajax({
+            url: '/Admin/getSocialMedia',
+            type: 'POST',
+            dataType: 'json',
+            beforeSend: function () {
+                $("div#divLoading").addClass("show");
+            },
+            success: function (data) {
+                data.forEach(function (element) {
+                    $('#socialmediatable tbody').append('<tr value="'+ element.Id +'"> <td class="socialName">' + element.SocialMediaName + '</td> <td class="socialLink">' + element.SocialMediaLink + '</td> <td><a href="#" id="'+ element.Id +'" onclick="deleteSocialMedia(this)"> Sil </a> </td> /tr>');
+                });
+            },
+            complete: function () {
+                $("div#divLoading").removeClass("show");
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                toastr.success('Daha sosyal medya hesapların eklenmemiş, Tatlisim ❤');
+            }
+        });
+    }
+
+    $('#socialmediatable').on('click',
+        'tr',
+        function(e) {
+            e.preventDefault();
+            var id = $(this).attr('value');
+            var socialName = $(this).find('td.socialName').text();
+            var SocialMediaLink = $(this).find('td.socialLink').text();
+
+
+            $('#socialMediaName').val(socialName);
+            $('#socialMediaNameLink').val(SocialMediaLink);
+            $('#socialMediaId').val(id);
+
+        });
+
+    $('#btnModify').click(function () {
+
+        var name = $('#socialMediaName').val();
+        var link = $('#socialMediaNameLink').val();
+        var id = $('#socialMediaId').val();
+
+        $.ajax({
+            url: '/Admin/modifySocialMedia',
+            data : {'id':id , 'name':name , 'link':link},
+            type: 'POST',
+            dataType: 'json',
+            beforeSend: function () {
+                $("div#divLoading").addClass("show");
+            },
+            success: function (data) {
+                if (data === 'true') {
+                    getSocial();
+                    toastr.success('Sosyal medya işlemi başarılı. Tatlisim ❤');
+                } else {
+                    toastr.error('Sosyal medya işlemi başarısız. Tatlisim ❤');
+                }
+            },
+            complete: function () {
+                $("div#divLoading").removeClass("show");
+            }
+        });
+
+    });
+
+    function deleteSocialMedia(event) {
+
+        var id = event.id;
+
+        $.ajax({
+            url: '/Admin/deleteSocialMedia',
+            data: { 'id': id},
+            type: 'POST',
+            dataType: 'json',
+            beforeSend: function () {
+                $("div#divLoading").addClass("show");
+            },
+            success: function (data) {
+                if (data === 'true') {
+                    getSocial();
+                    toastr.success('Sosyal medya hesabı silindi. Tatlisim ❤');
+                } else {
+                    toastr.error('Sosyal medya hesabı silinemedi. Tatlisim ❤');
+                }
+            },
+            complete: function () {
+                $("div#divLoading").removeClass("show");
+            }
+        });
+    }
+</script>
+
+
+<script src="~/Content/admin/js/compiled.min474a.js"></script>
+
+

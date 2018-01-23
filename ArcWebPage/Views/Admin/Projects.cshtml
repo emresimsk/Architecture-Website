@@ -1,0 +1,71 @@
+﻿
+@{
+    ViewBag.Title = "Projects";
+    Layout = "~/Views/Shared/LayoutAdmin.cshtml";
+}
+
+
+<div class="row gutter-xs">
+    <div class="col-xs-12 col-md-6 col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <table id="projecttable" class="table table-striped table-bordered table-responsive-md"">
+                    <thead class="secondary-color" style="color: white">
+                        <tr>
+                            <th>
+                                Proje tekil ad
+                            </th>
+                            <th>
+                                Başlık
+                            </th>
+                            <th>
+                                2. Başlık
+                            </th>
+
+                            <th>
+                                #
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        getProjects();
+    });
+
+    function getProjects() {
+
+        $('#projecttable tbody').empty();
+        $.ajax({
+            url: '/Admin/getProjects',
+            type: 'POST',
+            dataType: 'json',
+            beforeSend: function () {
+                $("div#divLoading").addClass("show");
+            },
+            success: function (data) {
+                data.forEach(function (element) {
+                    $('#projecttable tbody').append('<tr value="' + element.Id + '"> <td class="projectUniqueName">' + element.ProjectNameUnique + '</td> <td class="projectTitle">' + element.Title + '</td> <td class="projectComment"> ' + element.TitleSecond + ' </td> <td><a href="#" id=' + element.ProjectNameUnique + ' onclick="projectDetail(this)"> Detaylı Gör </a> </td> /tr>');
+                });
+            },
+            complete: function () {
+                $("div#divLoading").removeClass("show");
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                toastr.success('Daha proje eklenmemiş, Tatlisim ❤');
+            }
+        });
+    }
+
+    function projectDetail(event) {
+
+        var id = event.id;
+        window.location.href = "ProjectDetail/"+id;
+    }
+</script>

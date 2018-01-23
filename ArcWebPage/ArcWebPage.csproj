@@ -552,6 +552,14 @@
     <Content Include="Views\Admin\Panel.cshtml" />
     <Content Include="Views\Admin\AboutMeEdit.cshtml" />
     <Content Include="packages.config" />
+    <Content Include="Views\Admin\ContactEdit.cshtml" />
+    <Content Include="Views\Admin\SocialMediaAdd.cshtml" />
+    <Content Include="Views\Admin\SkillList.cshtml" />
+    <Content Include="Views\Admin\EducationList.cshtml" />
+    <Content Include="Views\Admin\Projects.cshtml" />
+    <Content Include="Views\Admin\ProjectAdd.cshtml" />
+    <Content Include="Views\Admin\ProjectImageAdd.cshtml" />
+    <Content Include="Views\Admin\projectDetail.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -561,7 +569,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="File\" />
+    <Folder Include="File\about\" />
+    <Folder Include="File\contact\" />
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>

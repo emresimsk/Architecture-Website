@@ -246,17 +246,17 @@ namespace BusinessLayer
 
         public bool AddSocialMedia(params SocialMedia[] socialMedia)
         {
-            return (_socialMediaRepository.Add() == 1);
+            return (_socialMediaRepository.Add(socialMedia) == 1);
         }
 
         public bool UpdateSocialMedia(params SocialMedia[] socialMedia)
         {
-            return (_socialMediaRepository.Update() == 1);
+            return (_socialMediaRepository.Update(socialMedia) == 1);
         }
 
         public bool RemoveSocialMedia(params SocialMedia[] socialMedia)
         {
-            return (_socialMediaRepository.Remove() == 1);
+            return (_socialMediaRepository.Remove(socialMedia) == 1);
         }
 
         

@@ -450,7 +450,7 @@
     width: 0;
 }
 
-.dropzone .dz-preview.dz-error .dz-error-message { display: block; }
+.dropzone .dz-preview.dz-error .dz-error-message { display: block; margin-top: 60px !important }
 
 .dropzone .dz-preview.dz-error:hover .dz-error-message {
     opacity: 1;

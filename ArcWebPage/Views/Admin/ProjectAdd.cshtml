@@ -1,0 +1,61 @@
+﻿
+@{
+    ViewBag.Title = "ProjectAdd";
+    Layout = "~/Views/Shared/LayoutAdmin.cshtml";
+}
+
+
+@using (Html.BeginForm("ProjectAdd", "Admin", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-signin" }))
+{
+    <div class="row gutter-xs">
+        <div class="col-xs-12 col-md-6 col-lg-12">
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="md-form col-sm-12">
+                        Tekil Proje Adi
+                        <input type="text" id="projectNameUnique" name="projectNameUnique" class="form-control">
+                    </div>
+                    <div class="md-form col-sm-12">
+                        Proje Adi
+                        <input type="text" id="title" name="title" class="form-control">
+                    </div>
+                    <div class="md-form col-sm-12">
+                        Proje Açıklaması:
+                        <textarea type="text" id="comment" name="comment" class="md-textarea"></textarea>
+                    </div>
+                    <div class="col-sm-12">
+                        <br />
+                        <label class="checkbox-inline"><input type="checkbox" name="interior" id="interior" value="interior">İç Mekan</label>
+                        <label class="checkbox-inline"><input type="checkbox" name="industrial" id="industrial" value="industrial">Dış Mekan</label>
+                    </div>
+                    <div class="md-form col-sm-12">
+                        <br />
+                        Alt Taraf Proje Adi
+                        <input type="text" id="titleSecond" name="titleSecond" class="form-control">
+                    </div>
+                    <div class="md-form col-sm-12">
+                        Alt Taraf Proje Açıklaması:
+                        <textarea type="text" id="commentSecond" name="commentSecond" class="md-textarea"></textarea>
+                    </div>
+                    <div class="file-field" style="position: static !important">
+                        <div class="btn btn-primary btn-lg">
+                            <span>Ana Resim</span>
+                            <input id="file" name="file" type="file" required>
+                        </div>
+                        <div class="file-path-wrapper">
+                            <input class="file-path" type="text" placeholder="Upload your file">
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <button type="submit" style="float: right; margin-top: 20px" id="btnSave" class="btn btn-secondary btn-block">Ekle</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+<script src="~/Content/admin/js/compiled.min474a.js"></script>
+

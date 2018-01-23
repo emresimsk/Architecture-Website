@@ -1,0 +1,179 @@
+﻿
+@{
+    ViewBag.Title = "EducationList";
+    Layout = "~/Views/Shared/LayoutAdmin.cshtml";
+}
+
+
+<div class="row gutter-xs">
+    <div class="col-xs-12 col-md-6 col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="md-form col-sm-12">
+                    Okul Adı
+                    <input type="text" id="educationTitle" class="form-control" required="">
+                    <input type="hidden" id="educationID" />
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="md-form col-sm-12">
+                    Açıklama
+                    <textarea type="text" class="md-textarea" id="educationComment"></textarea>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="md-form col-sm-3">
+                    Başlama Tarihi
+                    <input type="text" id="educationYear1" class="form-control" required="">
+                </div>
+                <div class="offset-1 col-sm-3">
+                    Bitirme Tarihi
+                    <input type="text" id="educationYear2" class="form-control" required="">
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="md-form col-sm-2">
+                    <button type="reset" class="btn btn-lg btn-danger btn-block">Temizle</button>
+                </div>
+                <div class="col-sm-offset-1 col-sm-2">
+                    <button type="button" id="btnModify" class="btn btn-lg btn-secondary btn-block">Kaydet</button>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <table class="table table-hover" id="educationtable">
+                    <thead class="secondary-color" style="color: white">
+                        <tr>
+                            <th>
+                                Okul Adı
+                            </th>
+                            <th>
+                                Açıklama
+                            </th>
+                            <th>
+                                Başlama - Bitiş Tarihi
+                            </th>
+
+                            <th>
+                                #
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        getEducation();
+    });
+
+    function getEducation() {
+
+        $('#educationtable tbody').empty();
+        $.ajax({
+            url: '/Admin/getEducation',
+            type: 'POST',
+            dataType: 'json',
+            beforeSend: function () {
+                $("div#divLoading").addClass("show");
+            },
+            success: function (data) {
+                data.forEach(function (element) {
+                    $('#educationtable tbody').append('<tr value="' + element.Id + '"> <td class="educationTitle">' + element.Title + '</td> <td class="educationComment">' + element.Comment + '</td> <td class="educationYear"> '+ element.Year +' </td> <td><a href="#" id="' + element.Id + '" onclick="deleteEducation(this)"> Sil </a> </td> /tr>');
+                });
+            },
+            complete: function () {
+                $("div#divLoading").removeClass("show");
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                toastr.success('Daha eğitim bilgilerin eklenmemiş, Tatlisim ❤');
+            }
+        });
+    }
+
+    $('#educationtable').on('click',
+        'tr',
+        function (e) {
+            e.preventDefault();
+            var id = $(this).attr('value');
+            var educationTitle = $(this).find('td.educationTitle').text();
+            var educationComment = $(this).find('td.educationComment').text();
+            var educationYear = $(this).find('td.educationYear').text();
+
+            var educationfirst1 = educationYear.substring(0, 5);
+            var educationfirst2 = educationYear.substring(7, 12);
+
+            $('#educationTitle').val(educationTitle);
+            $('#educationComment').val(educationComment);
+            $('#educationYear1').val(educationfirst1);
+            $('#educationYear2').val(educationfirst2);
+            $('#educationID').val(id);
+
+        });
+
+
+
+    $('#btnModify').click(function () {
+
+        var title = $('#educationTitle').val();
+        var comment = $('#educationComment').val();
+        var year1 = $('#educationYear1').val();
+        var year2 = $('#educationYear2').val();
+        var id = $('#educationID').val();
+
+        $.ajax({
+            url: '/Admin/modifyEducation',
+            data: { 'id': id, 'year1': year1, 'year2': year2, 'title': title, 'comment': comment },
+            type: 'POST',
+            dataType: 'json',
+            beforeSend: function () {
+                $("div#divLoading").addClass("show");
+            },
+            success: function (data) {
+                if (data === 'true') {
+                    getEducation();
+                    toastr.success('Eğitim ekleme işlemi başarılı. Tatlisim ❤');
+                } else {
+                    toastr.error('Eğitim ekleme işlemi başarısız. Tatlisim ❤');
+                }
+            },
+            complete: function () {
+                $("div#divLoading").removeClass("show");
+            }
+        });
+
+    });
+
+
+    function deleteEducation(event) {
+
+        var id = event.id;
+
+        $.ajax({
+            url: '/Admin/deleteEducation',
+            data: { 'id': id },
+            type: 'POST',
+            dataType: 'json',
+            beforeSend: function () {
+                $("div#divLoading").addClass("show");
+            },
+            success: function (data) {
+                if (data === 'true') {
+                    getEducation();
+                    toastr.success('Eğitim hesabı silindi. Tatlisim ❤');
+                } else {
+                    toastr.error('Eğitim hesabı silinemedi. Tatlisim ❤');
+                }
+            },
+            complete: function () {
+                $("div#divLoading").removeClass("show");
+            }
+        });
+    }
+
+</script>
