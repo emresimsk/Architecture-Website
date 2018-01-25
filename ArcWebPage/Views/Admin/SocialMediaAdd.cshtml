@@ -21,6 +21,7 @@
                 <div class="col-sm-offset-1 col-sm-2">
                     <br />
                     <button type="button" id="btnModify" class="btn btn-secondary btn-block">Ekle</button>
+                    <button type="button" id="btnReset" class="btn btn-danger btn-block">Temizle</button>
                 </div>
             </div>
 
@@ -120,6 +121,14 @@
         });
 
     });
+
+    $('#btnReset').click(function() {
+        $('#socialMediaName').val('');
+        $('#socialMediaNameLink').val('');
+        $('#socialMediaId').val('');
+    });
+
+
 
     function deleteSocialMedia(event) {
 

@@ -429,30 +429,30 @@ function initDomik() {
         ]
     });
 // contact form ------------------
-    $("#contactform").submit(function() {
-        var a = $(this).attr("action");
-        $("#message").slideUp(750,
-            function() {
-                $("#message").hide();
-                $("#submit").attr("disabled", "disabled");
-                $.post(a,
-                    {
-                        name: $("#name").val(),
-                        email: $("#email").val(),
-                        comments: $("#comments").val()
-                    },
-                    function(a) {
-                        document.getElementById("message").innerHTML = a;
-                        $("#message").slideDown("slow");
-                        $("#submit").removeAttr("disabled");
-                        if (null != a.match("success")) $("#contactform").slideDown("slow");
-                    });
-            });
-        return false;
-    });
-    $("#contactform input, #contactform textarea").keyup(function() {
-        $("#message").slideUp(1500);
-    });
+    //$("#contactform").submit(function() {
+    //    var a = $(this).attr("action");
+    //    $("#message").slideUp(750,
+    //        function() {
+    //            $("#message").hide();
+    //            $("#submit").attr("disabled", "disabled");
+    //            $.post(a,
+    //                {
+    //                    name: $("#name").val(),
+    //                    email: $("#email").val(),
+    //                    comments: $("#comments").val()
+    //                },
+    //                function(a) {
+    //                    document.getElementById("message").innerHTML = a;
+    //                    $("#message").slideDown("slow");
+    //                    $("#submit").removeAttr("disabled");
+    //                    if (null != a.match("success")) $("#contactform").slideDown("slow");
+    //                });
+    //        });
+    //    return false;
+    //});
+    //$("#contactform input, #contactform textarea").keyup(function() {
+    //    $("#message").slideUp(1500);
+    //});
     // IMPORTANT   INIT YOUR FUNCTIONS HERE ------------------
 
     var ww3 = $(window).width();

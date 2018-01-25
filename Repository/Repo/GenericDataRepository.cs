@@ -10,7 +10,7 @@ using DAL;
 namespace Repository
 {
    public class GenericDataRepository<T> : IGenericDataRepository<T> where T : class
-    {
+   {
         public virtual IList<T> GetAll(params Expression<Func<T, object>>[] navigationProperties)
         {
             List<T> list;

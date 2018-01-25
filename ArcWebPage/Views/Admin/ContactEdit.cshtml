@@ -12,16 +12,37 @@
 
     function message()
     {
-        var messa =  @Html.Raw(TempData["ContactMe"]);
-
-        if (messa) {
-            toastr.success('Profil güncelleme işlemi başarılı. Tatlisim ❤');
-        } else {
-            toastr.success('Profil güncelleme işlemi başarısız. Tatlisim ❤');
+        @{
+            if (TempData["ContactMe"] !=null)
+            {
+                if (TempData["ContactMe"].ToString() == "true")
+                {
+                    @: toastr.success('Profil güncelleme işlemi başarılı. Tatlisim ❤');
+                }
+                else
+                {
+                    @: toastr.success('Profil güncelleme işlemi başarısız. Tatlisim ❤');
+                }
+            }
         }
     }
 
 </script>
+
+<style>
+    
+    #overlay {
+         margin-top: 100px;
+         position: fixed;
+         top: 0;
+         width: 80%;
+         height: 80%;
+         background-repeat: no-repeat;
+         background-position: center center;
+         cursor: pointer;
+         z-index: 100;
+     }
+</style>
 
 
 @using (Html.BeginForm("ContactEdit", "Admin", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-signin" }))
@@ -67,14 +88,21 @@
                 </div>
 
                 <div class="card-body">
-                    <div class="file-field">
-                        <div class="btn btn-secondary">
-                            <span>Profil Resmi</span>
-                            <input type="file" name="picture1">
+                    <div class="col-sm-10">
+                        <div class="file-field">
+                            <div class="btn btn-secondary">
+                                <span>Profil Resmi</span>
+                                <input type="file" name="picture1">
+                            </div>
+                            <div class="file-path-wrapper">
+                                <input class="file-path validate" type="text" placeholder="@((Model.ImagePath != null) ? "Resim yüklü.Degiştirmek için yeniden yükle." : "Resim yükle")">
+                            </div>
                         </div>
-                        <div class="file-path-wrapper">
-                            <input class="file-path validate" type="text" placeholder="@( (Model.ImagePath!=null)?"Resim yüklü.Degiştirmek için yeniden yükle.":"Resim yükle")">
-                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <img width="100" onclick="imgzoom(this)" src="@Model.ImagePath"/>
+                    </div>
+                    <div id="overlay">
                     </div>
                 </div>
 
@@ -85,6 +113,24 @@
         </div>
     </div>
                                 }
+<script>
+    
+    $ovr = $('#overlay');
 
+    function imgzoom(event) {
+
+        $ovr.fadeTo(600, 1).css({
+            backgroundImage: "url(" + event.src + ")"
+        });
+
+
+    }
+
+    $ovr.click(function () {
+        $(this).stop().fadeTo(600, 0, function () {
+            $(this).hide();
+        });
+    });
+</script>
 
 <script src="~/Content/admin/js/compiled.min474a.js"></script>

@@ -1,0 +1,46 @@
+﻿@model IEnumerable<DAL.DB.Mails>
+
+@{
+    ViewBag.Title = "Mails";
+    Layout = "~/Views/Shared/LayoutAdmin.cshtml";
+}
+
+<div class="card">
+    <div class="card-body">
+        <table class="table table-hover" id="educationtable">
+            <thead class="secondary-color" style="color: white">
+            <tr>
+                <th>
+                    Gönderen Adi
+                </th>
+                <th>
+                    Mail Adresi
+                </th>
+                <th>
+                    Gönderim Tarihi
+                </th>
+
+                <th>
+                    #
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            @{
+                if (Model !=null)
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td> @item.SendFromName </td>
+                            <td> @item.SendFromEmailAdress </td>
+                            <td> @item.SendDate.Value.ToString(" hh:mm - dd-MM-yyyy") </td>
+                            <td> <a href="@Url.Action("MailDetail","Admin", new {id=item.Id})">Mesajı Oku</a></td>
+                        </tr>
+                    }
+                }
+            }
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,4 +1,6 @@
-﻿@{
+﻿@model IEnumerable<DAL.DB.ImageFilePath>
+
+@{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -7,58 +9,27 @@
     <div class="content full-height">
         <div class="swiper-container" id="horizontal-slider" data-mwc="1" data-mwa="0">
             <div class="swiper-wrapper">
-                <!--=============== 1 ===============-->
-                <div class="swiper-slide">
-                    <div class="bg" style="background-image: url(../../Content/images/bg/17.jpg)"></div>
-                    <div class="overlay"></div>
-                    <div class="slide-title-holder">
-                        <div class="slide-title">
+                
+                @{
+                    if (Model != null)
+                    {
+                        foreach (var img in Model)
+                        {
+                            <div class="swiper-slide">
+                            <div class="bg" style="background-image: url(@img.ImagePath)"></div>
+                            <div class="overlay"></div>
+                            <div class="slide-title-holder">
+                            <div class="slide-title">
                             <h3 class="transition">
-                                <a class="ajax transition2" href="#">Blandit praesent</a>
+                            <a class="ajax transition2" href="#">Seyda Kartal</a>
                             </h3>
-                            <h4>Ut wisi enim ad minim veniam, quis nostrud exerci</h4>
-                        </div>
-                    </div>
-                </div>
-                <!--=============== 2 ===============-->
-                <div class="swiper-slide">
-                    <div class="bg" style="background-image: url(../../Content/images/bg/24.jpg)"></div>
-                    <div class="overlay"></div>
-                    <div class="slide-title-holder">
-                        <div class="slide-title">
-                            <h3 class="transition">
-                                <a class="ajax transition2" href="#">In tortor neque</a>
-                            </h3>
-                            <h4>Ut wisi enim ad minim veniam, quis nostrud exerci</h4>
-                        </div>
-                    </div>
-                </div>
-                <!--=============== 3 ===============-->
-                <div class="swiper-slide">
-                    <div class="bg" style="background-image: url(../../Content/images/bg/18.jpg)"></div>
-                    <div class="overlay"></div>
-                    <div class="slide-title-holder">
-                        <div class="slide-title">
-                            <h3 class="transition">
-                                <a class="ajax transition2" href="#">Vestibulum tincidunt</a>
-                            </h3>
-                            <h4>Ut wisi enim ad minim veniam, quis nostrud exerci</h4>
-                        </div>
-                    </div>
-                </div>
-                <!--=============== 4 ===============-->
-                <div class="swiper-slide">
-                    <div class="bg" style="background-image: url(../../Content/images/bg/22.jpg)"></div>
-                    <div class="overlay"></div>
-                    <div class="slide-title-holder">
-                        <div class="slide-title">
-                            <h3 class="transition">
-                                <a class="ajax transition2" href="#">Libero bibendum</a>
-                            </h3>
-                            <h4>Ut wisi enim ad minim veniam, quis nostrud exerci</h4>
-                        </div>
-                    </div>
-                </div>
+                            <h4>Architecture and CGArt</h4>
+                            </div>
+                            </div>
+                            </div>
+                        }
+                    }
+                }
             </div>
             <div class="swiper-nav-holder hor">
                 <a class="swiper-nav arrow-left transition " href="#">

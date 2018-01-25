@@ -10,6 +10,8 @@ namespace Repository
     public interface IProjectRepository : IGenericDataRepository<Project> { }
     public interface ISkillsRepository : IGenericDataRepository<Skills> { }
     public interface ISocialMediaRepository : IGenericDataRepository<SocialMedia> { }
+    public interface IMailsRepository : IGenericDataRepository<Mails> { }
+    public interface IBlockIpRepository : IGenericDataRepository<BlockIp> { }
 
     
     public class AboutMeRepository : GenericDataRepository<AboutMe>, IAboutmeRepository { }
@@ -20,4 +22,6 @@ namespace Repository
     public class ProjectRepository : GenericDataRepository<Project>, IProjectRepository { }
     public class SkillsRepository : GenericDataRepository<Skills>, ISkillsRepository { }
     public class SocialMediaRepository : GenericDataRepository<SocialMedia>, ISocialMediaRepository { }
+    public class MailsRepository : GenericDataRepository<Mails>, IMailsRepository { }
+    public class BlockIpRepository : GenericDataRepository<BlockIp>, IBlockIpRepository { }
 }

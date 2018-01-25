@@ -1,9 +1,9 @@
+C:\Users\idecon1\Desktop\Şeyda\KATMANLI\ArcWebPage\Architecture-Website\DAL\bin\Debug\DAL.dll.config
+C:\Users\idecon1\Desktop\Şeyda\KATMANLI\ArcWebPage\Architecture-Website\DAL\bin\Debug\DAL.dll
+C:\Users\idecon1\Desktop\Şeyda\KATMANLI\ArcWebPage\Architecture-Website\DAL\bin\Debug\DAL.pdb
 C:\Users\idecon1\Desktop\Şeyda\KATMANLI\ArcWebPage\Architecture-Website\DAL\bin\Debug\EntityFramework.dll
 C:\Users\idecon1\Desktop\Şeyda\KATMANLI\ArcWebPage\Architecture-Website\DAL\bin\Debug\EntityFramework.SqlServer.dll
 C:\Users\idecon1\Desktop\Şeyda\KATMANLI\ArcWebPage\Architecture-Website\DAL\bin\Debug\EntityFramework.xml
 C:\Users\idecon1\Desktop\Şeyda\KATMANLI\ArcWebPage\Architecture-Website\DAL\bin\Debug\EntityFramework.SqlServer.xml
-C:\Users\idecon1\Desktop\Şeyda\KATMANLI\ArcWebPage\Architecture-Website\DAL\bin\Debug\DAL.pdb
-C:\Users\idecon1\Desktop\Şeyda\KATMANLI\ArcWebPage\Architecture-Website\DAL\obj\Debug\DAL.pdb
-C:\Users\idecon1\Desktop\Şeyda\KATMANLI\ArcWebPage\Architecture-Website\DAL\bin\Debug\DAL.dll.config
-C:\Users\idecon1\Desktop\Şeyda\KATMANLI\ArcWebPage\Architecture-Website\DAL\bin\Debug\DAL.dll
 C:\Users\idecon1\Desktop\Şeyda\KATMANLI\ArcWebPage\Architecture-Website\DAL\obj\Debug\DAL.dll
+C:\Users\idecon1\Desktop\Şeyda\KATMANLI\ArcWebPage\Architecture-Website\DAL\obj\Debug\DAL.pdb

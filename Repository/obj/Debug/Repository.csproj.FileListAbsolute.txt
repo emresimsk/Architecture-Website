@@ -1,12 +1,12 @@
+C:\Users\idecon1\Desktop\Şeyda\KATMANLI\ArcWebPage\Architecture-Website\Repository\bin\Debug\Repository.dll.config
+C:\Users\idecon1\Desktop\Şeyda\KATMANLI\ArcWebPage\Architecture-Website\Repository\bin\Debug\Repository.dll
 C:\Users\idecon1\Desktop\Şeyda\KATMANLI\ArcWebPage\Architecture-Website\Repository\bin\Debug\Repository.pdb
+C:\Users\idecon1\Desktop\Şeyda\KATMANLI\ArcWebPage\Architecture-Website\Repository\bin\Debug\DAL.dll
 C:\Users\idecon1\Desktop\Şeyda\KATMANLI\ArcWebPage\Architecture-Website\Repository\bin\Debug\EntityFramework.dll
 C:\Users\idecon1\Desktop\Şeyda\KATMANLI\ArcWebPage\Architecture-Website\Repository\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\idecon1\Desktop\Şeyda\KATMANLI\ArcWebPage\Architecture-Website\Repository\bin\Debug\DAL.pdb
 C:\Users\idecon1\Desktop\Şeyda\KATMANLI\ArcWebPage\Architecture-Website\Repository\bin\Debug\EntityFramework.xml
 C:\Users\idecon1\Desktop\Şeyda\KATMANLI\ArcWebPage\Architecture-Website\Repository\bin\Debug\EntityFramework.SqlServer.xml
 C:\Users\idecon1\Desktop\Şeyda\KATMANLI\ArcWebPage\Architecture-Website\Repository\obj\Debug\Repository.csprojResolveAssemblyReference.cache
-C:\Users\idecon1\Desktop\Şeyda\KATMANLI\ArcWebPage\Architecture-Website\Repository\obj\Debug\Repository.pdb
-C:\Users\idecon1\Desktop\Şeyda\KATMANLI\ArcWebPage\Architecture-Website\Repository\bin\Debug\DAL.pdb
-C:\Users\idecon1\Desktop\Şeyda\KATMANLI\ArcWebPage\Architecture-Website\Repository\bin\Debug\Repository.dll.config
-C:\Users\idecon1\Desktop\Şeyda\KATMANLI\ArcWebPage\Architecture-Website\Repository\bin\Debug\Repository.dll
-C:\Users\idecon1\Desktop\Şeyda\KATMANLI\ArcWebPage\Architecture-Website\Repository\bin\Debug\DAL.dll
 C:\Users\idecon1\Desktop\Şeyda\KATMANLI\ArcWebPage\Architecture-Website\Repository\obj\Debug\Repository.dll
+C:\Users\idecon1\Desktop\Şeyda\KATMANLI\ArcWebPage\Architecture-Website\Repository\obj\Debug\Repository.pdb

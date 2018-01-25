@@ -1,8 +1,11 @@
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
 namespace DAL.DB
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
+    using System.Data.Entity.Spatial;
+
     [Table("Project")]
     public partial class Project
     {
@@ -18,8 +21,6 @@ namespace DAL.DB
         public string Comment { get; set; }
 
         public string TitleSecond { get; set; }
-
-        public string CommentSecond { get; set; }
 
         [StringLength(50)]
         public string Type { get; set; }

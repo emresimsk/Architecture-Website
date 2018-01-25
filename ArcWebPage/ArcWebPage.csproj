@@ -303,6 +303,7 @@
     <Content Include="Content\css\mdb.min.css" />
     <Content Include="Content\css\plugins.css" />
     <Content Include="Content\css\reset.css" />
+    <Content Include="Content\css\skill.css" />
     <Content Include="Content\css\style.css" />
     <Content Include="Content\dropzone\css\basic.css" />
     <Content Include="Content\dropzone\css\basic.min.css" />
@@ -315,57 +316,12 @@
     <Content Include="Content\fonts\fontawesome-webfonte0a5.svg" />
     <Content Include="Content\fonts\FuturaPT-Book_gdi.svg" />
     <Content Include="Content\fonts\futurastd-bold.svg" />
-    <Content Include="Content\images\bg\10.jpg" />
-    <Content Include="Content\images\bg\11.jpg" />
-    <Content Include="Content\images\bg\12.jpg" />
-    <Content Include="Content\images\bg\14.jpg" />
-    <Content Include="Content\images\bg\17.jpg" />
-    <Content Include="Content\images\bg\18.jpg" />
-    <Content Include="Content\images\bg\22.jpg" />
-    <Content Include="Content\images\bg\24.jpg" />
-    <Content Include="Content\images\bg\long\2.jpg" />
-    <Content Include="Content\images\bg\long\3.jpg" />
-    <Content Include="Content\images\bg\long\4.jpg" />
-    <Content Include="Content\images\bg\long\5.jpg" />
-    <Content Include="Content\images\bg\long\6.jpg" />
-    <Content Include="Content\images\bg\long\7.jpg" />
-    <Content Include="Content\images\bg\long\8.jpg" />
-    <Content Include="Content\images\bg\long\9.jpg" />
-    <Content Include="Content\images\blog\users\1.jpg" />
-    <Content Include="Content\images\blog\users\2.jpg" />
     <Content Include="Content\images\body-bg.png" />
     <Content Include="Content\images\favicon.html" />
-    <Content Include="Content\images\folio\slider\1.jpg" />
-    <Content Include="Content\images\folio\slider\2.jpg" />
-    <Content Include="Content\images\folio\slider\3.jpg" />
-    <Content Include="Content\images\folio\thumbs\1.jpg" />
-    <Content Include="Content\images\folio\thumbs\10.jpg" />
-    <Content Include="Content\images\folio\thumbs\11.jpg" />
-    <Content Include="Content\images\folio\thumbs\12.jpg" />
-    <Content Include="Content\images\folio\thumbs\13.jpg" />
-    <Content Include="Content\images\folio\thumbs\14.jpg" />
-    <Content Include="Content\images\folio\thumbs\15.jpg" />
-    <Content Include="Content\images\folio\thumbs\16.jpg" />
-    <Content Include="Content\images\folio\thumbs\18.jpg" />
-    <Content Include="Content\images\folio\thumbs\2.jpg" />
-    <Content Include="Content\images\folio\thumbs\20.jpg" />
-    <Content Include="Content\images\folio\thumbs\21.jpg" />
-    <Content Include="Content\images\folio\thumbs\3.jpg" />
-    <Content Include="Content\images\folio\thumbs\4.jpg" />
-    <Content Include="Content\images\folio\thumbs\5.jpg" />
-    <Content Include="Content\images\folio\thumbs\6.jpg" />
-    <Content Include="Content\images\folio\thumbs\7.jpg" />
-    <Content Include="Content\images\folio\thumbs\8.jpg" />
-    <Content Include="Content\images\folio\thumbs\9.jpg" />
     <Content Include="Content\images\footer-logo.png" />
     <Content Include="Content\images\grabbing.html" />
     <Content Include="Content\images\logo.png" />
-    <Content Include="Content\images\team\big\2.jpg" />
-    <Content Include="Content\images\team\small\1.jpg" />
-    <Content Include="Content\images\team\small\2.jpg" />
-    <Content Include="Content\images\team\small\3.jpg" />
-    <Content Include="Content\images\team\small\5.jpg" />
-    <Content Include="Content\images\team\small\6.jpg" />
+    <Content Include="Content\images\profil.jpg" />
     <Content Include="Content\img\overlays\01.png" />
     <Content Include="Content\img\overlays\02.png" />
     <Content Include="Content\img\overlays\03.png" />
@@ -474,6 +430,7 @@
     <Content Include="Content\portfolio\pics\zoom-icons.png" />
     <Content Include="Content\portfolio\pics\zoom.png" />
     <Content Include="Content\Site.css" />
+    <Content Include="Content\js\validate.js" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -494,6 +451,8 @@
     <Compile Include="Identity\UserApp.cs" />
     <Compile Include="Identity\UserAppDbContext.cs" />
     <Compile Include="Identity\UserManagerApp.cs" />
+    <Compile Include="Models\AboutModel.cs" />
+    <Compile Include="Models\ContactModel.cs" />
     <Compile Include="Models\ProjectAndImages.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -560,6 +519,12 @@
     <Content Include="Views\Admin\ProjectAdd.cshtml" />
     <Content Include="Views\Admin\ProjectImageAdd.cshtml" />
     <Content Include="Views\Admin\projectDetail.cshtml" />
+    <Content Include="Views\Admin\CreateUser.cshtml" />
+    <Content Include="Views\Admin\Users.cshtml" />
+    <Content Include="Views\Admin\UserEdit.cshtml" />
+    <Content Include="Views\Home\Detail.cshtml" />
+    <Content Include="Views\Admin\Mails.cshtml" />
+    <Content Include="Views\Admin\MailDetail.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

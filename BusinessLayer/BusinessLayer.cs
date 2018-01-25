@@ -20,6 +20,8 @@ namespace BusinessLayer
         private readonly IProjectRepository _projectRepository;
         private readonly ISkillsRepository _skillsRepository;
         private readonly ISocialMediaRepository _socialMediaRepository;
+        private readonly IMailsRepository _mailsRepository;
+        private readonly IBlockIpRepository _blockIpRepository;
 
         public BusinessLayer()
         {
@@ -31,6 +33,8 @@ namespace BusinessLayer
             _projectRepository = new ProjectRepository();
             _skillsRepository = new SkillsRepository();
             _socialMediaRepository = new SocialMediaRepository();
+            _mailsRepository = new MailsRepository();
+            _blockIpRepository = new BlockIpRepository();
         }
 
         //<------------------------------------------------------------------ ABOUT ME ---------------------------------------------------------------->
@@ -70,6 +74,11 @@ namespace BusinessLayer
         public AspNetUsers GetAspNetUserByName(string userName)
         {
             return _aspNetUsersRepository.GetSingle(x => x.UserName == userName);
+        }
+
+        public AspNetUsers GetAspNetUserById(string id)
+        {
+            return _aspNetUsersRepository.GetSingle(x => x.Id == id);
         }
 
         public bool AddAspNetUser(params AspNetUsers[] aspNetUser)
@@ -259,6 +268,82 @@ namespace BusinessLayer
             return (_socialMediaRepository.Remove(socialMedia) == 1);
         }
 
-        
+        //<-------------------------------------------------------------------  MAILS ---------------------------------------------------------------->
+
+        public IList<Mails> GetAllMails()
+        {
+            return _mailsRepository.GetAll();
+        }
+
+        public IList<Mails> GetAllMailsByIp(string ip)
+        {
+            return _mailsRepository.GetList(x => x.SendFromIp == ip);
+        }
+
+        public bool GetIpLast5Minute(string ip,DateTime date)
+        {
+            var list = _mailsRepository.GetList(x => x.SendFromIp == ip);
+            if (list != null)
+            {
+                foreach (var item in list)
+                {
+                    TimeSpan time = (item.SendDate != null) ? date.Subtract(item.SendDate.Value) : new TimeSpan();
+
+                    if (time.TotalMinutes < 5)
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        public Mails GetMailById(decimal id)
+        {
+            return _mailsRepository.GetSingle(x => x.Id == id);
+        }
+
+        public bool AddMail(params Mails[] mails)
+        {
+            return (_mailsRepository.Add(mails) == 1);
+        }
+
+        public bool UpdateMail(params Mails[] mails)
+        {
+            return (_mailsRepository.Update(mails) == 1);
+        }
+
+        public bool RemoveMail(params Mails[] mails)
+        {
+            return (_mailsRepository.Remove(mails) == 1);
+        }
+
+        //<------------------------------------------------------------------- BLOCK IP ---------------------------------------------------------------->
+
+        public IList<BlockIp> GetAllBlockIps()
+        {
+            return _blockIpRepository.GetAll();
+        }
+
+        public BlockIp GetBlockIpById(decimal id)
+        {
+            return _blockIpRepository.GetSingle(x => x.Id == id);
+        }
+
+        public bool AddBlockIp(params BlockIp[] blockIp)
+        {
+            return (_blockIpRepository.Add(blockIp) == 1);
+        }
+
+        public bool UpdateBlockIp(params BlockIp[] blockIp)
+        {
+            return (_blockIpRepository.Update(blockIp) == 1);
+        }
+
+        public bool RemoveBlockIp(params BlockIp[] blockIp)
+        {
+            return (_blockIpRepository.Remove(blockIp) == 1);
+        }
     }
 }

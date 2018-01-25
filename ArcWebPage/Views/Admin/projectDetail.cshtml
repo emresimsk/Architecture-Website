@@ -1,8 +1,146 @@
-﻿
+﻿@model DAL.DB.Project
+
+
 @{
     ViewBag.Title = "projectDetail";
     Layout = "~/Views/Shared/LayoutAdmin.cshtml";
 }
 
-<h2>projectDetail</h2>
+<link href="~/Content/dropzone/css/basic.min.css" rel="stylesheet" />
+<link href="~/Content/dropzone/css/dropzone.min.css" rel="stylesheet" />
+<script src="~/Content/dropzone/js/dropzone.min.js"></script>
 
+
+<script src="~/Content/dropzone/js/dropzone-amd-module.min.js"></script>
+
+
+<style>
+    #overlay {
+        margin-top: 100px;
+        position: fixed;
+        top: 0;
+        width: 80%;
+        height: 80%;
+        background-repeat: no-repeat;
+        background-position: center center;
+        cursor: pointer;
+        z-index: 100;
+    }
+</style>
+
+<div class="row gutter-xs">
+    <div class="col-xs-12 col-md-6 col-lg-12">
+
+        <div class="card">
+            <div class="card-body">
+                <div class="md-form col-sm-12">
+                    Tekil Proje Adi
+                    <input type="text" id="projectUniqeName" class="form-control" value="@Model.ProjectNameUnique" readonly>
+                    <input type="hidden" value="@Model.Id" id="projectID" />
+                </div>
+                <div class="md-form col-sm-12">
+                    Proje Adi
+                    <input type="text" id="projectName" class="form-control" readonly value="@Model.Title">
+                </div>
+                <div class="md-form col-sm-12">
+                    Proje Açıklaması:
+                    <textarea type="text" id="projectComment" readonly class="md-textarea">@Model.Comment</textarea>
+                </div>
+                <div class="md-form col-sm-12">
+                    Alt Taraf Proje Adi
+                    <input type="text" id="projectNameSecond" class="form-control" readonly value="@Model.TitleSecond">
+                </div>     
+                <div class="md-form col-sm-10">
+                    <div class="file-field" style="position: static !important">
+                        <div class="btn btn-secondary btn-lg">
+                            <span>Ana Resim</span>
+                            <input id="file" name="file" type="file">
+                        </div>
+                        <div class="file-path-wrapper">
+                            <input class="file-path" readonly type="text" placeholder="@((Model.MainPicturePath != null) ? "Resim yüklü." : "Resim yükle")">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <img width="100" onclick="imgzoom(this)" src="@Model.MainPicturePath" />
+                </div>
+                <div id="overlay">
+                </div>
+                
+                <div class="col-sm-12">
+                    <a class="btn btn-secondary" href="@Url.Action("ProjectImageAdd","Admin",new {id=Model.ProjectNameUnique})">Düzenle</a>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body" id="imageList">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        getProjectImages();
+    });
+
+
+    function getProjectImages() {
+
+        var id = $('#projectID').val();
+
+        $('#imageList').empty();
+
+        $.ajax({
+            url: '/Admin/getProjectImages',
+            type: 'POST',
+            data: { 'id': id },
+            dataType: 'json',
+            beforeSend: function () {
+                $("div#divLoading").addClass("show");
+            },
+            success: function (data) {
+                if (data !="") {
+                    data.forEach(function (element) {
+                        $('#imageList').prepend('<img onclick="imgzoom(this)" data-id=' + element.Id + ' style="height: 100px;margin-right:10px;margin-top:10px"' + element.Id + '" src="' + element.ImagePath + '" />');
+                    });
+                }else {
+                    $('#imageList').prepend("Herhangi bir proje resmi eklenmemiş.");
+                }
+            },
+            complete: function () {
+                $("div#divLoading").removeClass("show");
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                toastr.success('Daha projeye resim eklenmemiş, Tatlisim ❤');
+            }
+        });
+    }
+
+
+
+
+
+    $ovr = $('#overlay');
+
+    function imgzoom(event) {
+
+        $ovr.fadeTo(600, 1).css({
+            backgroundImage: "url(" + event.src + ")"
+        });
+
+
+    }
+
+    $ovr.click(function () {
+        $(this).stop().fadeTo(600, 0, function () {
+            $(this).hide();
+        });
+    });
+
+
+</script>
+<script src="~/Content/admin/js/compiled.min474a.js"></script>

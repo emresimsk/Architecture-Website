@@ -1,0 +1,97 @@
+﻿@model DAL.DB.AspNetUsers
+
+@{
+    ViewBag.Title = "UserEdit";
+    Layout = "~/Views/Shared/LayoutAdmin.cshtml";
+}
+
+
+<script>
+
+    $(document).ready(function() {
+        message();
+    });
+
+    function message()
+    {
+        var messa =  @Html.Raw(TempData["editUser"]);
+
+        if (messa) {
+            toastr.success('Profil güncelleme işlemi başarılı. Tatlisim ❤');
+        } else {
+            toastr.success('Profil güncelleme işlemi başarısız. Tatlisim ❤');
+        }
+
+    }
+
+</script>
+
+    
+
+@using (Html.BeginForm("UserEdit", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    if (Model != null)
+    {
+        
+
+    <div class="card">
+        <div class="card-body col-sm-6">
+            <div class="pull-left">
+                <h4 class="card-title"></h4>
+            </div>
+            <div class="pull-right" data-toggle="buttons">
+            </div>
+
+            <div class="card-body">
+                <div class="md-form">
+                    <input type="email" id="Email" name="Email" class="email-ic" value="@Model.Email" />
+                    <label for="Email">Email:</label>
+                    <input type="hidden" value="@Model.Id"/>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <div class="md-form">
+                    <input type="text" id="NameSoyname" name="NameSoyname" value="@Model.NameSoyname" />
+                    <label for="NameSoyname">Ad Soyad:</label>
+                </div>
+            </div>
+        </div>
+        <div class="card-body col-sm-6">
+            <div class="pull-left">
+                <h4 class="card-title"></h4>
+            </div>
+            <div class="pull-right" data-toggle="buttons">
+                <label>Kullanıcı oluşturma sayfası</label>
+            </div>
+
+            <div class="card-body">
+                <div class="md-form">
+                    <input type="text" id="UserName" name="UserName" value="@Model.UserName" />
+                    <label for="UserName">Kullanıcı Adı:</label>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <div class="md-form">
+                    <input type="password" id="password" name="password" />
+                    <label for="password">Şifre:</label>
+                </div>
+            </div>
+        </div>
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="col-sm-2" style="margin: 5px">
+            <button type="submit" class="btn btn-block btn-secondary">Güncelle</button>
+        </div>
+        <br />
+        <div class="row">
+
+        </div>
+    </div>
+    }
+}
+
+
+

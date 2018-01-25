@@ -19,6 +19,7 @@ namespace BusinessLayer
 
         IList<AspNetUsers> GetAllAspNetUsers();                                   // AspNetUsers
         AspNetUsers GetAspNetUserByName(string userName);                         // AspNetUsers
+        AspNetUsers GetAspNetUserById(string id);                                 // AspNetUsers
         bool AddAspNetUser(params AspNetUsers[] aspNetUser);                      // AspNetUsers
         bool UpdateAspNetUser(params AspNetUsers[] aspNetUser);                   // AspNetUsers
         bool RemoveAspNetUser(params AspNetUsers[] aspNetUser);                   // AspNetUsers
@@ -66,6 +67,25 @@ namespace BusinessLayer
         bool AddSocialMedia(params SocialMedia[] socialMedia);                    // Social Media
         bool UpdateSocialMedia(params SocialMedia[] socialMedia);                 // Social Media
         bool RemoveSocialMedia(params SocialMedia[] socialMedia);                 // Social Media
+
+
+        IList<Mails> GetAllMails();                                               // Mails
+        IList<Mails> GetAllMailsByIp(string ip);                                  // Mails
+        Mails GetMailById(decimal id);                                            // Mails
+        bool AddMail(params Mails[] mails);                                       // Mails
+        bool UpdateMail(params Mails[] mails);                                    // Mails
+        bool RemoveMail(params Mails[] mails);                                    // Mails      
+
+
+        IList<BlockIp> GetAllBlockIps();                                          // BlockIp
+        bool GetIpLast5Minute(string ip, DateTime date);                          // BlockIp
+        BlockIp GetBlockIpById(decimal id);                                       // BlockIp
+        bool AddBlockIp(params BlockIp[] blockIp);                                // BlockIp
+        bool UpdateBlockIp(params BlockIp[] blockIp);                             // BlockIp
+        bool RemoveBlockIp(params BlockIp[] blockIp);                             // BlockIp
+
+
+
     }
 }
 

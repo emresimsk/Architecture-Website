@@ -24,7 +24,7 @@
         background-repeat:no-repeat;
         background-position: center center;
         cursor:pointer;
-        z-index: 1;
+        z-index: 101;
     }
 
     .img-wrap {
@@ -74,10 +74,6 @@
                 <div class="md-form col-sm-12">
                     Alt Taraf Proje Adi
                     <input type="text" id="projectNameSecond" class="form-control" value="@Model.TitleSecond" >
-                </div>
-                <div class="md-form col-sm-12">
-                    Alt Taraf Proje Açıklaması:
-                    <textarea type="text" id="projectCommentSecond" name="HeaderSecond" class="md-textarea">@Model.CommentSecond</textarea>
                 </div>
                 <div class="md-form col-sm-10">
                     <div class="file-field" style="position: static !important">
@@ -138,6 +134,9 @@
                 var id = $('#projectID').val();
                 formData.append("projectID", id);
             });
+            this.on("success", function(file, responseText) {
+                getProjectImages();
+            });
             this.on("addedfile", function (file) {
                 // Create the remove button
                 var removeButton = Dropzone.createElement('<button class="btn btn-danger">Remove file</button>');
@@ -164,7 +163,8 @@
 
         var id = $('#projectID').val();
         
-        $('#educationtable tbody').empty();
+        $('#imageList').empty();
+
         $.ajax({
             url: '/Admin/getProjectImages',
             type: 'POST',
@@ -174,10 +174,19 @@
                 $("div#divLoading").addClass("show");
             },
             success: function (data) {
-                if (data !="") {
-                    data.forEach(function (element) {
-                        $('#imageList').prepend('<div class="img-wrap"><span onclick="deleteImage(this)" class="close">&times;</span> <img onclick="imgzoom(this)" data-id=' + element.Id + ' style="height: 100px;margin-right:10px;margin-top:10px"' + element.Id + '" src="' + element.ImagePath + '" /></div>');
+                if (data != "") {
+                    data.forEach(function(element) {
+                        $('#imageList').prepend(
+                            '<div class="img-wrap"><span onclick="deleteImage(this)" class="close">&times;</span> <img onclick="imgzoom(this)" data-id=' +
+                            element.Id +
+                            ' style="height: 100px;margin-right:10px;margin-top:10px"' +
+                            element.Id +
+                            '" src="' +
+                            element.ImagePath +
+                            '" /></div>');
                     });
+                } else {
+                    $('#imageList').prepend("Herhangi bir proje resmi eklenmemiş.");
                 }      
             },
             complete: function () {
@@ -212,7 +221,30 @@
 
     function deleteImage(event) {
         var id = $(event).closest('.img-wrap').find('img').data('id');
-        toastr.success('Silinecek Id:'+id);
+
+        $.ajax({
+            url: '/Admin/setDeletedImages',
+            type: 'POST',
+            data: { 'id': id },
+            dataType: 'json',
+            beforeSend: function () {
+                $("div#divLoading").addClass("show");
+            },
+            success: function (data) {
+                if (data === "true") {
+                    getProjectImages();
+                    toastr.success('Proje resmi silme başarılı, Tatlisim ❤');
+                } else {
+                    toastr.success('Proje resmi başarısız oldu, Tatlisim ❤');
+                }
+            },
+            complete: function () {
+                $("div#divLoading").removeClass("show");
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                toastr.success('Daha sonra tekrar dene, Tatlisim ❤');
+            }
+        });
     }
 
 </script>

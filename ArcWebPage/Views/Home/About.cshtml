@@ -1,4 +1,226 @@
-﻿@{
+﻿@model ArcWebPage.Models.AboutModel
+
+@{
     ViewBag.Title = "About";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
+<link href="https://fonts.googleapis.com/css?family=Raleway:400,300,600,800,900" rel="stylesheet" type="text/css">
+<link href="~/Content/css/skill.css" rel="stylesheet" />
+
+@{
+    if (Model != null)
+    {
+
+        <div class="content-holder elem scale-bg2 transition3">
+            <div class="content">
+                <!-- background animation -->
+                <div class="bg-animate">
+                    <img src="../../Content/images/body-bg.png" class="respimg" alt="">
+                </div>
+                <!-- wrapper inner -->
+                <div class="wrapper-inner">
+                    <section class="no-padding no-border" id="sec1">
+                        <!-- page title -->
+                        <div class="container">
+                            <div class="page-title no-border">
+                                <h2>
+                                    @Model.About.Header <br>
+                                </h2>
+                                <h3>
+                                    <span>@Model.About.HeaderSecond</span>
+                                </h3>
+                            </div>
+                        </div>
+                    </section>
+                    <div class="container">
+                        <!-- about text -->
+                        <section>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <img src="@Model.About.ImagePath" alt="" class="respimg">
+                                </div>
+                                <div class="col-md-9">
+                                    <p>@Model.About.AboutComment</p>
+                                    <a href="@Url.Action("Portfolio", "Home")" class="ajax btn"><span>View my work</span> <i class="fa fa-long-arrow-right"></i></a>
+                                </div>
+                            </div>
+                        </section>
+                        <!-- about text end -->
+                        <!-- story / resume -->
+                        <section id="sec2">
+                            <div class="section-title">
+                                <h3>My Skill</h3>
+                            </div>
+                            <div id="skills" class="row">
+                                <div class="alingleft" id="one"></div>
+                                <div class="alingleft" id="two"></div>
+                                <div class="alingleft" id="three"></div>
+                                <div class="alingleft" id="four"></div>
+                                <div class="alingleft" id="five"></div>
+                                <div class="alingleft" id="six"></div>
+                                <div class="alingleft" id="seven"></div>
+                                <div class="alingleft" id="eight"></div>
+                                <div class="alingleft" id="nine"></div>
+                                <div class="alingleft" id="ten"></div>
+                            </div>
+                        </section>
+                        <section id="sec3" class="no-border">
+                            <div class="section-title">
+                                <h3>Education</h3>
+                            </div>
+                            @{
+                                if (Model.Education !=null)
+                                {
+                                    foreach (var item in Model.Education)
+                                    {
+                                        <div class="resume-holder">
+                                            <div class="resume-item">
+                                                <div class="resume-head">
+                                                    <h3>@item.Year</h3>
+                                                </div>
+                                                <div class="resume-box">
+                                                    <div class="row">
+                                                        <div class="col-md-3"></div>
+                                                        <div class="col-md-9">
+                                                            <h5>@item.Title</h5>
+                                                            <p>@item.Comment</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    }   
+                                }
+                            }
+
+                            <a href="#" class="btn"><span>Download Resume</span> <i class="fa fa-long-arrow-right"></i></a>
+                        </section>
+                        <!-- resume / story end -->
+                        <!-- services  -->
+                    </div>
+                </div>
+                <!-- wrapper inner end   -->
+                <!-- parallax column   -->
+                <div class="img-wrap">
+                    <div class="bg" style="background-image: url(@Model.About.ImagePathSecond)" data-top-bottom="transform: translateY(300px);" data-bottom-top="transform: translateY(-300px);"></div>
+                </div>
+                <!-- parallax column end   -->
+                <!--to top    -->
+                <div class="to-top">
+                    <i class="fa fa-long-arrow-up"></i>
+                </div>
+                <!-- to top  end -->
+                <!--=============== footer ===============-->
+                <div class="height-emulator"></div>
+                <footer>
+                    <div class="footer-inner">
+                        <div class="row">
+                            <div class="col-md-5">
+                                <a class="footer-logo ajax" href="@Url.Action("Index","Home")"><img src="#" alt="">LOGO</a>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="footer-adress">
+                                    <span>TR Kocaeli Izmit</span>
+                                    <a href="https://www.google.com.tr/maps/place/%C4%B0zmit,+Kocaeli/40.7711737,29.8993958,13z/data=!3m1!4b1!4m5!3m4!1s0x14cb4f66644bfb9d:0x82690ee7586b7eb9!8m2!3d40.7654408!4d29.9408089?hl=tr" target="_blank">View on map</a>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <ul class="footer-contact">
+                                    <li></li>
+                                    <li><a href="#">info@skartal.com</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5"></div>
+                            <div class="col-md-7">
+                                <p> &#169; Skartal @DateTime.Now.Year.  All rights reserved.  </p>
+                            </div>
+                        </div>
+                    </div>
+                    <span class="footer-decor"></span>
+                </footer>
+                <!-- footer end    -->
+            </div>
+            <!-- content  end  -->
+        </div>
+
+    }
+}
+
+
+<script src="~/Content/admin/js/progressbar.js"></script>
+
+<script>
+
+    $(allInView);
+    $(window).scroll(allInView);
+
+    var i = true;
+
+    function isScrolledIntoView(elem) {
+
+        var docViewTop = $(window).scrollTop();
+        var docViewBottom = docViewTop + $(window).height();
+
+        var elemTop = $(elem).offset().top;
+        var elemBottom = elemTop + $(elem).height();
+
+        return ((elemBottom <= docViewBottom) && (elemTop >= docViewTop));
+    }
+
+    function allInView() {
+
+        if (isScrolledIntoView($("#skills"))) {
+
+            if (i) {
+                i = false;
+                progressCreate('#000', '0.96', 'AutoCad', 'one');
+                progressCreate('#000', '0.9', '3DMax', 'two');
+                progressCreate('#000', '0.78', 'Revit', 'three');
+                progressCreate('#000', '0.47', 'PhotoShop', 'four');
+                progressCreate('#000', '0.86', 'Excel', 'five');
+            }
+        }
+
+    }
+
+
+    function progressCreate(colorCode, value, name, divId) {
+
+        var bar = new ProgressBar.Circle('#' + divId,
+            {
+                color: colorCode,
+                // This has to be the same size as the maximum width to
+                // prevent clipping
+                strokeWidth: 4,
+                trailWidth: 1,
+                easing: 'easeInOut',
+                duration: 1500,
+                text: {
+                    autoStyleContainer: false
+                },
+                from: { color: colorCode, width: 1 },
+                to: { color: colorCode, width: 4 },
+                // Set default step function for all animate calls
+                step: function (state, circle) {
+                    circle.path.setAttribute('stroke', state.color);
+                    circle.path.setAttribute('stroke-width', state.width);
+
+                    var value = Math.round(circle.value() * 100);
+                    if (value === 0) {
+                        circle.setText('');
+                    } else {
+                        circle.setText(name);
+                    }
+
+                }
+            });
+        bar.text.style.fontFamily = '"Raleway", Helvetica, sans-serif';
+        bar.text.style.fontSize = '1.5rem';
+
+        bar.animate(value); // Number from 0.0 to 1.0
+    }
+</script>

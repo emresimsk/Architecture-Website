@@ -1,7 +1,11 @@
-using System.ComponentModel.DataAnnotations.Schema;
-
 namespace DAL.DB
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
+    using System.Data.Entity.Spatial;
+
     [Table("AboutMe")]
     public partial class AboutMe
     {

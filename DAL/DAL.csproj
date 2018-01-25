@@ -63,21 +63,23 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DB\AboutMe.cs" />
-    <Compile Include="ArcEntitiy.cs" />
+    <Compile Include="DB\ArcEntitiy.cs" />
     <Compile Include="DB\AspNetRoles.cs" />
     <Compile Include="DB\AspNetUserClaims.cs" />
     <Compile Include="DB\AspNetUserLogins.cs" />
     <Compile Include="DB\AspNetUsers.cs" />
+    <Compile Include="DB\BlockIp.cs" />
     <Compile Include="DB\ContactPage.cs" />
     <Compile Include="DB\C__MigrationHistory.cs" />
     <Compile Include="DB\Education.cs" />
     <Compile Include="DB\ImageFilePath.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="DB\Mails.cs" />
     <Compile Include="DB\Project.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DB\Skills.cs" />
     <Compile Include="DB\SocialMedia.cs" />
     <Compile Include="DB\sysdiagrams.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

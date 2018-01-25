@@ -1,0 +1,57 @@
+﻿@model IEnumerable<DAL.DB.AspNetUsers>
+
+@{
+    ViewBag.Title = "Users";
+    Layout = "~/Views/Shared/LayoutAdmin.cshtml";
+}
+
+
+
+<div class="row gutter-xs">
+    <div class="col-xs-12 col-md-6 col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <table class="table table-hover" id="educationtable">
+                    <thead class="secondary-color" style="color: white">
+                    <tr>
+                        <th>
+                            Adı ve Soyadı
+                        </th>
+                        <th>
+                            Kullanıcı Adı
+                        </th>
+                        <th>
+                            E-mail
+                        </th>
+
+                        <th>
+                            #
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            foreach (var user in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @user.NameSoyname
+                                    </td>
+                                    <td>
+                                        @user.UserName
+                                    </td>
+                                    <td>
+                                        @user.Email
+                                    </td>
+                                    <td>
+                                        <a href="@Url.Action("UserEdit","Admin",new {id = user.Id})">Düzenle</a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

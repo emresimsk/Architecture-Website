@@ -1,0 +1,90 @@
+﻿@model DAL.DB.Mails
+
+@{
+    ViewBag.Title = "MailDetail";
+    Layout = "~/Views/Shared/LayoutAdmin.cshtml";
+}
+
+
+<div class="row gutter-xs">
+    <div class="col-xs-12 col-md-6 col-lg-12">
+        <div class="card">
+
+            <div class="card-body">
+                <div class="pull-left">
+                    <h4 class="card-title"></h4>
+                </div>
+                <div class="pull-right" data-toggle="buttons">
+                    <label>Mail detay sayfası</label>
+                </div>
+            </div>
+            
+            @{
+                if (Model != null)
+                {
+                    <div class="card-body">
+                        <div class="md-form col-sm-12">
+                            Gönderen Kişi Adi
+                            <input type="text" value="@Model.SendFromName" readonly class="form-control">
+                            <input type="hidden" id="mailId" value="@Model.Id"/>
+                        </div>
+                        <div class="md-form col-sm-12">
+                            Gönderen Kişinin Email
+                            <input type="text" readonly value="@Model.SendFromEmailAdress" class="form-control">
+                        </div>
+                        <div class="md-form col-sm-12">
+                            Gönderen Kişi Mesaj
+                            <textarea readonly class="md-form-control">@Model.Message</textarea>
+                        </div>
+                        <div class="md-form col-sm-10">
+                            Gönderen Kişi IP bilgisi
+                            <input type="text" id="ipInfo" readonly value="@Model.SendFromIp" class="form-control">
+                        </div>
+                        <div class="md-form col-sm-1"> 
+                            <button class="btn btn-black" onclick="deleteorblock('B')">Engelle</button>
+                        </div>
+                        <div class="md-form col-sm-12">
+                            Gönderim Tarihi
+                            <input type="text" readonly value="@Model.SendDate" class="form-control">
+                        </div>
+                        <div class="md-form col-sm-12" align="right">
+                             <button class="btn btn-danger" onclick="deleteorblock('S')">Sil</button>
+                        </div>
+
+                    </div>
+                }
+            }    
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    function deleteorblock(type) {
+
+        var id = $('#mailId').val();
+
+        $.ajax({
+            url: '/Admin/BlockAndDelete',
+            data: { 'id': id, 'blockordelete': type },
+            type: 'POST',
+            dataType: 'json',
+            beforeSend: function() {
+                $("div#divLoading").addClass("show");
+            },
+            success: function(data) {
+                if (data === 'true') {
+                    toastr.success('İşlem başarıyla yapıldı.Mail sayfasına yönlendiriyorsun. Tatlisim ❤');
+                    window.location = "/Admin/Mails";
+
+                } else {
+                    toastr.error('işlem başarısız. Tatlisim ❤');
+                }
+            },
+            complete: function() {
+                $("div#divLoading").removeClass("show");
+            }
+        });
+    }
+</script>

@@ -8,7 +8,10 @@ using ArcWebPage.Identity;
 using ArcWebPage.Models;
 using Microsoft.AspNet.Identity.Owin;
 using BusinessLayer;
+using DAL;
 using DAL.DB;
+using Microsoft.AspNet.Identity;
+using Microsoft.Owin.Security;
 
 namespace ArcWebPage.Controllers
 {
@@ -28,13 +31,13 @@ namespace ArcWebPage.Controllers
 
         public RoleAppManager RoleAppManager => HttpContext.GetOwinContext().GetUserManager<RoleAppManager>();
 
-
+        [Authorize]
         public ActionResult Panel()
         {
             return View();
         }
 
-
+        [Authorize]
         public ActionResult AboutMeEdit()
         {
             var aboutList = _db.GetAllAboutMes();
@@ -42,6 +45,7 @@ namespace ArcWebPage.Controllers
             return View(about);
         }
 
+        [Authorize]
         [HttpPost]
         public ActionResult AboutMeEdit(AboutMe about, HttpPostedFileBase picture1, HttpPostedFileBase picture2)
         {
@@ -90,7 +94,7 @@ namespace ArcWebPage.Controllers
             return RedirectToAction("AboutMeEdit");
         }
 
-
+        [Authorize]
         public ActionResult ContactEdit()
         {
             var contantList = _db.GetAllContactPages();
@@ -98,6 +102,7 @@ namespace ArcWebPage.Controllers
             return View(contant);
         }
 
+        [Authorize]
         [HttpPost]
         public ActionResult ContactEdit(ContactPage contact, HttpPostedFileBase picture1)
         {
@@ -130,12 +135,13 @@ namespace ArcWebPage.Controllers
             return RedirectToAction("ContactEdit");
         }
 
-
+        [Authorize]
         public ActionResult SocialMediaAdd()
         {
             return View();
         }
 
+        [Authorize]
         [HttpPost]
         public JsonResult getSocialMedia()
         {
@@ -144,6 +150,7 @@ namespace ArcWebPage.Controllers
             return Json(social);
         }
 
+        [Authorize]
         [HttpPost]
         public JsonResult modifySocialMedia(string id, string name, string link)
         {
@@ -172,6 +179,7 @@ namespace ArcWebPage.Controllers
             return Json(result);
         }
 
+        [Authorize]
         [HttpPost]
         public JsonResult deleteSocialMedia(string id)
         {
@@ -185,12 +193,13 @@ namespace ArcWebPage.Controllers
             return Json(result);
         }
 
-
+        [Authorize]
         public ActionResult SkillList()
         {
             return View();
         }
 
+        [Authorize]
         [HttpPost]
         public JsonResult getSkills()
         {
@@ -198,6 +207,7 @@ namespace ArcWebPage.Controllers
             return Json(skillList);
         }
 
+        [Authorize]
         [HttpPost]
         public JsonResult modifySkill(string id, string name, string value, string colorCode)
         {
@@ -232,6 +242,7 @@ namespace ArcWebPage.Controllers
             return Json(result);
         }
 
+        [Authorize]
         [HttpPost]
         public JsonResult deleteSkill(string id)
         {
@@ -241,12 +252,13 @@ namespace ArcWebPage.Controllers
             return Json(result);
         }
 
-
+        [Authorize]
         public ActionResult EducationList()
         {
             return View();
         }
 
+        [Authorize]
         [HttpPost]
         public JsonResult getEducation()
         {
@@ -255,6 +267,7 @@ namespace ArcWebPage.Controllers
             return Json(educationList);
         }
 
+        [Authorize]
         [HttpPost]
         public JsonResult modifyEducation(string id, string year1, string year2, string title, string comment)
         {
@@ -289,6 +302,7 @@ namespace ArcWebPage.Controllers
             return Json(result);
         }
 
+        [Authorize]
         [HttpPost]
         public JsonResult deleteEducation(string id)
         {
@@ -300,13 +314,13 @@ namespace ArcWebPage.Controllers
             return Json(result);
         }
 
-
+        [Authorize]
         public ActionResult Projects()
         {
             return View();
         }
 
-
+        [Authorize]
         public JsonResult getProjects()
         {
             var projectList = _db.GetAllProjects().Any() ? _db.GetAllProjects() : new List<Project>();
@@ -314,12 +328,13 @@ namespace ArcWebPage.Controllers
             return Json(projectList);
         }
 
-
+        [Authorize]
         public ActionResult ProjectAdd()
         {
             return View();
         }
 
+        [Authorize]
         [HttpPost]
         public ActionResult ProjectAdd(string projectNameUnique, string title, string comment, string titleSecond,
                                        string commentSecond, string interior, string industrial, HttpPostedFileBase file)
@@ -354,7 +369,6 @@ namespace ArcWebPage.Controllers
             project.Title = title;
             project.Comment = comment;
             project.TitleSecond = titleSecond;
-            project.CommentSecond = commentSecond;
             project.Type = type;
             project.MainPicturePath = "/File/" + project.ProjectNameUnique +"/"+ filePictureName;
 
@@ -364,6 +378,7 @@ namespace ArcWebPage.Controllers
             return View();
         }
 
+        [Authorize]
         public ActionResult ProjectImageAdd(string id)
         {
             var project = _db.GetProjectByName(id) != null ? _db.GetProjectByName(id) : new Project();
@@ -371,6 +386,17 @@ namespace ArcWebPage.Controllers
             return View(project);
         }
 
+        [Authorize]
+        [HttpPost]
+        public ActionResult ProjectImageAdd(Project p)
+        {
+
+            TempData["ProjectEdit"] = _db.UpdateProject(p).ToString().ToLower();
+
+            return RedirectToAction("projectDetail", new {id = p.ProjectNameUnique});
+        }
+
+        [Authorize]
         [HttpPost]
         public ActionResult FileUpload(IEnumerable<HttpPostedFileBase> file, string projectID)
         {
@@ -405,24 +431,15 @@ namespace ArcWebPage.Controllers
             return Json(new {Message = result});
         }
 
-
+        [Authorize]
         public ActionResult projectDetail(string id)
         {
-            //var projectAndImages = new ProjectAndImages();
+            var project = _db.GetProjectByName(id) != null ? _db.GetProjectByName(id) : new Project();
 
-            //if (_db.GetProjectByName(id) != null)
-            //{
-            //    var project = _db.GetProjectByName(id);
-
-            //    var images = _db.GetImagesByProjectId(project.Id);
-
-            //    projectAndImages.Project = project;
-            //    projectAndImages.Images = images;
-            //}
-
-            return View();
+            return View(project);
         }
 
+        [Authorize]
         public JsonResult getProjectImages(string id)
         {
             decimal projectId = Convert.ToDecimal(id);
@@ -435,6 +452,21 @@ namespace ArcWebPage.Controllers
             return Json("");
         }
 
+        [Authorize]
+        [HttpPost]
+        public JsonResult setDeletedImages(string id)
+        {
+            decimal imageId = Convert.ToDecimal(id);
+            ImageFilePath image = _db.GetImageFilePathById(imageId);
+
+            deleteImage(image.ImagePath).ToString().ToLower();
+
+            string result = _db.RemoveImageFilePath(image).ToString().ToLower();
+
+            return Json(result);
+        }
+
+        [Authorize]
         private bool deleteImage(string path)
         {
 
@@ -455,7 +487,7 @@ namespace ArcWebPage.Controllers
             return true;
         }
 
-
+        [Authorize]
         private bool createFolder(string folderName)
         {
             var folderPath = HttpContext.Server.MapPath("~/File/" + folderName);
@@ -474,6 +506,123 @@ namespace ArcWebPage.Controllers
             }
 
             return true;
+        }
+
+        public ActionResult Users()
+        {
+            return View(_db.GetAllAspNetUsers());
+        }
+
+        [Authorize]
+        public ActionResult UserEdit(string id)
+        {
+            AspNetUsers user = _db.GetAspNetUserById(id);
+            return View(user);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public ActionResult UserEdit(UserApp user , string password)
+        {
+
+            AspNetUsers u = _db.GetAspNetUserById(user.Id);
+
+            u.UserName = user.UserName;
+            u.Email = user.Email;
+            u.NameSoyname = user.NameSoyname;
+
+            if (password.Length > 5)
+            {
+                u.PasswordHash = UserManagerApp.PasswordHasher.HashPassword(password);
+            }
+
+            TempData["editUser"] = _db.UpdateAspNetUser(u);
+
+            return RedirectToAction("UserEdit", "Admin", new {id = u.Id});
+        }
+
+        [Authorize]
+        public ActionResult CreateUser()
+        {
+            return View(new UserApp());
+        }
+
+        [Authorize]
+        [HttpPost]
+        public ActionResult CreateUser(UserApp user, string password)
+        {
+            UserApp userName = UserManagerApp.FindByName(user.UserName);  
+                                                                                                                                 
+            if (userName != null)
+            {
+                ModelState.AddModelError("", "Girilen Email sistemde kayıtlıdır.");
+                return View();
+            }
+            else
+            {
+                IdentityResult result = UserManagerApp.Create(user, password); 
+
+                if (result.Succeeded) 
+                {
+                    TempData["CreateMessage"] = "true";
+                    return RedirectToAction("CreateUser","Admin");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "false");
+                    return View();
+                }
+            }
+        }
+
+        public ActionResult Mails()
+        {
+            return View(_db.GetAllMails());
+        }
+
+        public ActionResult MailDetail(decimal id)
+        {
+            return View(_db.GetMailById(id));
+        }
+
+        [HttpPost]
+        public JsonResult BlockAndDelete(decimal id,string blockordelete)
+        {
+
+            DAL.DB.Mails mail = _db.GetMailById(id);
+
+            if (blockordelete == "B")
+            {
+                BlockIp ip = new BlockIp()
+                {
+                    BlockIp1 = mail.SendFromIp
+                };
+
+                bool result = _db.AddBlockIp(ip);
+
+                if (result)
+                {
+                    var mailByIp = _db.GetAllMailsByIp(mail.SendFromIp);
+                    foreach (var item in mailByIp)
+                    {
+                        _db.RemoveMail(item);
+                    }
+                }
+
+                return Json(result.ToString().ToLower());
+            }
+            else
+            {
+                return Json(_db.RemoveMail(mail).ToString().ToLower());
+            }
+        }
+
+        [Authorize]
+        public ActionResult SingOut()
+        {
+            IAuthenticationManager authManager = HttpContext.GetOwinContext().Authentication;
+            authManager.SignOut();
+            return RedirectToAction("Index", "Home");
         }
     }
 }
