@@ -12,6 +12,7 @@ using Microsoft.Owin.Security;
 
 namespace ArcWebPage.Controllers
 {
+    [RoutePrefix("")]
     public class HomeController : Controller
     {
         public UserManagerApp UserManagerApp
@@ -26,18 +27,20 @@ namespace ArcWebPage.Controllers
         public RoleAppManager RoleAppManager => HttpContext.GetOwinContext().GetUserManager<RoleAppManager>();
 
         private readonly BusinessLayer.BusinessLayer _db = new BusinessLayer.BusinessLayer();
-
+        
         public ActionResult Index()
         {
             IEnumerable<ImageFilePath> images = _db.GetAllImageFilePaths().Take(5);
             return View(images);
         }
 
+        [Route("Project")]
         public ActionResult Project()
         {
            return View(_db.GetAllProjects());
         }
 
+        [Route("Detail")]
         public ActionResult Detail(string id)
         {
             ProjectAndImages p = new ProjectAndImages();
@@ -48,16 +51,19 @@ namespace ArcWebPage.Controllers
             return View(p);
         }
 
+        [Route("Portfolio")]
         public ActionResult Portfolio()
         {
             return View();
         }
 
+        [Route("Portfolioo")]
         public ActionResult Portfolioo()
         {
             return View();
         }
-        
+
+        [Route("About")]
         public ActionResult About()
         {
             AboutModel model = new AboutModel();
@@ -68,6 +74,7 @@ namespace ArcWebPage.Controllers
             return View(model);
         }
 
+        [Route("Contact")]
         public ActionResult Contact()
         {
             ContactModel model = new ContactModel();
@@ -78,11 +85,13 @@ namespace ArcWebPage.Controllers
             return View(model);
         }
 
+        [Route("Admin")]
         public ActionResult Admin()
         {
             return View();
         }
 
+        [Route("Admin")]
         [HttpPost]
         public ActionResult Admin(string username, string password)
         {
@@ -111,6 +120,7 @@ namespace ArcWebPage.Controllers
             return View();
         }
 
+        [Route("MailSave")]
         [HttpPost]
         public JsonResult MailSave(string sendFrom , string Name , string Message)
         {

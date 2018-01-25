@@ -15,6 +15,8 @@ using Microsoft.Owin.Security;
 
 namespace ArcWebPage.Controllers
 {
+
+    [RoutePrefix("Admin")]
     public class AdminController : Controller
     {
         private readonly BusinessLayer.BusinessLayer _db = new BusinessLayer.BusinessLayer();
@@ -30,21 +32,20 @@ namespace ArcWebPage.Controllers
 
 
         public RoleAppManager RoleAppManager => HttpContext.GetOwinContext().GetUserManager<RoleAppManager>();
-
-        [Authorize]
+       
+        [Route("Panel")]
         public ActionResult Panel()
         {
             return View();
         }
-
-        [Authorize]
+        
         public ActionResult AboutMeEdit()
         {
             var aboutList = _db.GetAllAboutMes();
             var about = aboutList.Any() ? aboutList.FirstOrDefault() : new AboutMe();
             return View(about);
         }
-
+        
         [Authorize]
         [HttpPost]
         public ActionResult AboutMeEdit(AboutMe about, HttpPostedFileBase picture1, HttpPostedFileBase picture2)

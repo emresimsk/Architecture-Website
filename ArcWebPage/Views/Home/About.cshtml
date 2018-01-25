@@ -53,16 +53,18 @@
                                 <h3>My Skill</h3>
                             </div>
                             <div id="skills" class="row">
-                                <div class="alingleft" id="one"></div>
-                                <div class="alingleft" id="two"></div>
-                                <div class="alingleft" id="three"></div>
-                                <div class="alingleft" id="four"></div>
-                                <div class="alingleft" id="five"></div>
-                                <div class="alingleft" id="six"></div>
-                                <div class="alingleft" id="seven"></div>
-                                <div class="alingleft" id="eight"></div>
-                                <div class="alingleft" id="nine"></div>
-                                <div class="alingleft" id="ten"></div>
+                                <div class="alingleft" id="skill1"></div>
+                                <div class="alingleft" id="skill2"></div>
+                                <div class="alingleft" id="skill3"></div>
+                                <div class="alingleft" id="skill4"></div>
+                                <div class="alingleft" id="skill5"></div>
+                                <div class="alingleft" id="skill6"></div>
+                                <div class="alingleft" id="skill7"></div>
+                                <div class="alingleft" id="skill8"></div>
+                                <div class="alingleft" id="skill9"></div>
+                                <div class="alingleft" id="skill10"></div>
+                                <div class="alingleft" id="skill11"></div>
+                                <div class="alingleft" id="skill12"></div>
                             </div>
                         </section>
                         <section id="sec3" class="no-border">
@@ -155,42 +157,57 @@
 
 <script>
 
-    $(allInView);
-    $(window).scroll(allInView);
+    //$(allInView);
+    //$(window).scroll(allInView);
 
-    var i = true;
 
-    function isScrolledIntoView(elem) {
+    //var i = true;
+   
 
-        var docViewTop = $(window).scrollTop();
-        var docViewBottom = docViewTop + $(window).height();
+    //function isScrolledIntoView(elem) {
 
-        var elemTop = $(elem).offset().top;
-        var elemBottom = elemTop + $(elem).height();
+    //    var docViewTop = $(window).scrollTop();
+    //    var docViewBottom = docViewTop + $(window).height();
 
-        return ((elemBottom <= docViewBottom) && (elemTop >= docViewTop));
-    }
+    //    var elemTop = $(elem).offset().top;
+    //    var elemBottom = elemTop + $(elem).height();
 
-    function allInView() {
+    //    return ((elemBottom <= docViewBottom) && (elemTop >= docViewTop));
+    //}
 
-        if (isScrolledIntoView($("#skills"))) {
+    //function allInView() {
 
-            if (i) {
-                i = false;
-                progressCreate('#000', '0.96', 'AutoCad', 'one');
-                progressCreate('#000', '0.9', '3DMax', 'two');
-                progressCreate('#000', '0.78', 'Revit', 'three');
-                progressCreate('#000', '0.47', 'PhotoShop', 'four');
-                progressCreate('#000', '0.86', 'Excel', 'five');
-            }
-        }
+    //    if (isScrolledIntoView($(".container"))) {
 
-    }
+    //        if (i) {
+    //            i = false;
 
+    //            var index = 1;
+    //            skillList.forEach(function(item) {
+    //                progressCreate(item.ColorCode, item.Value, item.Name, index);
+    //                index++;
+    //            });
+    //        }
+    //    }
+
+    //}
+
+    $(document).ready(function () {
+        var skillList = @Html.Raw(Json.Encode(Model.Skills));
+
+
+        var index = 1;
+        skillList.forEach(function(item) {
+            progressCreate(item.ColorCode, item.Value, item.Name, index);
+            index++;
+        });
+    });
+
+   
 
     function progressCreate(colorCode, value, name, divId) {
 
-        var bar = new ProgressBar.Circle('#' + divId,
+        var bar = new ProgressBar.Circle('#skill' + divId,
             {
                 color: colorCode,
                 // This has to be the same size as the maximum width to
@@ -205,7 +222,7 @@
                 from: { color: colorCode, width: 1 },
                 to: { color: colorCode, width: 4 },
                 // Set default step function for all animate calls
-                step: function (state, circle) {
+                step: function(state, circle) {
                     circle.path.setAttribute('stroke', state.color);
                     circle.path.setAttribute('stroke-width', state.width);
 
@@ -213,7 +230,7 @@
                     if (value === 0) {
                         circle.setText('');
                     } else {
-                        circle.setText(name);
+                        circle.setText(name + '<br>' + value);
                     }
 
                 }
@@ -221,6 +238,6 @@
         bar.text.style.fontFamily = '"Raleway", Helvetica, sans-serif';
         bar.text.style.fontSize = '1.5rem';
 
-        bar.animate(value); // Number from 0.0 to 1.0
+        bar.animate(value / 100); // Number from 0.0 to 1.0
     }
 </script>

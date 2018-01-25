@@ -177,7 +177,7 @@
             var Message = $('#comments').val();
 
             $.ajax({
-                url: '/Home/MailSave',
+                url: 'MailSave',
                 data: { 'sendFrom': sendFrom, 'Name': Name, 'Message': Message },
                 type: 'POST',
                 dataType: 'json',
