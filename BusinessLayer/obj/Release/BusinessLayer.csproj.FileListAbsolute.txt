@@ -1,0 +1,14 @@
+C:\Users\idecon1\Desktop\Şeyda\KATMANLI\ArcWebPage\Architecture-Website\BusinessLayer\bin\Release\BusinessLayer.dll.config
+C:\Users\idecon1\Desktop\Şeyda\KATMANLI\ArcWebPage\Architecture-Website\BusinessLayer\bin\Release\BusinessLayer.dll
+C:\Users\idecon1\Desktop\Şeyda\KATMANLI\ArcWebPage\Architecture-Website\BusinessLayer\bin\Release\BusinessLayer.pdb
+C:\Users\idecon1\Desktop\Şeyda\KATMANLI\ArcWebPage\Architecture-Website\BusinessLayer\bin\Release\DAL.dll
+C:\Users\idecon1\Desktop\Şeyda\KATMANLI\ArcWebPage\Architecture-Website\BusinessLayer\bin\Release\EntityFramework.dll
+C:\Users\idecon1\Desktop\Şeyda\KATMANLI\ArcWebPage\Architecture-Website\BusinessLayer\bin\Release\EntityFramework.SqlServer.dll
+C:\Users\idecon1\Desktop\Şeyda\KATMANLI\ArcWebPage\Architecture-Website\BusinessLayer\bin\Release\Repository.dll
+C:\Users\idecon1\Desktop\Şeyda\KATMANLI\ArcWebPage\Architecture-Website\BusinessLayer\bin\Release\DAL.pdb
+C:\Users\idecon1\Desktop\Şeyda\KATMANLI\ArcWebPage\Architecture-Website\BusinessLayer\bin\Release\Repository.pdb
+C:\Users\idecon1\Desktop\Şeyda\KATMANLI\ArcWebPage\Architecture-Website\BusinessLayer\bin\Release\EntityFramework.xml
+C:\Users\idecon1\Desktop\Şeyda\KATMANLI\ArcWebPage\Architecture-Website\BusinessLayer\bin\Release\EntityFramework.SqlServer.xml
+C:\Users\idecon1\Desktop\Şeyda\KATMANLI\ArcWebPage\Architecture-Website\BusinessLayer\obj\Release\BusinessLayer.csprojResolveAssemblyReference.cache
+C:\Users\idecon1\Desktop\Şeyda\KATMANLI\ArcWebPage\Architecture-Website\BusinessLayer\obj\Release\BusinessLayer.dll
+C:\Users\idecon1\Desktop\Şeyda\KATMANLI\ArcWebPage\Architecture-Website\BusinessLayer\obj\Release\BusinessLayer.pdb
