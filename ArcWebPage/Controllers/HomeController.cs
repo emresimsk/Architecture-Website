@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -15,6 +14,8 @@ namespace ArcWebPage.Controllers
     [RoutePrefix("")]
     public class HomeController : Controller
     {
+        private readonly BusinessLayer.BusinessLayer _db = new BusinessLayer.BusinessLayer();
+
         public UserManagerApp UserManagerApp
         {
             get
@@ -26,27 +27,25 @@ namespace ArcWebPage.Controllers
 
         public RoleAppManager RoleAppManager => HttpContext.GetOwinContext().GetUserManager<RoleAppManager>();
 
-        private readonly BusinessLayer.BusinessLayer _db = new BusinessLayer.BusinessLayer();
-        
         public ActionResult Index()
         {
-            IEnumerable<ImageFilePath> images = _db.GetAllImageFilePaths().Take(5);
+            var images = _db.GetAllImageFilePaths().Take(5);
             return View(images);
         }
 
         [Route("Project")]
         public ActionResult Project()
         {
-           return View(_db.GetAllProjects());
+            return View(_db.GetAllProjects());
         }
 
         [Route("Detail")]
         public ActionResult Detail(string id)
         {
-            ProjectAndImages p = new ProjectAndImages();
+            var p = new ProjectAndImages();
 
             p.Project = _db.GetProjectByName(id);
-            p.Images = (p.Project != null) ? _db.GetImagesByProjectId(p.Project.Id) : null;
+            p.Images = p.Project != null ? _db.GetImagesByProjectId(p.Project.Id) : null;
 
             return View(p);
         }
@@ -66,7 +65,7 @@ namespace ArcWebPage.Controllers
         [Route("About")]
         public ActionResult About()
         {
-            AboutModel model = new AboutModel();
+            var model = new AboutModel();
 
             model.About = _db.GetAllAboutMes().FirstOrDefault();
             model.Skills = _db.GetAllSkilles().OrderByDescending(x => x.Value);
@@ -77,7 +76,7 @@ namespace ArcWebPage.Controllers
         [Route("Contact")]
         public ActionResult Contact()
         {
-            ContactModel model = new ContactModel();
+            var model = new ContactModel();
 
             model.Contact = _db.GetAllContactPages().FirstOrDefault();
             model.Sociales = _db.GetAllSocialMedias();
@@ -122,34 +121,28 @@ namespace ArcWebPage.Controllers
 
         [Route("MailSave")]
         [HttpPost]
-        public JsonResult MailSave(string sendFrom , string Name , string Message)
+        public JsonResult MailSave(string sendFrom, string Name, string Message)
         {
             var requestUserIp = Request.UserHostAddress;
-            DateTime dateNow = DateTime.Now;
-            if (_db.GetAllBlockIps().Any(x=>x.BlockIp1==requestUserIp))
-            {
+            var dateNow = DateTime.Now;
+            if (_db.GetAllBlockIps().Any(x => x.BlockIp1 == requestUserIp))
                 return Json("Sending blocked");
-            }
 
             if (_db.GetIpLast5Minute(requestUserIp, dateNow))
             {
-                Mails mail = new Mails()
+                var mail = new Mails
                 {
-                    Message =  Message,
-                    SendDate =  dateNow,
-                    SendFromEmailAdress =  sendFrom,
+                    Message = Message,
+                    SendDate = dateNow,
+                    SendFromEmailAdress = sendFrom,
                     SendFromIp = requestUserIp,
-                    SendFromName =  Name
+                    SendFromName = Name
                 };
 
-                string result = (_db.AddMail(mail)) ? "Mail was sent." : "Mail could not be sent.";
+                var result = _db.AddMail(mail) ? "Mail was sent." : "Mail could not be sent.";
                 return Json(result);
             }
-            else
-            {
-                return Json("Wait 5 minutes to send the mail again.Please!");
-            }
+            return Json("Wait 5 minutes to send the mail again.Please!");
         }
-
     }
 }

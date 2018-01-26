@@ -5,17 +5,12 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using ArcWebPage.Identity;
-using ArcWebPage.Models;
-using Microsoft.AspNet.Identity.Owin;
-using BusinessLayer;
-using DAL;
 using DAL.DB;
 using Microsoft.AspNet.Identity;
-using Microsoft.Owin.Security;
+using Microsoft.AspNet.Identity.Owin;
 
 namespace ArcWebPage.Controllers
 {
-
     [RoutePrefix("Admin")]
     public class AdminController : Controller
     {
@@ -32,46 +27,45 @@ namespace ArcWebPage.Controllers
 
 
         public RoleAppManager RoleAppManager => HttpContext.GetOwinContext().GetUserManager<RoleAppManager>();
-       
+
         [Route("Panel")]
         public ActionResult Panel()
         {
             return View();
         }
-        
+
         public ActionResult AboutMeEdit()
         {
             var aboutList = _db.GetAllAboutMes();
             var about = aboutList.Any() ? aboutList.FirstOrDefault() : new AboutMe();
             return View(about);
         }
-        
+
         [Authorize]
         [HttpPost]
         public ActionResult AboutMeEdit(AboutMe about, HttpPostedFileBase picture1, HttpPostedFileBase picture2)
         {
-
             string filePictureName1 = null;
             string filePictureName2 = null;
 
             if (picture1 != null)
             {
                 filePictureName1 = Path.GetFileName(picture1.FileName);
-                string filePicturePath1 = Path.Combine(Server.MapPath("~/File/about"), filePictureName1);
+                var filePicturePath1 = Path.Combine(Server.MapPath("~/File/about"), filePictureName1);
                 picture1.SaveAs(filePicturePath1);
             }
 
             if (picture2 != null)
             {
                 filePictureName2 = Path.GetFileName(picture2.FileName);
-                string filePicturePath2 = Path.Combine(Server.MapPath("~/File/about"), filePictureName2);
+                var filePicturePath2 = Path.Combine(Server.MapPath("~/File/about"), filePictureName2);
                 picture2.SaveAs(filePicturePath2);
             }
 
 
             if (_db.GetAllAboutMes().Any())
             {
-                AboutMe aboutMe = _db.GetAllAboutMes().FirstOrDefault();
+                var aboutMe = _db.GetAllAboutMes().FirstOrDefault();
 
                 deleteImage(aboutMe.ImagePath);
                 deleteImage(aboutMe.ImagePathSecond);
@@ -82,13 +76,12 @@ namespace ArcWebPage.Controllers
                 aboutMe.ImagePath = "/File/about/" + filePictureName1;
                 aboutMe.ImagePathSecond = "/File/about/" + filePictureName2;
                 TempData["AboutMe"] = _db.UpdateAboutMe(aboutMe).ToString().ToLower();
-
             }
             else
             {
                 about.ImagePath = "/File/about/" + filePictureName1;
                 about.ImagePathSecond = "/File/about/" + filePictureName2;
-          
+
                 TempData["AboutMe"] = _db.AddAboutMe(about).ToString().ToLower();
             }
 
@@ -112,7 +105,9 @@ namespace ArcWebPage.Controllers
             if (picture1 != null)
             {
                 filePictureName = Path.GetFileName(picture1.FileName); // dosya adını alıyor
-                string filePicturePath = Path.Combine(Server.MapPath("~/File/contact"),filePictureName); // dosya adiyla birlikte nereye kaydecegini ayarlıyor
+                var filePicturePath =
+                    Path.Combine(Server.MapPath("~/File/contact"),
+                        filePictureName); // dosya adiyla birlikte nereye kaydecegini ayarlıyor
                 picture1.SaveAs(filePicturePath);
             }
 
@@ -124,12 +119,13 @@ namespace ArcWebPage.Controllers
 
                 contactMe.Comment = contact.Comment;
                 contactMe.Title = contact.Title;
-                contactMe.ImagePath = "/File/contact/"+filePictureName;
+                contactMe.ImagePath = "/File/contact/" + filePictureName;
                 TempData["ContactMe"] = _db.UpdateContactPage(contactMe).ToString().ToLower();
             }
             else
             {
-                contact.ImagePath = "/File/contact/" + filePictureName; ;
+                contact.ImagePath = "/File/contact/" + filePictureName;
+                ;
                 TempData["ContactMe"] = _db.AddContactPage(contact).ToString().ToLower();
             }
 
@@ -338,7 +334,7 @@ namespace ArcWebPage.Controllers
         [Authorize]
         [HttpPost]
         public ActionResult ProjectAdd(string projectNameUnique, string title, string comment, string titleSecond,
-                                       string commentSecond, string interior, string industrial, HttpPostedFileBase file)
+            string commentSecond, string interior, string industrial, HttpPostedFileBase file)
         {
             var project = new Project();
 
@@ -348,9 +344,9 @@ namespace ArcWebPage.Controllers
 
             var type = interior + " " + industrial;
             project.ProjectNameUnique = projectNameUnique.ToLower().Replace(" ", "-").Replace("ş", "s")
-                                                                   .Replace("ü", "u").Replace("ı", "i")
-                                                                   .Replace("ğ", "g").Replace("ü", "u")
-                                                                   .Replace("ö", "o").Replace("ç", "c");
+                .Replace("ü", "u").Replace("ı", "i")
+                .Replace("ğ", "g").Replace("ü", "u")
+                .Replace("ö", "o").Replace("ç", "c");
 
 
             string filePictureName = null;
@@ -359,10 +355,14 @@ namespace ArcWebPage.Controllers
             {
                 filePictureName = Path.GetFileName(file.FileName);
 
-                bool result = true;
-                do {result = createFolder(project.ProjectNameUnique);} while (!result);
+                var result = true;
+                do
+                {
+                    result = createFolder(project.ProjectNameUnique);
+                } while (!result);
 
-                string filePicturePath = Path.Combine(Server.MapPath("~/File/" + project.ProjectNameUnique), filePictureName);
+                var filePicturePath =
+                    Path.Combine(Server.MapPath("~/File/" + project.ProjectNameUnique), filePictureName);
                 file.SaveAs(filePicturePath);
             }
 
@@ -371,7 +371,7 @@ namespace ArcWebPage.Controllers
             project.Comment = comment;
             project.TitleSecond = titleSecond;
             project.Type = type;
-            project.MainPicturePath = "/File/" + project.ProjectNameUnique +"/"+ filePictureName;
+            project.MainPicturePath = "/File/" + project.ProjectNameUnique + "/" + filePictureName;
 
             if (_db.AddProject(project))
                 return RedirectToAction("ProjectImageAdd", new {id = project.ProjectNameUnique});
@@ -391,7 +391,6 @@ namespace ArcWebPage.Controllers
         [HttpPost]
         public ActionResult ProjectImageAdd(Project p)
         {
-
             TempData["ProjectEdit"] = _db.UpdateProject(p).ToString().ToLower();
 
             return RedirectToAction("projectDetail", new {id = p.ProjectNameUnique});
@@ -404,10 +403,9 @@ namespace ArcWebPage.Controllers
             var projectId = Convert.ToDecimal(projectID);
 
             var result = false;
-            Project project = _db.GetProjectById(projectId);
+            var project = _db.GetProjectById(projectId);
 
             if (project != null)
-            {
                 foreach (var f in file)
                 {
                     string fileName = null;
@@ -415,7 +413,7 @@ namespace ArcWebPage.Controllers
                     if (f != null)
                     {
                         fileName = Path.GetFileName(f.FileName);
-                        string uploadPath = Path.Combine(Server.MapPath("~/File/"+project.ProjectNameUnique), fileName);
+                        var uploadPath = Path.Combine(Server.MapPath("~/File/" + project.ProjectNameUnique), fileName);
                         f.SaveAs(uploadPath);
                     }
 
@@ -427,7 +425,6 @@ namespace ArcWebPage.Controllers
 
                     result = _db.AddImageFilePath(imageFile);
                 }
-            }
 
             return Json(new {Message = result});
         }
@@ -443,12 +440,10 @@ namespace ArcWebPage.Controllers
         [Authorize]
         public JsonResult getProjectImages(string id)
         {
-            decimal projectId = Convert.ToDecimal(id);
+            var projectId = Convert.ToDecimal(id);
 
             if (_db.GetImagesByProjectId(projectId).Any())
-            {
                 return Json(_db.GetImagesByProjectId(projectId));
-            }
 
             return Json("");
         }
@@ -457,12 +452,12 @@ namespace ArcWebPage.Controllers
         [HttpPost]
         public JsonResult setDeletedImages(string id)
         {
-            decimal imageId = Convert.ToDecimal(id);
-            ImageFilePath image = _db.GetImageFilePathById(imageId);
+            var imageId = Convert.ToDecimal(id);
+            var image = _db.GetImageFilePathById(imageId);
 
             deleteImage(image.ImagePath).ToString().ToLower();
 
-            string result = _db.RemoveImageFilePath(image).ToString().ToLower();
+            var result = _db.RemoveImageFilePath(image).ToString().ToLower();
 
             return Json(result);
         }
@@ -470,16 +465,15 @@ namespace ArcWebPage.Controllers
         [Authorize]
         private bool deleteImage(string path)
         {
+            var filePath = Path.Combine(Server.MapPath(path));
 
-            string filePath = Path.Combine(Server.MapPath(path));
-
-            if (System.IO.File.Exists(@filePath))
+            if (System.IO.File.Exists(filePath))
             {
                 try
                 {
-                    System.IO.File.Delete(@filePath);
+                    System.IO.File.Delete(filePath);
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     return false;
                 }
@@ -494,17 +488,15 @@ namespace ArcWebPage.Controllers
             var folderPath = HttpContext.Server.MapPath("~/File/" + folderName);
 
             if (!Directory.Exists(folderPath))
-            {
                 try
                 {
                     Directory.CreateDirectory(folderPath);
                     return true;
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     return false;
                 }
-            }
 
             return true;
         }
@@ -517,25 +509,22 @@ namespace ArcWebPage.Controllers
         [Authorize]
         public ActionResult UserEdit(string id)
         {
-            AspNetUsers user = _db.GetAspNetUserById(id);
+            var user = _db.GetAspNetUserById(id);
             return View(user);
         }
 
         [Authorize]
         [HttpPost]
-        public ActionResult UserEdit(UserApp user , string password)
+        public ActionResult UserEdit(UserApp user, string password)
         {
-
-            AspNetUsers u = _db.GetAspNetUserById(user.Id);
+            var u = _db.GetAspNetUserById(user.Id);
 
             u.UserName = user.UserName;
             u.Email = user.Email;
             u.NameSoyname = user.NameSoyname;
 
             if (password.Length > 5)
-            {
                 u.PasswordHash = UserManagerApp.PasswordHasher.HashPassword(password);
-            }
 
             TempData["editUser"] = _db.UpdateAspNetUser(u);
 
@@ -552,28 +541,22 @@ namespace ArcWebPage.Controllers
         [HttpPost]
         public ActionResult CreateUser(UserApp user, string password)
         {
-            UserApp userName = UserManagerApp.FindByName(user.UserName);  
-                                                                                                                                 
+            var userName = UserManagerApp.FindByName(user.UserName);
+
             if (userName != null)
             {
                 ModelState.AddModelError("", "Girilen Email sistemde kayıtlıdır.");
                 return View();
             }
-            else
-            {
-                IdentityResult result = UserManagerApp.Create(user, password); 
+            var result = UserManagerApp.Create(user, password);
 
-                if (result.Succeeded) 
-                {
-                    TempData["CreateMessage"] = "true";
-                    return RedirectToAction("CreateUser","Admin");
-                }
-                else
-                {
-                    ModelState.AddModelError("", "false");
-                    return View();
-                }
+            if (result.Succeeded)
+            {
+                TempData["CreateMessage"] = "true";
+                return RedirectToAction("CreateUser", "Admin");
             }
+            ModelState.AddModelError("", "false");
+            return View();
         }
 
         public ActionResult Mails()
@@ -587,41 +570,35 @@ namespace ArcWebPage.Controllers
         }
 
         [HttpPost]
-        public JsonResult BlockAndDelete(decimal id,string blockordelete)
+        public JsonResult BlockAndDelete(decimal id, string blockordelete)
         {
-
-            DAL.DB.Mails mail = _db.GetMailById(id);
+            var mail = _db.GetMailById(id);
 
             if (blockordelete == "B")
             {
-                BlockIp ip = new BlockIp()
+                var ip = new BlockIp
                 {
                     BlockIp1 = mail.SendFromIp
                 };
 
-                bool result = _db.AddBlockIp(ip);
+                var result = _db.AddBlockIp(ip);
 
                 if (result)
                 {
                     var mailByIp = _db.GetAllMailsByIp(mail.SendFromIp);
                     foreach (var item in mailByIp)
-                    {
                         _db.RemoveMail(item);
-                    }
                 }
 
                 return Json(result.ToString().ToLower());
             }
-            else
-            {
-                return Json(_db.RemoveMail(mail).ToString().ToLower());
-            }
+            return Json(_db.RemoveMail(mail).ToString().ToLower());
         }
 
         [Authorize]
         public ActionResult SingOut()
         {
-            IAuthenticationManager authManager = HttpContext.GetOwinContext().Authentication;
+            var authManager = HttpContext.GetOwinContext().Authentication;
             authManager.SignOut();
             return RedirectToAction("Index", "Home");
         }

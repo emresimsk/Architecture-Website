@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.Net.Compilers.2.4.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.2.4.0\build\Microsoft.Net.Compilers.props')" />
   <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.8\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.8\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
-  <Import Project="..\packages\Microsoft.Net.Compilers.2.6.1\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.2.6.1\build\Microsoft.Net.Compilers.props')" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -16,7 +16,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ArcWebPage</RootNamespace>
     <AssemblyName>ArcWebPage</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
@@ -165,107 +165,8 @@
     <Content Include="Content\admin\fonts\fontawesome-webfont5b62.html" />
     <Content Include="Content\admin\fonts\fontawesome-webfont5b62.svg" />
     <Content Include="Content\admin\fonts\icon-works-webfont.svg" />
-    <Content Include="Content\admin\img\0100e8b81ad03f81a64a0a5f49c5be41.jpg" />
-    <Content Include="Content\admin\img\0180441436.jpg" />
-    <Content Include="Content\admin\img\0299419341.jpg" />
-    <Content Include="Content\admin\img\0310728269.jpg" />
-    <Content Include="Content\admin\img\0460697039.jpg" />
-    <Content Include="Content\admin\img\0531871454.jpg" />
-    <Content Include="Content\admin\img\0601274412.jpg" />
-    <Content Include="Content\admin\img\0777931269.jpg" />
-    <Content Include="Content\admin\img\0872116906.jpg" />
-    <Content Include="Content\admin\img\0980726243.jpg" />
-    <Content Include="Content\admin\img\1099386850.jpg" />
-    <Content Include="Content\admin\img\1182824800.jpg" />
-    <Content Include="Content\admin\img\1272501223.jpg" />
-    <Content Include="Content\admin\img\1376812548.jpg" />
-    <Content Include="Content\admin\img\1463296788.jpg" />
-    <Content Include="Content\admin\img\1554502810.jpg" />
-    <Content Include="Content\admin\img\1699893867.jpg" />
-    <Content Include="Content\admin\img\1703835345.jpg" />
-    <Content Include="Content\admin\img\1823060748.jpg" />
-    <Content Include="Content\admin\img\1968946964.jpg" />
-    <Content Include="Content\admin\img\2079247459.jpg" />
-    <Content Include="Content\admin\img\2163317912.jpg" />
-    <Content Include="Content\admin\img\2234124529.jpg" />
-    <Content Include="Content\admin\img\2362153679.jpg" />
-    <Content Include="Content\admin\img\2440513918.jpg" />
-    <Content Include="Content\admin\img\2565559510.jpg" />
-    <Content Include="Content\admin\img\2621512521.jpg" />
-    <Content Include="Content\admin\img\2790515408.jpg" />
-    <Content Include="Content\admin\img\2832982242.jpg" />
-    <Content Include="Content\admin\img\2995015682.jpg" />
-    <Content Include="Content\admin\img\2ef1cfdcf1da5256d7b994983bd8d457.jpg" />
-    <Content Include="Content\admin\img\3002121059.jpg" />
-    <Content Include="Content\admin\img\3353100198.jpg" />
-    <Content Include="Content\admin\img\3476962581.jpg" />
-    <Content Include="Content\admin\img\35e0765272cd421a5352331003ae2ab1.jpg" />
-    <Content Include="Content\admin\img\3dd124286157b729cc38d9bd7045e384.jpg" />
-    <Content Include="Content\admin\img\4148866741.png" />
-    <Content Include="Content\admin\img\4299815763.png" />
-    <Content Include="Content\admin\img\4337135755.png" />
-    <Content Include="Content\admin\img\4460638882.png" />
-    <Content Include="Content\admin\img\4522104820.png" />
     <Content Include="Content\admin\img\4608823220.png" />
-    <Content Include="Content\admin\img\4790827186.png" />
-    <Content Include="Content\admin\img\4818875210.jpg" />
-    <Content Include="Content\admin\img\4902540768.jpg" />
-    <Content Include="Content\admin\img\4fcb4322807f1fd92aa3140adb37d4d9.jpg" />
-    <Content Include="Content\admin\img\5037874725.jpg" />
-    <Content Include="Content\admin\img\5171142011.jpg" />
-    <Content Include="Content\admin\img\5285117345.jpg" />
-    <Content Include="Content\admin\img\5345655041.jpg" />
-    <Content Include="Content\admin\img\5477829604.jpg" />
-    <Content Include="Content\admin\img\5595140688.jpg" />
-    <Content Include="Content\admin\img\5615854990.jpg" />
-    <Content Include="Content\admin\img\5774898501.jpg" />
-    <Content Include="Content\admin\img\5892565850.jpg" />
-    <Content Include="Content\admin\img\5991713086.jpg" />
-    <Content Include="Content\admin\img\6049281045.jpg" />
-    <Content Include="Content\admin\img\6149937996.jpg" />
-    <Content Include="Content\admin\img\6298374167.jpg" />
-    <Content Include="Content\admin\img\6381079466.jpg" />
-    <Content Include="Content\admin\img\6482952761.jpg" />
-    <Content Include="Content\admin\img\6501906268.jpg" />
-    <Content Include="Content\admin\img\6621353903.jpg" />
-    <Content Include="Content\admin\img\6711938749.jpg" />
-    <Content Include="Content\admin\img\6858253787.jpg" />
-    <Content Include="Content\admin\img\6950484109.jpg" />
-    <Content Include="Content\admin\img\69ece2eb60bdd2126e2acf27af43aa9b.jpg" />
-    <Content Include="Content\admin\img\7045565015.jpg" />
-    <Content Include="Content\admin\img\7154941405.jpg" />
-    <Content Include="Content\admin\img\7225550528.jpg" />
-    <Content Include="Content\admin\img\7397509215.jpg" />
-    <Content Include="Content\admin\img\7457956311.png" />
-    <Content Include="Content\admin\img\7489e404fb5088d63e5a5d55b27d546c.jpg" />
-    <Content Include="Content\admin\img\7575559379.jpg" />
-    <Content Include="Content\admin\img\7690704672.jpg" />
-    <Content Include="Content\admin\img\7795524868.jpg" />
-    <Content Include="Content\admin\img\7808910503.jpg" />
-    <Content Include="Content\admin\img\7943544458.jpg" />
-    <Content Include="Content\admin\img\7a4ee939781f6165006cff1b5b8096d4.jpg" />
-    <Content Include="Content\admin\img\8077136002.jpg" />
-    <Content Include="Content\admin\img\8160313374.jpg" />
-    <Content Include="Content\admin\img\8244439665.jpg" />
-    <Content Include="Content\admin\img\8335744038.jpg" />
-    <Content Include="Content\admin\img\8447261358.jpg" />
-    <Content Include="Content\admin\img\8525358731.jpg" />
-    <Content Include="Content\admin\img\8694637414.jpg" />
-    <Content Include="Content\admin\img\8796828207.png" />
-    <Content Include="Content\admin\img\8898319262.jpg" />
-    <Content Include="Content\admin\img\8907917568.png" />
-    <Content Include="Content\admin\img\9066377313.png" />
-    <Content Include="Content\admin\img\9193364282.png" />
-    <Content Include="Content\admin\img\9248739560.png" />
-    <Content Include="Content\admin\img\9346320298.png" />
-    <Content Include="Content\admin\img\9438147354.png" />
-    <Content Include="Content\admin\img\9540314125.png" />
-    <Content Include="Content\admin\img\9620101696.png" />
-    <Content Include="Content\admin\img\972b6c5882a45ee73d83a90a9852660c.jpg" />
-    <Content Include="Content\admin\img\b787e62313c23880e0797bfbbc3d150c.jpg" />
-    <Content Include="Content\admin\img\cca2226fdaba079b321ba5cf05ba0adc.jpg" />
     <Content Include="Content\admin\img\elephant.png" />
-    <Content Include="Content\admin\img\f420a3cea0fb04862eb630f5a54b2733.jpg" />
     <Content Include="Content\admin\img\flags\4x3\bd.svg" />
     <Content Include="Content\admin\img\flags\4x3\br.svg" />
     <Content Include="Content\admin\img\flags\4x3\cn.svg" />
@@ -318,9 +219,7 @@
     <Content Include="Content\fonts\futurastd-bold.svg" />
     <Content Include="Content\images\body-bg.png" />
     <Content Include="Content\images\favicon.html" />
-    <Content Include="Content\images\footer-logo.png" />
     <Content Include="Content\images\grabbing.html" />
-    <Content Include="Content\images\logo.png" />
     <Content Include="Content\images\profil.jpg" />
     <Content Include="Content\img\overlays\01.png" />
     <Content Include="Content\img\overlays\02.png" />
@@ -430,13 +329,20 @@
     <Content Include="Content\portfolio\pics\zoom-icons.png" />
     <Content Include="Content\portfolio\pics\zoom.png" />
     <Content Include="Content\Site.css" />
-    <Content Include="Content\js\validate.js" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <None Include="Properties\PublishProfiles\architecture.pubxml" />
+    <None Include="Properties\PublishProfiles\Architecture2.pubxml" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
     <None Include="Scripts\jquery-3.2.1.intellisense.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -454,6 +360,11 @@
     <Compile Include="Models\AboutModel.cs" />
     <Compile Include="Models\ContactModel.cs" />
     <Compile Include="Models\ProjectAndImages.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />
@@ -536,19 +447,22 @@
     <Folder Include="App_Data\" />
     <Folder Include="File\about\" />
     <Folder Include="File\contact\" />
-    <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BusinessLayer\BusinessLayer.csproj">
-      <Project>{91076F8A-1856-40C4-8DD2-82C0BB586388}</Project>
+      <Project>{91076f8a-1856-40c4-8dd2-82c0bb586388}</Project>
       <Name>BusinessLayer</Name>
     </ProjectReference>
     <ProjectReference Include="..\DAL\DAL.csproj">
-      <Project>{1CC79A65-924A-4517-A387-7E977420A6A0}</Project>
+      <Project>{1cc79a65-924a-4517-a387-7e977420a6a0}</Project>
       <Name>DAL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Repository\Repository.csproj">
+      <Project>{c059ff93-7ba2-4670-b7f9-7cd9c3c67b35}</Project>
+      <Name>Repository</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
@@ -581,8 +495,8 @@
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.2.6.1\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.2.6.1\build\Microsoft.Net.Compilers.props'))" />
     <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.8\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.8\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.2.4.0\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.2.4.0\build\Microsoft.Net.Compilers.props'))" />
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

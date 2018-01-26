@@ -1,27 +1,22 @@
-﻿using DAL.DB;
-using Repository;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using DAL.DB;
+using Repository;
 
 namespace BusinessLayer
 {
-    public class BusinessLayer:IBusinessLayer
+    public class BusinessLayer : IBusinessLayer
     {
-
-
         private readonly IAboutmeRepository _aboutmeRepository;
         private readonly IAspNetUsersRepository _aspNetUsersRepository;
+        private readonly IBlockIpRepository _blockIpRepository;
         private readonly IContactPageRepository _contactPageRepository;
         private readonly IEducationRepository _educationRepository;
         private readonly IImageFilePathRepository _imageFilePathRepository;
+        private readonly IMailsRepository _mailsRepository;
         private readonly IProjectRepository _projectRepository;
         private readonly ISkillsRepository _skillsRepository;
         private readonly ISocialMediaRepository _socialMediaRepository;
-        private readonly IMailsRepository _mailsRepository;
-        private readonly IBlockIpRepository _blockIpRepository;
 
         public BusinessLayer()
         {
@@ -41,27 +36,27 @@ namespace BusinessLayer
 
         public IList<AboutMe> GetAllAboutMes()
         {
-           return _aboutmeRepository.GetAll();
+            return _aboutmeRepository.GetAll();
         }
 
         public AboutMe GetAboutMeById(decimal id)
         {
-            return _aboutmeRepository.GetSingle(x=>x.Id == id);
+            return _aboutmeRepository.GetSingle(x => x.Id == id);
         }
 
         public bool AddAboutMe(params AboutMe[] aboutMe)
         {
-            return (_aboutmeRepository.Add(aboutMe) == 1);
+            return _aboutmeRepository.Add(aboutMe) == 1;
         }
 
         public bool UpdateAboutMe(params AboutMe[] aboutMe)
         {
-            return (_aboutmeRepository.Update(aboutMe) == 1);
+            return _aboutmeRepository.Update(aboutMe) == 1;
         }
 
         public bool RemoveAboutMe(params AboutMe[] aboutMe)
         {
-            return (_aboutmeRepository.Remove(aboutMe) == 1);
+            return _aboutmeRepository.Remove(aboutMe) == 1;
         }
 
         //<------------------------------------------------------------------ ASPNET USERS ---------------------------------------------------------------->
@@ -83,17 +78,17 @@ namespace BusinessLayer
 
         public bool AddAspNetUser(params AspNetUsers[] aspNetUser)
         {
-            return (_aspNetUsersRepository.Add(aspNetUser) == 1);
+            return _aspNetUsersRepository.Add(aspNetUser) == 1;
         }
 
         public bool UpdateAspNetUser(params AspNetUsers[] aspNetUser)
         {
-            return (_aspNetUsersRepository.Update(aspNetUser) == 1);
+            return _aspNetUsersRepository.Update(aspNetUser) == 1;
         }
 
         public bool RemoveAspNetUser(params AspNetUsers[] aspNetUser)
         {
-            return (_aspNetUsersRepository.Remove(aspNetUser) == 1);
+            return _aspNetUsersRepository.Remove(aspNetUser) == 1;
         }
 
         //<------------------------------------------------------------------- CONTACT PAGE ---------------------------------------------------------------->
@@ -110,17 +105,17 @@ namespace BusinessLayer
 
         public bool AddContactPage(params ContactPage[] contactPage)
         {
-            return (_contactPageRepository.Add(contactPage) == 1);
+            return _contactPageRepository.Add(contactPage) == 1;
         }
 
         public bool UpdateContactPage(params ContactPage[] contactPage)
         {
-            return (_contactPageRepository.Update(contactPage) == 1);
+            return _contactPageRepository.Update(contactPage) == 1;
         }
 
         public bool RemoveContactPage(params ContactPage[] contactPage)
         {
-            return (_contactPageRepository.Remove(contactPage) == 1);
+            return _contactPageRepository.Remove(contactPage) == 1;
         }
 
         //<------------------------------------------------------------------- EDUCATION PAGE ---------------------------------------------------------------->
@@ -137,17 +132,17 @@ namespace BusinessLayer
 
         public bool AddEducation(params Education[] education)
         {
-            return (_educationRepository.Add(education) == 1);
+            return _educationRepository.Add(education) == 1;
         }
 
         public bool UpdateEducation(params Education[] education)
         {
-            return (_educationRepository.Add(education) == 1);
+            return _educationRepository.Add(education) == 1;
         }
 
         public bool RemoveEducation(params Education[] education)
         {
-            return (_educationRepository.Add(education) == 1);
+            return _educationRepository.Add(education) == 1;
         }
 
         //<------------------------------------------------------------------- PROJECT PAGE ---------------------------------------------------------------->
@@ -169,17 +164,17 @@ namespace BusinessLayer
 
         public bool AddProject(params Project[] project)
         {
-            return (_projectRepository.Add(project) == 1);
+            return _projectRepository.Add(project) == 1;
         }
 
         public bool UpdateProject(params Project[] project)
         {
-            return (_projectRepository.Update(project) == 1);
+            return _projectRepository.Update(project) == 1;
         }
 
         public bool RemoveProject(params Project[] project)
         {
-            return (_projectRepository.Remove(project) == 1);
+            return _projectRepository.Remove(project) == 1;
         }
 
         //<------------------------------------------------------------------- IMAGES FILE PATH ---------------------------------------------------------------->
@@ -201,17 +196,17 @@ namespace BusinessLayer
 
         public bool AddImageFilePath(params ImageFilePath[] imageFilePath)
         {
-            return (_imageFilePathRepository.Add(imageFilePath) == 1);
+            return _imageFilePathRepository.Add(imageFilePath) == 1;
         }
 
         public bool UpdateImageFilePath(params ImageFilePath[] imageFilePath)
         {
-            return (_imageFilePathRepository.Update(imageFilePath) == 1);
+            return _imageFilePathRepository.Update(imageFilePath) == 1;
         }
 
         public bool RemoveImageFilePath(params ImageFilePath[] imageFilePath)
         {
-            return (_imageFilePathRepository.Remove(imageFilePath) == 1);
+            return _imageFilePathRepository.Remove(imageFilePath) == 1;
         }
 
         //<------------------------------------------------------------------- SKİLLS ---------------------------------------------------------------->
@@ -228,17 +223,17 @@ namespace BusinessLayer
 
         public bool AddSkill(params Skills[] skills)
         {
-            return (_skillsRepository.Add(skills)==1);
+            return _skillsRepository.Add(skills) == 1;
         }
 
         public bool UpdateSkill(params Skills[] skills)
         {
-            return (_skillsRepository.Update(skills) == 1);
+            return _skillsRepository.Update(skills) == 1;
         }
 
         public bool RemoveSkill(params Skills[] skills)
         {
-            return (_skillsRepository.Remove(skills) == 1);
+            return _skillsRepository.Remove(skills) == 1;
         }
 
         //<------------------------------------------------------------------- SOCIAL MEDIA ---------------------------------------------------------------->
@@ -255,17 +250,17 @@ namespace BusinessLayer
 
         public bool AddSocialMedia(params SocialMedia[] socialMedia)
         {
-            return (_socialMediaRepository.Add(socialMedia) == 1);
+            return _socialMediaRepository.Add(socialMedia) == 1;
         }
 
         public bool UpdateSocialMedia(params SocialMedia[] socialMedia)
         {
-            return (_socialMediaRepository.Update(socialMedia) == 1);
+            return _socialMediaRepository.Update(socialMedia) == 1;
         }
 
         public bool RemoveSocialMedia(params SocialMedia[] socialMedia)
         {
-            return (_socialMediaRepository.Remove(socialMedia) == 1);
+            return _socialMediaRepository.Remove(socialMedia) == 1;
         }
 
         //<-------------------------------------------------------------------  MAILS ---------------------------------------------------------------->
@@ -280,21 +275,17 @@ namespace BusinessLayer
             return _mailsRepository.GetList(x => x.SendFromIp == ip);
         }
 
-        public bool GetIpLast5Minute(string ip,DateTime date)
+        public bool GetIpLast5Minute(string ip, DateTime date)
         {
             var list = _mailsRepository.GetList(x => x.SendFromIp == ip);
             if (list != null)
-            {
                 foreach (var item in list)
                 {
-                    TimeSpan time = (item.SendDate != null) ? date.Subtract(item.SendDate.Value) : new TimeSpan();
+                    var time = item.SendDate != null ? date.Subtract(item.SendDate.Value) : new TimeSpan();
 
                     if (time.TotalMinutes < 5)
-                    {
                         return false;
-                    }
                 }
-            }
 
             return true;
         }
@@ -306,17 +297,17 @@ namespace BusinessLayer
 
         public bool AddMail(params Mails[] mails)
         {
-            return (_mailsRepository.Add(mails) == 1);
+            return _mailsRepository.Add(mails) == 1;
         }
 
         public bool UpdateMail(params Mails[] mails)
         {
-            return (_mailsRepository.Update(mails) == 1);
+            return _mailsRepository.Update(mails) == 1;
         }
 
         public bool RemoveMail(params Mails[] mails)
         {
-            return (_mailsRepository.Remove(mails) == 1);
+            return _mailsRepository.Remove(mails) == 1;
         }
 
         //<------------------------------------------------------------------- BLOCK IP ---------------------------------------------------------------->
@@ -333,17 +324,17 @@ namespace BusinessLayer
 
         public bool AddBlockIp(params BlockIp[] blockIp)
         {
-            return (_blockIpRepository.Add(blockIp) == 1);
+            return _blockIpRepository.Add(blockIp) == 1;
         }
 
         public bool UpdateBlockIp(params BlockIp[] blockIp)
         {
-            return (_blockIpRepository.Update(blockIp) == 1);
+            return _blockIpRepository.Update(blockIp) == 1;
         }
 
         public bool RemoveBlockIp(params BlockIp[] blockIp)
         {
-            return (_blockIpRepository.Remove(blockIp) == 1);
+            return _blockIpRepository.Remove(blockIp) == 1;
         }
     }
 }

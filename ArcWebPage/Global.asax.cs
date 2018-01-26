@@ -10,7 +10,6 @@ namespace ArcWebPage
         {
             AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
-            
         }
     }
 }

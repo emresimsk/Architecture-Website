@@ -1,0 +1,139 @@
+.turnjs-slider {
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    height: 8px;
+    margin: 20px auto;
+    width: 600px;
+}
+
+.turnjs-slider .thumbnail {
+    -moz-border-radius: 5px;
+    -moz-transform: translate3d(0px, 50px, 0px) scale(0.1, 0.1);
+    -moz-transition: -moz-transform 0.2s;
+    -ms-border-radius: 5px;
+    -ms-transform: translate3d(0px, 50px, 0px) scale(0.1, 0.1);
+    -ms-transition: -ms-transform 0.2s;
+    -o-border-radius: 5px;
+    -o-transform: translate3d(0px, 50px, 0px) scale(0.1, 0.1);
+
+    -o-transition: -o-transform 0.2s;
+    -webkit-border-radius: 5px;
+    -webkit-transform: translate3d(0px, 50px, 0px) scale(0.1, 0.1);
+
+    -webkit-transition: -webkit-transform 0.2s;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 5px;
+
+    display: none;
+    height: 85px;
+    left: -17px;
+
+    position: absolute;
+    top: -100px;
+    transform: translate3d(0px, 50px, 0px) scale(0.1, 0.1);
+
+    transition: transform:0.2s;
+    width: 115px;
+    z-index: 10000;
+}
+
+.no-transition {
+    -moz-transition: none;
+    -ms-transition: none;
+    -o-transition: none;
+    -webkit-transition: none;
+}
+
+.turnjs-slider .thumbnail div {
+    background-color: white;
+    height: 70px;
+    margin: 7px;
+    width: 100px;
+}
+
+.turnjs-slider .ui-state-hover .thumbnail {
+    display: block;
+    opacity: 0;
+}
+
+.turnjs-slider .ui-state-active .thumbnail {
+    -moz-transform: scale(1, 1);
+    -ms-transform: scale(1, 1);
+    -o-transform: scale(1, 1);
+    -webkit-transform: scale(1, 1);
+    display: block;
+    opacity: 1;
+    transform: scale(1, 1);
+}
+
+/* Layout helpers
+----------------------------------*/
+
+/* Interaction Cues
+----------------------------------*/
+
+.ui-state-disabled { cursor: default !important; }
+
+/* Misc visuals
+----------------------------------*/
+
+/* Overlays */
+
+.turnjs-slider .ui-widget-overlay {
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+
+.turnjs-slider .ui-slider {
+    position: relative;
+    text-align: left;
+}
+
+.turnjs-slider .ui-slider-handle {
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    cursor: default;
+    height: 8px;
+    position: absolute;
+    width: 80px;
+    z-index: 0;
+}
+
+.turnjs-slider .ui-slider-horizontal {
+    height: 8px;
+    margin-left: 39px;
+    width: 520px;
+}
+
+.turnjs-slider .ui-slider-horizontal .ui-slider-handle {
+    margin-left: -40px;
+    margin-top: -1px;
+}
+
+/* Interaction states
+----------------------------------*/
+
+.turnjs-slider .ui-slider-handle {
+    -moz-transition: opacity 0.2s;
+    -ms-transition: opacity 0.2s;
+    -o-transition: opacity 0.2s;
+    -webkit-transition: opacity 0.2s;
+    background-color: black;
+    border: 1px solid white;
+    display: block;
+    opacity: 0.2;
+    transition: opacity 0.2s;
+}
+
+.turnjs-slider .ui-state-hover { opacity: 0.4; }
+
+.turnjs-slider .ui-state-active { opacity: 1; }
